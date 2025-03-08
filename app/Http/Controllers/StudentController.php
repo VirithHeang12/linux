@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Gender;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,7 @@ class StudentController extends Controller
         $perPage = request()->query('itemsPerPage', 5);
         $students = Student::paginate($perPage)->appends(request()->query());
 
-        return Inertia::render('DashBoard/Student/Index', [
+        return Inertia::render('Dashboard/Students/Index', [
             'students'     => $students,
         ]);
     }
@@ -30,7 +31,10 @@ class StudentController extends Controller
      */
     public function create()
     {
-        return Inertia::render('DashBoard/Student/Create');
+        $genders = array_column(Gender::cases(), 'value');
+        return Inertia::render('Dashboard/Students/Create', [
+            'genders' => $genders,
+        ]);
     }
 
    /**
@@ -47,25 +51,24 @@ class StudentController extends Controller
         try {
 
             $student = Student::create([
-              'student_id' => $request->student_id,
-              'firstname' => $request->firstname,
-              'lastname' => $request->lastname,
-              'gender' => $request->gender,
-              'dob' => $request->dob,
-              'address' => $request->address,
-              'email' => $request->email,
-              'phone' => $request->phone,
-
+              'student_id'          => $request->student_id,
+              'first_name'          => $request->first_name,
+              'last_name'           => $request->last_name,
+              'gender'              => $request->gender,
+              'date_of_birth'       => $request->date_of_birth,
+              'address'             => $request->address,
+              'email'               => $request->email,
+              'phone'               => $request->phone,
             ]);
 
             DB::commit();
 
-            return redirect()->route('student.index')->with('success', 'student created.');
+            return redirect()->route('students.index')->with('success', 'student created.');
         } catch (\Exception $e) {
             dd($e);
             DB::rollBack();
 
-            return redirect()->route('student.index')->with('error', 'Student not created.');
+            return redirect()->route('students.index')->with('error', 'Student not created.');
         }
     }
 

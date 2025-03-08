@@ -12,6 +12,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticationController::class, 'destroy'])
         ->name('logout');
+
+    Route::resource('students', StudentController::class);
 });
 
 Route::middleware('guest')->group(function () {
@@ -29,4 +31,4 @@ Route::middleware('guest')->group(function () {
 
 });
 
-Route::resource('students', StudentController::class);
+
