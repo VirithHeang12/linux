@@ -1,28 +1,38 @@
 <template>
     <vee-form :validation-schema="schema" @submit.prevent="submitForm" v-slot="{ meta, setErrors }">
         <vee-field name="email" v-slot="{ field, errors }">
-            <div class="mb-3">
-                <label for="name" class="form-label">{{ __('Name') }}</label>
-                <input type="text" id="password" class="form-control" v-bind="field" v-model="form.name"
-                    :aria-describedby="'nameError'" />
-                <span v-if="errors.length" id="nameError" class="text-danger">{{ errors[0] }}</span>
-            </div>
+            <v-text-field v-bind="field" :error-messages="errors" v-model="form.email" label="Email"
+                variant="outlined"></v-text-field>
         </vee-field>
-        <v-btn @click="close" color="primary" class="mt-4 d-inline-flex justify-content-start "
+        <vee-field name="password" v-slot="{ field, errors }">
+            <v-text-field v-bind="field" :error-messages="errors" v-model="form.password" label="Password"
+                variant="outlined"></v-text-field>
+        </vee-field>
+        <v-btn color="primary" class="mt-4 d-inline-flex justify-content-start "
             :disabled="!meta.valid || form.processing" @click.prevent="submitForm(setErrors)">
             <span v-if="form.processing" class="spinner-border spinner-border-sm me-2" role="status"
                 aria-hidden="true"></span>
-            {{ __('Submit') }}
+            Submit
         </v-btn>
     </vee-form>
 </template>
 
 <script setup>
-    import { useForm } from 'vee-validate';
+import { useForm } from '@inertiajs/vue3';
+import * as yup from 'yup';
+import { route } from 'ziggy-js';
 
+const schema = yup.object().shape({
+    email: yup.string().required().email(),
+    password: yup.string().required().min(6),
+})
 
-    const form = useForm({
-        name: '',
-    });
+const form = useForm({
+    email: '',
+    password: '',
+});
 
+const submitForm = () => {
+    form.post(route('login'));
+}
 </script>
