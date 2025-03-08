@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticationController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -27,3 +28,5 @@ Route::middleware('guest')->group(function () {
         ->name('login.store');
 
 });
+
+Route::resource('students', StudentController::class);
