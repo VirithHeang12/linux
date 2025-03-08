@@ -8,11 +8,22 @@ Route::middleware('auth')->group(function () {
     Route::get('/', function () {
         return Inertia::render('Index');
     });
+
+    Route::post('logout', [AuthenticationController::class, 'destroy'])
+        ->name('logout');
 });
 
 Route::middleware('guest')->group(function () {
-    Route::get('login', [AuthenticationController::class, 'create'])
+    Route::get('register', [AuthenticationController::class, 'createRegister'])
+        ->name('register');
+
+    Route::post('register', [AuthenticationController::class, 'storeRegister'])
+        ->name('register.store');
+
+    Route::get('login', [AuthenticationController::class, 'createLogin'])
         ->name('login');
 
-    Route::post('login', [AuthenticationController::class, 'store']);
+    Route::post('login', [AuthenticationController::class, 'storeLogin'])
+        ->name('login.store');
+
 });
