@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Gender;
+use App\Enums\PermissionEnum;
 use App\Http\Requests\StudentStoreRequest;
 use App\Http\Requests\StudentUpdateRequest;
 use App\Models\Student;
@@ -19,6 +20,9 @@ class StudentController extends Controller
      */
     public function index(): \Inertia\Response
     {
+        if (!auth()->user()->hasPermissionTo(PermissionEnum::READ_STUDENT)) {
+            return Inertia::render('Dashboard/Errors/403');
+        }
         // $students = Student::all();
         $perPage = request()->query('itemsPerPage', 5);
         $students = Student::paginate($perPage)->appends(request()->query());
@@ -34,6 +38,9 @@ class StudentController extends Controller
     public function create()
     {
 
+        if (!auth()->user()->hasPermissionTo(PermissionEnum::CREATE_STUDENT)) {
+            return Inertia::render('Dashboard/Errors/403');
+        }
         $genders = array_column(Gender::cases(), 'value');
         return Inertia::render('Dashboard/Students/Create', [
             'genders' => $genders,
@@ -94,6 +101,7 @@ class StudentController extends Controller
     public function edit(Student $student)
     {
         $genders = array_column(Gender::cases(), 'value');
+
         return Inertia::render('Dashboard/Students/Edit', [
             'student' => $student,
             'genders' => $genders,
@@ -143,8 +151,12 @@ class StudentController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Student  $student
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Student $student)
+    public function destroy(Student $student): \Illuminate\Http\RedirectResponse
     {
 
         DB::beginTransaction();
@@ -154,11 +166,12 @@ class StudentController extends Controller
 
             DB::commit();
 
-            return response()->json(null, 204);
+            return redirect()->route('students.index')->with('success', 'Student deleted.');
+
         } catch (\Exception $e) {
             DB::rollBack();
 
-            return response()->json(['message' => $e->getMessage()], 500);
+            return redirect()->route('students.index')->with('error', 'Student not deleted.');
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\RoleEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
@@ -44,6 +45,8 @@ class AuthenticationController extends Controller
             'email'         => $data['email'],
             'password'      => Hash::make($data['password']),
         ]);
+
+        $user->assignRole(RoleEnum::STUDENT);
 
         Auth::login($user);
 
