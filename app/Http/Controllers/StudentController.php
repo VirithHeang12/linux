@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Gender;
+use App\Http\Requests\StudentStoreRequest;
+use App\Http\Requests\StudentUpdateRequest;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -45,22 +47,24 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    public function store(StudentStoreRequest $request): \Illuminate\Http\RedirectResponse
     {
+
+        $data = $request->validated();
 
         DB::beginTransaction();
 
         try {
 
             $student = Student::create([
-              'student_id'          => $request->student_id,
-              'first_name'          => $request->first_name,
-              'last_name'           => $request->last_name,
-              'gender'              => $request->gender,
-              'date_of_birth'       => $request->date_of_birth,
-              'address'             => $request->address,
-              'email'               => $request->email,
-              'phone'               => $request->phone,
+              'student_id'          => $data['student_id'],
+              'first_name'          => $data['first_name'],
+              'last_name'           => $data['last_name'],
+              'gender'              => $data['gender'],
+              'date_of_birth'       => $data['date_of_birth'],
+              'address'             => $data['address'],
+              'email'               => $data['email'],
+              'phone'               => $data['phone'],
             ]);
 
             DB::commit();
@@ -99,21 +103,24 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Student $student):\Illuminate\Http\RedirectResponse
+    public function update(StudentUpdateRequest $request, Student $student):\Illuminate\Http\RedirectResponse
     {
+
+        $data = $request->validated();
+
         DB::beginTransaction();
 
         try {
 
             $student->update([
-                'student_id'          => $request->student_id,
-                'first_name'          => $request->first_name,
-                'last_name'           => $request->last_name,
-                'gender'              => $request->gender,
-                'date_of_birth'       => $request->date_of_birth,
-                'address'             => $request->address,
-                'email'               => $request->email,
-                'phone'               => $request->phone,
+              'student_id'          => $data['student_id'],
+              'first_name'          => $data['first_name'],
+              'last_name'           => $data['last_name'],
+              'gender'              => $data['gender'],
+              'date_of_birth'       => $data['date_of_birth'],
+              'address'             => $data['address'],
+              'email'               => $data['email'],
+              'phone'               => $data['phone'],
             ]);
 
             DB::commit();
