@@ -38,6 +38,9 @@ class StudentController extends Controller
     public function create()
     {
 
+        if (!auth()->user()->hasPermissionTo(PermissionEnum::CREATE_STUDENT)) {
+            return Inertia::render('Dashboard/Errors/403');
+        }
         $genders = array_column(Gender::cases(), 'value');
         return Inertia::render('Dashboard/Students/Create', [
             'genders' => $genders,
