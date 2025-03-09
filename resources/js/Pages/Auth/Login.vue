@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-container>
-            <img src="public/assets/logo.png" alt="">
+            <img src="/public/assets/logo.png" alt="">
         </v-container>
         <vee-form :validation-schema="schema" @submit.prevent="submitForm" v-slot="{ meta, setErrors }">
             <vee-field name="email" v-slot="{ field, errors }">
@@ -23,21 +23,21 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/vue3';
-import * as yup from 'yup';
-import { route } from 'ziggy-js';
+    import { useForm } from '@inertiajs/vue3';
+    import * as yup from 'yup';
+    import { route } from 'ziggy-js';
 
-const schema = yup.object().shape({
-    email: yup.string().required().email(),
-    password: yup.string().required().min(6),
-})
+    const schema = yup.object().shape({
+        email: yup.string().required().email(),
+        password: yup.string().required().min(6),
+    })
 
-const form = useForm({
-    email: '',
-    password: '',
-});
+    const form = useForm({
+        email: '',
+        password: '',
+    });
 
-const submitForm = () => {
-    form.post(route('login.store'));
-}
+    const submitForm = () => {
+        form.post(route('login.store'));
+    }
 </script>

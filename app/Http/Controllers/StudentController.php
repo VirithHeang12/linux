@@ -7,7 +7,6 @@ use App\Enums\PermissionEnum;
 use App\Http\Requests\StudentStoreRequest;
 use App\Http\Requests\StudentUpdateRequest;
 use App\Models\Student;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
@@ -20,7 +19,7 @@ class StudentController extends Controller
      */
     public function index(): \Inertia\Response
     {
-        if (!auth()->user()->hasPermissionTo(PermissionEnum::READ_STUDENT)) {
+        if (!auth()->user()->hasPermissionTo(PermissionEnum::VIEW_ANY_STUDENTS)) {
             return Inertia::render('Dashboard/Errors/403');
         }
         // $students = Student::all();
@@ -72,6 +71,12 @@ class StudentController extends Controller
               'address'             => $data['address'],
               'email'               => $data['email'],
               'phone'               => $data['phone'],
+            ]);
+
+            $student->user()->create([
+              'name'                => $data['first_name'] . ' ' . $data['last_name'],
+              'email'               => $data['email'],
+              'password'            => bcrypt('password'),
             ]);
 
             DB::commit();
