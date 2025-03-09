@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Gender;
+use App\Enums\PermissionEnum;
 use App\Http\Requests\StudentStoreRequest;
 use App\Http\Requests\StudentUpdateRequest;
 use App\Models\Student;
@@ -19,6 +20,9 @@ class StudentController extends Controller
      */
     public function index(): \Inertia\Response
     {
+        if (!auth()->user()->hasPermissionTo(PermissionEnum::READ_STUDENT)) {
+            return Inertia::render('Dashboard/Errors/403');
+        }
         // $students = Student::all();
         $perPage = request()->query('itemsPerPage', 5);
         $students = Student::paginate($perPage)->appends(request()->query());
