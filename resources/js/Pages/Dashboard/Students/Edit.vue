@@ -95,6 +95,8 @@
     });
 
     const submitForm = () => {
-        form.put(route('students.update', props.student.id));
+        form.put(route('students.update', {
+            student: props.student.id
+        }));
     }
 </script>
