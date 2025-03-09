@@ -84,7 +84,11 @@ const form = useForm({
     phone: '',
 });
 
-const submitForm = () => {
-    form.post(route('students.store'));
+const submitForm = (setErrors) => {
+    form.post(route('students.store'), {
+        onError: (errors) => {
+            setErrors(errors);
+        },
+    });
 }
 </script>
