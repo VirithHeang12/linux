@@ -31,6 +31,7 @@ class StudentController extends Controller
      */
     public function create()
     {
+
         $genders = array_column(Gender::cases(), 'value');
         return Inertia::render('Dashboard/Students/Create', [
             'genders' => $genders,
@@ -46,6 +47,7 @@ class StudentController extends Controller
      */
     public function store(Request $request): \Illuminate\Http\RedirectResponse
     {
+
         DB::beginTransaction();
 
         try {
@@ -77,7 +79,9 @@ class StudentController extends Controller
      */
     public function show(Student $student)
     {
-        //
+        return Inertia::render('Dashboard/Students/Show', [
+            'student' => $student,
+        ]);
     }
 
     /**
@@ -85,22 +89,69 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
-        //
+        $genders = array_column(Gender::cases(), 'value');
+        return Inertia::render('Dashboard/Students/Edit', [
+            'student' => $student,
+            'genders' => $genders,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Student $student)
+    public function update(Request $request, Student $student):\Illuminate\Http\RedirectResponse
     {
-        //
+        DB::beginTransaction();
+
+        try {
+
+            $student->update([
+                'student_id'          => $request->student_id,
+                'first_name'          => $request->first_name,
+                'last_name'           => $request->last_name,
+                'gender'              => $request->gender,
+                'date_of_birth'       => $request->date_of_birth,
+                'address'             => $request->address,
+                'email'               => $request->email,
+                'phone'               => $request->phone,
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('students.index')->with('success', 'Student updated.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()->route('students.index')->with('error', 'Students not updated.');
+        }
     }
+
+    public function delete(Student $student)
+    {
+        return Inertia::render('Dashboard/Students/Delete', [
+            'student' => $student,
+        ]);
+    }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Student $student)
     {
-        //
+
+        DB::beginTransaction();
+
+        try {
+            $student->delete();
+
+            DB::commit();
+
+            return response()->json(null, 204);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 }

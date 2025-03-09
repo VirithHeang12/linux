@@ -14,6 +14,8 @@ Route::middleware('auth')->group(function () {
         ->name('logout');
 
     Route::resource('students', StudentController::class);
+    Route::get('students/{student}/delete', [StudentController::class, 'delete'])
+        ->name('students.delete');
 });
 
 Route::middleware('guest')->group(function () {

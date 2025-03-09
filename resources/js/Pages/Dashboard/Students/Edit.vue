@@ -53,14 +53,12 @@
     </Modal>
 </template>
 
+
 <script setup>
 import { useForm } from '@inertiajs/vue3';
 import * as yup from 'yup';
 import { route } from 'ziggy-js';
-
-const props = defineProps({
-    genders: Array,
-});
+import { defineProps } from 'vue';
 
 const schema = yup.object().shape({
     student_id: yup.string().required("Student ID is required"),
@@ -73,18 +71,29 @@ const schema = yup.object().shape({
     phone: yup.string().required("Phone is required").min(9, "Phone must be at least 10 characters"),
 });
 
+const props = defineProps({
+    student: {
+        type: Object,
+        required: true,
+    },
+    genders: {
+        type: Array,
+        required: true,
+    },
+});
+
 const form = useForm({
-    student_id: '',
-    first_name: '',
-    last_name: '',
-    gender: '',
-    date_of_birth: '',
-    address: '',
-    email: '',
-    phone: '',
+    student_id: props.student.student_id,
+    first_name: props.student.first_name,
+    last_name: props.student.last_name,
+    gender: props.student.gender,
+    date_of_birth: props.student.date_of_birth,
+    address: props.student.address,
+    email: props.student.email,
+    phone: props.student.phone,
 });
 
 const submitForm = () => {
-    form.post(route('students.store'));
+    form.put(route('students.update', props.student.id));
 }
 </script>

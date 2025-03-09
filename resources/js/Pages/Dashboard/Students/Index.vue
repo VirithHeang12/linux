@@ -60,7 +60,7 @@ const headers = [
         title: 'Birth Date',
         align: 'start',
         sortable: true,
-        key: 'bod',
+        key: 'date_of_birth',
     },
     {
         title: 'Address',
@@ -75,10 +75,10 @@ const headers = [
         key: 'email',
     },
     {
-        title: 'Password',
+        title: 'Phone',
         align: 'start',
         sortable: true,
-        key: 'password',
+        key: 'phone',
     },
     {
         title: 'Created At',
