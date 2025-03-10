@@ -11,6 +11,10 @@ import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 
+// Vue Toast
+import Vue3Toastify from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 
 import '@mdi/font/css/materialdesignicons.css'
 // Modal
@@ -62,6 +66,12 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         const app = createApp({ render: renderApp(App, props) })
             .use(plugin)
+            .use(
+                Vue3Toastify,
+                {
+                    autoClose: 3000,
+                }
+            )
             .use(vuetify);
 
         app.component("vee-form", Form);

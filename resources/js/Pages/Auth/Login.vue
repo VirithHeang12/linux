@@ -35,6 +35,7 @@
     import { useForm } from '@inertiajs/vue3';
     import * as yup from 'yup';
     import { route } from 'ziggy-js';
+
     const schema = yup.object().shape({
         email: yup.string().required().email(),
         password: yup.string().required().min(6),

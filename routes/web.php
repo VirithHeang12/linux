@@ -8,7 +8,7 @@ use Inertia\Inertia;
 Route::middleware('auth')->group(function () {
     Route::get('/', function () {
         return Inertia::render('Index');
-    });
+    })->name('index');
 
     Route::post('logout', [AuthenticationController::class, 'destroy'])
         ->name('logout');

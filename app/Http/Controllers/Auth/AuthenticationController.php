@@ -67,16 +67,15 @@ class AuthenticationController extends Controller
      *
      * @param LoginRequest $request
      *
-     *
-     * @return Inertia\Response
+     * @return RedirectResponse
      */
-    public function storeLogin(LoginRequest $request): Response
+    public function storeLogin(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        return Inertia::render('Index');
+        return redirect()->route('index')->with('success', 'You are logged in');
     }
 
     /**
