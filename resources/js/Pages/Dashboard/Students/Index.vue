@@ -149,10 +149,10 @@
     const createCallback = () => {
         visitModal(route('students.create'), {
             config: {
-                slideover: true,
-                position: 'right',
+                slideover: false,
+                position: 'center',
                 closeExplicitly: true,
-                maxWidth: '2xl',
+                maxWidth: '4xl',
             },
 
         });

@@ -107,6 +107,6 @@ class PermissionSeeder extends Seeder
         $vathana->assignRole(RoleEnum::ADMIN->value);
         $broseth->assignRole(RoleEnum::ADMIN->value);
         $chamroeun->assignRole(RoleEnum::ADMIN->value);
-        $rathana->assignRole(RoleEnum::ADMIN->value);
+        $rathana->assignRole(RoleEnum::STUDENT->value);
     }
 }

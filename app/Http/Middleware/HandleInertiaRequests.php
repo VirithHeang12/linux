@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\RoleEnum;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -37,7 +38,15 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'flash' => [
-                'success' => fn () => $request->session()->get('success'),
+                'success'       => fn () => $request->session()->get('success'),
+            ],
+            'auth'  => [
+                'user'              => fn() => $request->user() ? [
+                    'id'            => $request->user()->id,
+                    'name'          => $request->user()->name,
+                    'email'         => $request->user()->email,
+                    'is_admin'      => $request->user()->hasRole(RoleEnum::ADMIN),
+                ] : null,
             ],
         ]);
     }

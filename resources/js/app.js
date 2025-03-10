@@ -2,7 +2,7 @@ import "./bootstrap";
 
 // Inertia
 import { createApp, h } from "vue";
-import { createInertiaApp } from "@inertiajs/vue3";
+import { createInertiaApp, usePage } from "@inertiajs/vue3";
 
 // Vuetify
 import "vuetify/styles";
@@ -24,6 +24,8 @@ import { Modal, putConfig, ModalLink, renderApp } from "@inertiaui/modal-vue";
 import { Field, Form, ErrorMessage } from "vee-validate";
 
 import DataTableServer from "./Components/DataTableServer.vue";
+import DashboardLayout from "./Layouts/DashboardLayout.vue";
+import StudentLayout from "./Layouts/StudentLayout.vue";
 
 putConfig({
     type: "modal",
@@ -60,8 +62,19 @@ const vuetify = createVuetify({
 
 createInertiaApp({
     resolve: (name) => {
-        const pages = import.meta.glob("./Pages/**/*.vue", { eager: true });
-        return pages[`./Pages/${name}.vue`];
+        const isAdmin = usePage().props?.auth?.user?.is_admin;
+
+        const pages = import.meta.glob('./Pages/**/*.vue', { eager: true })
+        let page = pages[`./Pages/${name}.vue`]
+        if (!page) {
+            page = pages[`./Pages/Error.vue`]
+        }
+        if (!isAdmin) {
+            page.default.layout = StudentLayout
+        } else {
+            page.default.layout = DashboardLayout
+        }
+        return page;
     },
     setup({ el, App, props, plugin }) {
         const app = createApp({ render: renderApp(App, props) })

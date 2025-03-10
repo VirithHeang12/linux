@@ -25,4 +25,5 @@ body {
     line-height: 1.5;
     color: #333;
     background-color: #fff;
+    z-index: -1;
 }
