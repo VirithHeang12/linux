@@ -11,51 +11,15 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class AuthenticationController extends Controller
 {
     /**
-     * Display the registration view.
+     * Display the login view.
      *
      * @return Response
-     */
-    public function createRegister(): Response
-    {
-        return Inertia::render('Auth/Register');
-    }
-
-    /**
-     * Handle an incoming registration request.
-     *
-     *
-     * @param RegisterRequest $request
-     *
-     * @return Inertia\Response
-     *
-     */
-    public function storeRegister(RegisterRequest $request): Response
-    {
-        $data = $request->validated();
-
-        $user = User::create([
-            'name'          => $data['name'],
-            'email'         => $data['email'],
-            'password'      => Hash::make($data['password']),
-        ]);
-
-        $user->assignRole(RoleEnum::STUDENT);
-
-        Auth::login($user);
-
-        return Inertia::render('Index');
-    }
-
-
-    /**
-     * Display the login view.
      */
     public function createLogin(): Response
     {

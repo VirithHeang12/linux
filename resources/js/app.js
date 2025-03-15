@@ -26,13 +26,14 @@ import { Field, Form, ErrorMessage } from "vee-validate";
 import DataTableServer from "./Components/DataTableServer.vue";
 import DashboardLayout from "./Layouts/DashboardLayout.vue";
 import StudentLayout from "./Layouts/StudentLayout.vue";
+import ImageUploader from "./Components/ImageUploader.vue";
 
 putConfig({
     type: "modal",
-    navigate: false,
+    navigate: true,
     modal: {
         closeButton: true,
-        closeExplicitly: false,
+        closeExplicitly: true,
         maxWidth: "2xl",
         paddingClasses: "p-4 sm:p-6",
         panelClasses: "bg-white rounded",
@@ -40,7 +41,7 @@ putConfig({
     },
     slideover: {
         closeButton: true,
-        closeExplicitly: false,
+        closeExplicitly: true,
         maxWidth: "md",
         paddingClasses: "p-4 sm:p-6",
         panelClasses: "bg-white min-h-screen",
@@ -69,6 +70,10 @@ createInertiaApp({
         if (!page) {
             page = pages[`./Pages/Error.vue`]
         }
+        if (name === "Auth/Login" || name === "Auth/Register") {
+            page.default.layout = null;
+            return page;
+        }
         if (!isAdmin) {
             page.default.layout = StudentLayout
         } else {
@@ -95,6 +100,7 @@ createInertiaApp({
         app.component("ModalLink", ModalLink);
 
         app.component("DataTableServer", DataTableServer);
+        app.component("ImageUploader", ImageUploader);
 
         return app.mount(el);
     },

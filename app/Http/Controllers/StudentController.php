@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Gender;
-use App\Enums\PermissionEnum;
 use App\Http\Requests\StudentStoreRequest;
 use App\Http\Requests\StudentUpdateRequest;
 use App\Models\Student;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Spatie\QueryBuilder\QueryBuilder;
+use InertiaUI\Modal\Modal;
 
 class StudentController extends Controller
 {
@@ -19,12 +21,13 @@ class StudentController extends Controller
      */
     public function index(): \Inertia\Response
     {
-        if (!auth()->user()->hasPermissionTo(PermissionEnum::VIEW_ANY_STUDENTS)) {
-            return Inertia::render('Dashboard/Errors/403');
-        }
-        // $students = Student::all();
         $perPage = request()->query('itemsPerPage', 5);
-        $students = Student::paginate($perPage)->appends(request()->query());
+
+        $students = QueryBuilder::for(Student::class)
+            ->allowedFilters(['first_name', 'last_name', 'email', 'phone'])
+            ->allowedSorts(['first_name', 'last_name', 'email', 'phone'])
+            ->paginate($perPage)
+            ->appends(request()->query());
 
         return Inertia::render('Dashboard/Students/Index', [
             'students'     => $students,
@@ -33,21 +36,18 @@ class StudentController extends Controller
 
     /**
      * Show the form for creating a new student.
+     *
+     * @return Modal
      */
-    public function create()
+    public function create(): Modal
     {
+        Gate::authorize('create', Student::class);
 
-        if (!auth()->user()->hasPermissionTo(PermissionEnum::CREATE_STUDENT)) {
-            return Inertia::render('Dashboard/Errors/403');
-        }
-        $genders = array_column(Gender::cases(), 'value');
-        return Inertia::render('Dashboard/Students/Create', [
-            'genders' => $genders,
-        ]);
+        return Inertia::modal('Dashboard/Students/Create')->baseRoute('students.index');
     }
 
-   /**
-     * Store a newly created Movie in storage.
+    /**
+     * Store a newly created student in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      *
@@ -55,7 +55,6 @@ class StudentController extends Controller
      */
     public function store(StudentStoreRequest $request): \Illuminate\Http\RedirectResponse
     {
-
         $data = $request->validated();
 
         DB::beginTransaction();
@@ -72,6 +71,14 @@ class StudentController extends Controller
               'email'               => $data['email'],
               'phone'               => $data['phone'],
             ]);
+
+            $image = $request->file('image');
+
+            if ($image) {
+                $student->image()->create([
+                  'path' => $image->store('students', 'public'),
+                ]);
+            }
 
             $student->user()->create([
               'name'                => $data['first_name'] . ' ' . $data['last_name'],

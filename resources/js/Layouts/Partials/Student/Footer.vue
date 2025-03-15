@@ -4,7 +4,7 @@
 </script>
 
 <template>
-    <footer class="bg-[#242424] px-4 relative overflow-y-hidden bg-blur z-1">
+    <footer class="bg-[#242424] px-4 relative overflow-y-hidden bg-blur">
         <v-container class="pb-2 text-white">
             <div class="row border-b-[1.8px] border-white/[28%] z-10">
                 <div class="flex-col justify-center col-12 d-flex align-center">

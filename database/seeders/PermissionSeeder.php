@@ -29,13 +29,10 @@ class PermissionSeeder extends Seeder
             ]);
         }
 
-        $role = Role::findByName(RoleEnum::ADMIN->value);
-        $role->givePermissionTo(PermissionEnum::cases());
-
         $role = Role::findByName(RoleEnum::STUDENT->value);
         $role->givePermissionTo([
-            PermissionEnum::VIEW_STUDENT->value,
-            PermissionEnum::UPDATE_STUDENT->value,
+            PermissionEnum::VIEW_OWN_STUDENT,
+            PermissionEnum::UPDATE_OWN_STUDENT,
         ]);
 
         $virith             = User::create([
@@ -98,15 +95,15 @@ class PermissionSeeder extends Seeder
             'password'      => bcrypt('12345678'),
         ]);
 
-        $virith->assignRole(RoleEnum::ADMIN->value);
-        $sophannarith->assignRole(RoleEnum::ADMIN->value);
-        $soriya->assignRole(RoleEnum::ADMIN->value);
-        $panha->assignRole(RoleEnum::ADMIN->value);
-        $bona->assignRole(RoleEnum::ADMIN->value);
-        $thou->assignRole(RoleEnum::ADMIN->value);
-        $vathana->assignRole(RoleEnum::ADMIN->value);
-        $broseth->assignRole(RoleEnum::ADMIN->value);
-        $chamroeun->assignRole(RoleEnum::ADMIN->value);
-        $rathana->assignRole(RoleEnum::STUDENT->value);
+        $virith->assignRole(RoleEnum::ADMIN);
+        $sophannarith->assignRole(RoleEnum::ADMIN);
+        $soriya->assignRole(RoleEnum::ADMIN);
+        $panha->assignRole(RoleEnum::ADMIN);
+        $bona->assignRole(RoleEnum::ADMIN);
+        $thou->assignRole(RoleEnum::STUDENT);
+        $vathana->assignRole(RoleEnum::STUDENT);
+        $broseth->assignRole(RoleEnum::STUDENT);
+        $chamroeun->assignRole(RoleEnum::STUDENT);
+        $rathana->assignRole(RoleEnum::STUDENT);
     }
 }

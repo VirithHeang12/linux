@@ -17,7 +17,6 @@
                     <vee-field name="password" v-slot="{ field, errors }">
                         <v-text-field v-bind="field" :error-messages="errors" v-model="form.password" label="Password"
                             type="password" variant="outlined"></v-text-field>
-
                     </vee-field>
                     <v-btn color="primary" class="mt-4 d-inline-flex justify-content-start w-100"
                         :disabled="!meta.valid || form.processing" @click.prevent="submitForm(setErrors)">
@@ -37,8 +36,8 @@
     import { route } from 'ziggy-js';
 
     const schema = yup.object().shape({
-        email: yup.string().required().email(),
-        password: yup.string().required().min(6),
+        email: yup.string().email().required('Please enter your email'),
+        password: yup.string().min(8).required('Please enter your password'),
     })
 
 

@@ -105,56 +105,23 @@
     const viewCallback = (item) => {
         visitModal(route('students.show', {
             student: item.id,
-        }), {
-            method: 'get',
-            config: {
-                slideover: false,
-                position: 'center',
-                closeExplicitly: true,
-                maxWidth: '2xl',
-            },
-        });
-
+        }));
     };
 
     const editCallback = (item) => {
         visitModal(route('students.edit', {
             student: item.id,
-        }), {
-            method: 'get',
-            config: {
-                slideover: true,
-                position: 'right',
-                closeExplicitly: true,
-                maxWidth: '2xl',
-            },
-        });
+        }));
     };
 
     const deleteCallback = (item) => {
         visitModal(route('students.delete', {
             student: item.id,
-        }), {
-            config: {
-                slideover: false,
-                position: 'center',
-                closeExplicitly: true,
-                maxWidth: '2xl',
-            },
-
-        });
+        }));
 
     };
 
     const createCallback = () => {
-        visitModal(route('students.create'), {
-            config: {
-                slideover: false,
-                position: 'center',
-                closeExplicitly: true,
-                maxWidth: '4xl',
-            },
-
-        });
+        visitModal(route('students.create'));
     };
 </script>

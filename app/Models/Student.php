@@ -57,4 +57,14 @@ class Student extends Model
     {
         return $this->morphOne(User::class, 'userable');
     }
+
+    /**
+     * Get the image associated with the student.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function image(): \Illuminate\Database\Eloquent\Relations\MorphOne
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
 }
