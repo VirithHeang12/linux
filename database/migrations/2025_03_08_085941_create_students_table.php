@@ -49,6 +49,12 @@ return new class extends Migration
                 ->nullable()
                 ->comment('Phone number of the student');
 
+            $table->foreignId('specialty_id')
+                ->nullable( )
+                ->constrained('specialties')
+                ->cascadeOnDelete()
+                ->comment('Specialty of the student');
+
             $table->softDeletes();
             $table->timestamps();
         });

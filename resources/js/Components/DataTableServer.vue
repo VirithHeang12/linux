@@ -1,42 +1,46 @@
 <template>
-    <v-data-table-server density="comfortable" :disable-sort="true" @update:options="updateOptionsCallback"
-        :items="items" :items-length="itemsLength" v-model:items-per-page="itemsPerPage" :headers="computedHeaders"
-        :loading="loading" :items-per-page-options="itemsPerPageOptions">
-        <template v-slot:top>
-            <v-toolbar flat>
-                <v-toolbar-title class="fw-semibold !text-2xl !text-zinc-800">{{ title }}</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-btn v-if="hasCreate" @click="createItem()" class="m-2 fw-medium !tracking-normal"
-                    prepend-icon="mdi-plus" color="primary" variant="outlined"> {{ title }}
-                </v-btn>
-            </v-toolbar>
-        </template>
+    <div class="table-container">
+        <v-data-table-server density="comfortable" :disable-sort="true" @update:options="updateOptionsCallback"
+            :items="items" :items-length="itemsLength" v-model:items-per-page="itemsPerPage" :headers="computedHeaders"
+            :loading="loading" :items-per-page-options="itemsPerPageOptions">
+            <template v-slot:top>
+                <v-toolbar flat>
+                    <v-toolbar-title class="fw-semibold !text-2xl !text-zinc-800">{{ title }}</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-btn v-if="hasCreate" @click="createItem()" class="m-2 fw-medium !tracking-normal"
+                        prepend-icon="mdi-plus" color="primary" variant="outlined"> {{ title }}
+                    </v-btn>
+                </v-toolbar>
+            </template>
 
-        <template v-slot:[`item.no`]="{ item }" v-if="showNo">
-            {{ item.no }}
-        </template>
+            <template v-slot:[`item.no`]="{ item }" v-if="showNo">
+                {{ item.no }}
+            </template>
 
-        <template v-slot:[`item.image`]="{ item }">
-            <v-avatar size="40" color="grey" class="me-3">
-                <v-img style="cursor: pointer;" :src="item.image?.path" @click="viewImage(item.image?.path)" />
-            </v-avatar>
-        </template>
+            <template v-slot:[`item.image`]="{ item }">
+                <v-avatar size="40" color="grey" class="me-3">
+                    <v-img style="cursor: pointer;" :src="item.image?.path" @click="viewImage(item.image?.path)" />
+                </v-avatar>
+            </template>
 
-        <template v-slot:[`item.actions`]="{ item }">
-            <v-icon class="me-3" color="primary" size="small" @click="viewItem(item)">
-                mdi-eye
-            </v-icon>
-            <v-icon class="me-3" color="secondary" size="small" @click="editItem(item)">
-                mdi-pencil
-            </v-icon>
-            <v-icon class="me-3" color="danger" size="small" @click="deleteItem(item)">
-                mdi-delete
-            </v-icon>
-        </template>
-        <template v-slot:no-data>
-            <p>There is no data to display</p>
-        </template>
-    </v-data-table-server>
+            <template v-slot:[`item.actions`]="{ item }">
+                <div class="w-20 d-flex justify-content-center">
+                    <v-icon class="me-3" color="primary" size="small" @click="viewItem(item)">
+                        mdi-eye
+                    </v-icon>
+                    <v-icon class="me-3" color="secondary" size="small" @click="editItem(item)">
+                        mdi-pencil
+                    </v-icon>
+                    <v-icon class="me-3" color="danger" size="small" @click="deleteItem(item)">
+                        mdi-delete
+                    </v-icon>
+                </div>
+            </template>
+            <template v-slot:no-data>
+                <p>There is no data to display</p>
+            </template>
+        </v-data-table-server>
+    </div>
 </template>
 
 <script setup>

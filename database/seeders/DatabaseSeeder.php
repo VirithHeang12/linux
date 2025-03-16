@@ -21,8 +21,11 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            PermissionSeeder::class,
-            // StudentSeeder::class,
+            // PermissionSeeder::class,
+            //SpecialtySeeder::class,
+            StudentSeeder::class,
+            AcademicSeeder::class,
+            StudentClassSeeder::class,
         ]);
     }
 }
