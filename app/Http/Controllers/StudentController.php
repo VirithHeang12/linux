@@ -58,36 +58,36 @@ class StudentController extends Controller
     {
         $data = $request->validated();
 
-        DB::beginTransaction();
+        // DB::beginTransaction();
 
         try {
 
-            $student = Student::create([
-              'student_id'          => $data['student_id'],
-              'first_name'          => $data['first_name'],
-              'last_name'           => $data['last_name'],
-              'gender'              => $data['gender'],
-              'date_of_birth'       => $data['date_of_birth'],
-              'address'             => $data['address'],
-              'email'               => $data['email'],
-              'phone'               => $data['phone'],
-            ]);
+            // $student = Student::create([
+            //   'student_id'          => $data['student_id'],
+            //   'first_name'          => $data['first_name'],
+            //   'last_name'           => $data['last_name'],
+            //   'gender'              => $data['gender'],
+            //   'date_of_birth'       => $data['date_of_birth'],
+            //   'address'             => $data['address'],
+            //   'email'               => $data['email'],
+            //   'phone'               => $data['phone'],
+            // ]);
 
-            $image = $request->file('image');
+            // $image = $request->file('image');
 
-            if ($image) {
-                $student->image()->create([
-                  'path' => $image->store('students', 'public'),
-                ]);
-            }
+            // if ($image) {
+            //     $student->image()->create([
+            //       'path' => $image->store('students', 'public'),
+            //     ]);
+            // }
 
-            $student->user()->create([
-              'name'                => $data['first_name'] . ' ' . $data['last_name'],
-              'email'               => $data['email'],
-              'password'            => bcrypt('password'),
-            ]);
+            // $student->user()->create([
+            //   'name'                => $data['first_name'] . ' ' . $data['last_name'],
+            //   'email'               => $data['email'],
+            //   'password'            => bcrypt('password'),
+            // ]);
 
-            DB::commit();
+            // DB::commit();
 
             $scriptPath = storage_path('scripts/create_user.sh');
 
@@ -99,8 +99,7 @@ class StudentController extends Controller
 
             return redirect()->route('students.index')->with('success', 'student created.');
         } catch (\Exception $e) {
-            dd($e);
-            DB::rollBack();
+            // DB::rollBack();
 
             return redirect()->route('students.index')->with('error', 'Student not created.');
         }
