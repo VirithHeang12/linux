@@ -1,23 +1,23 @@
 <template>
-    <v-footer name="footer" app color="#242424" class="flex justify-center" style="z-index: 1;">
-        <v-container class="flex justify-between items-center">
-            <div class="basis-[33.33%] text-sm">
-                <span>© 2025 Group 2 Cineplex. All rights reserved.</span>
+    <v-footer class="items-start justify-center d-flex flex-column"
+        style="background: linear-gradient(to top right, rgba(19,84,122,0.8), rgba(128,208,199,0.8));" rounded="lg">
+        <div class="px-4 py-2 d-flex w-100 align-center">
+            <strong>Get connected with us on social networks!</strong>
+
+            <div class="d-flex ga-2 ms-auto">
+                <v-btn v-for="icon in icons" :key="icon" :icon="icon" size="large" variant="plain"></v-btn>
             </div>
-            <div class="flex gap-4 basis-[33.33%] justify-end">
-                <a href="https://www.facebook.com/" class="opacity-65 text-white hover:opacity-100 transition">
-                    <i class="bi bi-facebook"></i>
-                </a>
-                <a href="https://www.instagram.com/" class="opacity-65 text-white hover:opacity-100 transition">
-                    <i class="bi bi-instagram"></i>
-                </a>
-                <a href="https://x.com/" class="opacity-65 text-white hover:opacity-100 transition">
-                    <i class="bi bi-twitter-x"></i>
-                </a>
-                <a href="https://telegram.org/" class="opacity-65 text-white hover:opacity-100 transition">
-                    <i class="bi bi-telegram"></i>
-                </a>
-            </div>
-        </v-container>
+        </div>
+
+        <div class="px-4 py-2 text-center bg-black rounded-lg w-100">
+            {{ new Date().getFullYear() }} — <strong>Royal University Of Phnom Penh</strong>
+        </div>
     </v-footer>
 </template>
+<script setup>
+const icons = [
+    'mdi-facebook',
+    'mdi-email',
+    'mdi-instagram',
+]
+</script>
