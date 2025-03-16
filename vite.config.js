@@ -10,4 +10,12 @@ export default defineConfig({
         }),
         vue()
     ],
+    server: {
+        cors: true,
+        host: "localhost",
+        port: 5173,
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+        },
+    },
 });
