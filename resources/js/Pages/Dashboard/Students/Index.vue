@@ -44,10 +44,11 @@
 </template>
 
 <script setup>
-    import { computed, ref } from 'vue'
-    import { router } from '@inertiajs/vue3';
+    import { computed, ref, watch } from 'vue'
+    import { router, usePage } from '@inertiajs/vue3';
     import { route } from 'ziggy-js';
     import { visitModal } from '@inertiaui/modal-vue';
+    import { toast } from 'vue3-toastify';
 
     const props = defineProps({
         students: {
@@ -216,4 +217,38 @@
             },
         });
     };
+
+    /**
+     * Notify the user
+     *
+     * @param {string} message
+     *
+     * @return void
+     */
+    const notify = (message) => {
+        toast(message, {
+            autoClose: 1500,
+            position: toast.POSITION.BOTTOM_RIGHT,
+        });
+    }
+
+    const page = usePage();
+
+    /**
+     * Watch for flash messages
+     *
+     * @return void
+     */
+    watch(() => page.props.flash, (flash) => {
+        const success = page.props.flash.success;
+        const error = page.props.flash.error;
+
+        if (success) {
+            notify(success);
+        } else if (error) {
+            notify(error);
+        }
+    }, {
+        deep: true,
+    });
 </script>

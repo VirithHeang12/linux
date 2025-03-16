@@ -211,11 +211,11 @@
 </template>
 
 <script setup>
-    import { router, useForm } from '@inertiajs/vue3';
+    import { router, useForm, usePage } from '@inertiajs/vue3';
     import * as yup from 'yup';
     import { route } from 'ziggy-js';
-    import { defineProps, ref } from 'vue';
-    import { md } from 'vuetify/iconsets/md';
+    import { defineProps, ref, watch } from 'vue';
+    import { toast } from 'vue3-toastify';
 
     const props = defineProps({
         student: Object,
@@ -363,6 +363,40 @@
             }
         );
     }
+
+    /**
+     * Notify the user
+     *
+     * @param {string} message
+     *
+     * @return void
+     */
+    const notify = (message) => {
+        toast(message, {
+            autoClose: 1500,
+            position: toast.POSITION.BOTTOM_RIGHT,
+        });
+    }
+
+    const page = usePage();
+
+    /**
+     * Watch for flash messages
+     *
+     * @return void
+     */
+    watch(() => page.props.flash, (flash) => {
+        const success = page.props.flash.success;
+        const error = page.props.flash.error;
+
+        if (success) {
+            notify(success);
+        } else if (error) {
+            notify(error);
+        }
+    }, {
+        deep: true,
+    });
 
 </script>
 

@@ -109,7 +109,7 @@ class StudentController extends Controller
                 return redirect()->route('students.index')->with('error', 'Student not created.');
             }
 
-            return redirect()->route('students.index')->with('success', 'student created.');
+            return redirect()->route('students.index')->with('success', 'Student created successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -231,7 +231,9 @@ class StudentController extends Controller
 
             DB::commit();
 
-            return redirect()->route('students.index')->with('success', 'Student updated.');
+            return redirect()->route('students.edit', [
+                'student'       => $student,
+            ])->with('success', 'Student updated successfully.');
         } catch (\Exception $e) {
 
             dd($e);
@@ -276,7 +278,7 @@ class StudentController extends Controller
 
             DB::commit();
 
-            return redirect()->route('students.index')->with('success', 'Student deleted.');
+            return redirect()->route('students.index')->with('success', 'Student deleted successfully.');
 
         } catch (\Exception $e) {
             DB::rollBack();
