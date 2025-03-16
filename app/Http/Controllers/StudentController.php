@@ -27,6 +27,7 @@ class StudentController extends Controller
         $students = QueryBuilder::for(Student::class)
             ->allowedFilters(['first_name', 'last_name', 'email', 'phone'])
             ->allowedSorts(['first_name', 'last_name', 'email', 'phone'])
+            ->with('image')
             ->paginate($perPage)
             ->appends(request()->query());
 
@@ -58,48 +59,43 @@ class StudentController extends Controller
     {
         $data = $request->validated();
 
-        // DB::beginTransaction();
+        DB::beginTransaction();
 
         try {
 
-            // $student = Student::create([
-            //   'student_id'          => $data['student_id'],
-            //   'first_name'          => $data['first_name'],
-            //   'last_name'           => $data['last_name'],
-            //   'gender'              => $data['gender'],
-            //   'date_of_birth'       => $data['date_of_birth'],
-            //   'address'             => $data['address'],
-            //   'email'               => $data['email'],
-            //   'phone'               => $data['phone'],
-            // ]);
+            $student = Student::create([
+              'student_id'          => $data['student_id'],
+              'first_name'          => $data['first_name'],
+              'last_name'           => $data['last_name'],
+              'gender'              => $data['gender'],
+              'date_of_birth'       => $data['date_of_birth'],
+              'address'             => $data['address'],
+              'email'               => $data['email'],
+              'phone'               => $data['phone'],
+            ]);
 
-            // $image = $request->file('image');
+            $image = $request->file('image');
 
-            // if ($image) {
-            //     $student->image()->create([
-            //       'path' => $image->store('students', 'public'),
-            //     ]);
-            // }
-
-            // $student->user()->create([
-            //   'name'                => $data['first_name'] . ' ' . $data['last_name'],
-            //   'email'               => $data['email'],
-            //   'password'            => bcrypt('password'),
-            // ]);
-
-            // DB::commit();
-
-            $scriptPath = storage_path('scripts/create_user.sh');
-
-            $result = Process::run(["sudo", $scriptPath, $data['last_name'], 12345678]);
-
-            if ($result->successful()) {
-                return redirect()->route('students.index')->with('error', 'Student not created.');
+            if ($image) {
+                $student->image()->create([
+                  'path' => $image->store('students', 'public'),
+                ]);
             }
+
+            DB::commit();
+
+            // $scriptPath = storage_path('scripts/create_user.sh');
+
+            // $result = Process::run(["sudo", $scriptPath, $data['last_name'], 12345678]);
+
+            // if ($result->successful()) {
+            //     return redirect()->route('students.index')->with('error', 'Student not created.');
+            // }
 
             return redirect()->route('students.index')->with('success', 'student created.');
         } catch (\Exception $e) {
-            // DB::rollBack();
+            dd($e);
+            DB::rollBack();
 
             return redirect()->route('students.index')->with('error', 'Student not created.');
         }

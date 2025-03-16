@@ -9,12 +9,17 @@
                 <v-btn v-if="hasCreate" @click="createItem()" class="m-2 fw-medium !tracking-normal"
                     prepend-icon="mdi-plus" color="primary" variant="outlined"> {{ title }}
                 </v-btn>
-
             </v-toolbar>
         </template>
 
         <template v-slot:[`item.no`]="{ item }" v-if="showNo">
             {{ item.no }}
+        </template>
+
+        <template v-slot:[`item.image`]="{ item }">
+            <v-avatar size="40" color="grey" class="me-3">
+                <v-img style="cursor: pointer;" :src="item.image?.path" @click="viewImage(item.image?.path)" />
+            </v-avatar>
         </template>
 
         <template v-slot:[`item.actions`]="{ item }">
@@ -35,120 +40,126 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+    import { computed, ref } from 'vue';
 
-const props = defineProps({
-    hasCreate: {
-        type: Boolean,
-        required: false,
-        default: true,
-    },
-    showNo: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
-    title: {
-        type: String,
-        required: true,
-    },
-    serverItems: {
-        type: Array,
-        required: true,
-    },
-    itemsLength: {
-        type: Number,
-        required: true,
-    },
-    itemsPerPage: {
-        type: Number,
-        required: false,
-        default: 10,
-    },
-    loading: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
-    itemValue: {
-        type: String,
-        required: false,
-        default: 'id',
-    },
-    headers: {
-        type: Array,
-        required: true,
-    },
-});
+    const props = defineProps({
+        hasCreate: {
+            type: Boolean,
+            required: false,
+            default: true,
+        },
+        showNo: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
+        title: {
+            type: String,
+            required: true,
+        },
+        serverItems: {
+            type: Array,
+            required: true,
+        },
+        itemsLength: {
+            type: Number,
+            required: true,
+        },
+        itemsPerPage: {
+            type: Number,
+            required: false,
+            default: 10,
+        },
+        loading: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
+        itemValue: {
+            type: String,
+            required: false,
+            default: 'id',
+        },
+        headers: {
+            type: Array,
+            required: true,
+        },
+    });
 
-const itemsPerPage = ref(props.itemsPerPage);
-const page = ref(0);
+    const itemsPerPage = ref(props.itemsPerPage);
+    const page = ref(0);
 
-const items = computed(() => {
-    if (props.showNo) {
-        return props.serverItems.map((item, index) => {
-            return {
-                no: ((page.value - 1) * itemsPerPage.value) + index + 1,
-                ...item,
-            };
-        });
-    } else {
-        return props.serverItems;
-    }
-});
+    const items = computed(() => {
+        if (props.showNo) {
+            return props.serverItems.map((item, index) => {
+                return {
+                    no: ((page.value - 1) * itemsPerPage.value) + index + 1,
+                    ...item,
+                };
+            });
+        } else {
+            return props.serverItems;
+        }
+    });
 
-const computedHeaders = computed(() => {
-    if (props.showNo) {
-        return [
-            {
-                title: 'No',
-                align: 'start',
-                sortable: false,
-                value: 'no',
-            },
-            ...props.headers,
-            {
-                title: 'Actions',
-                align: 'start',
-                sortable: false,
-                value: 'actions',
-            },
-        ];
-    } else {
-        return [
-            ...props.headers,
-            {
-                title: 'Actions',
-                align: 'start',
-                sortable: false,
-                value: 'actions',
-            },
-        ];
-    }
-});
+    const computedHeaders = computed(() => {
+        if (props.showNo) {
+            return [
+                {
+                    title: 'No',
+                    align: 'start',
+                    sortable: false,
+                    value: 'no',
+                },
+                ...props.headers,
+                {
+                    title: 'Actions',
+                    align: 'start',
+                    sortable: false,
+                    value: 'actions',
+                },
+            ];
+        } else {
+            return [
+                ...props.headers,
+                {
+                    title: 'Actions',
+                    align: 'start',
+                    sortable: false,
+                    value: 'actions',
+                },
+            ];
+        }
+    });
 
-const itemsPerPageOptions = [5, 10, 20, 30, 40, 50];
+    const itemsPerPageOptions = [5, 10, 20, 30, 40, 50];
 
-const emits = defineEmits(['view', 'edit', 'delete', 'create', '@update:options']);
+    const emits = defineEmits(['view', 'edit', 'delete', 'create', '@update:options']);
 
-const updateOptionsCallback = (options) => {
-    page.value = options.page;
-    emits('@update:options', options);
-};
+    const updateOptionsCallback = (options) => {
+        page.value = options.page;
+        emits('@update:options', options);
+    };
 
-const viewItem = (item) => {
-    emits('view', item);
-};
+    const viewItem = (item) => {
+        emits('view', item);
+    };
 
-const editItem = (item) => {
-    emits('edit', item);
-};
+    const editItem = (item) => {
+        emits('edit', item);
+    };
 
-const deleteItem = (item) => {
-    emits('delete', item);
-};
+    const deleteItem = (item) => {
+        emits('delete', item);
+    };
 
-const createItem = () => {
-    emits('create');
-};
+    const createItem = () => {
+        emits('create');
+    };
+
+    const viewImage = (path) => {
+        window.open(path, '_blank');
+    };
 </script>
+
+<style scoped></style>

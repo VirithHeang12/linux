@@ -44,7 +44,13 @@ class Student extends Model
     protected static function booted(): void
     {
         static::created(function ($student) {
-            $student->assignRole(RoleEnum::STUDENT);
+            $user = $student->user()->create([
+                'name'          => $student['first_name'] . ' ' . $student['last_name'],
+                'email'         => $student->email,
+                'password'      => bcrypt(12345678),
+            ]);
+
+            $user->assignRole(RoleEnum::STUDENT);
         });
     }
 

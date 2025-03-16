@@ -1,4 +1,41 @@
 <template>
+    <v-expansion-panels class="mb-3">
+        <v-expansion-panel>
+            <v-expansion-panel-title>
+                <v-icon>mdi-magnify</v-icon>
+                Search</v-expansion-panel-title>
+            <v-expansion-panel-text>
+                <v-row dense>
+                    <v-col cols="12" md="3">
+                        <v-text-field v-model.lazy="filter.first_name" label="First Name" clearable variant="outlined"
+                            hide-details>
+                        </v-text-field>
+                    </v-col>
+                    <v-col cols="12" md="3">
+                        <v-text-field v-model.lazy="filter.last_name" label="Last Name" clearable variant="outlined"
+                            hide-details>
+                        </v-text-field>
+                    </v-col>
+                    <v-col cols="12" md="3">
+                        <v-text-field v-model.lazy="filter.phone" label="Phone" clearable variant="outlined"
+                            hide-details>
+                        </v-text-field>
+                    </v-col>
+                    <v-col cols="12" md="3">
+                        <v-text-field v-model.lazy="filter.email" label="Email" clearable variant="outlined"
+                            hide-details>
+                        </v-text-field>
+                    </v-col>
+                    <v-col :cols="12">
+                        <v-btn class="mt-3" color="black" @click="filterCallback">
+                            <v-icon left>mdi-filter</v-icon>
+                            Search
+                        </v-btn>
+                    </v-col>
+                </v-row>
+            </v-expansion-panel-text>
+        </v-expansion-panel>
+    </v-expansion-panels>
     <data-table-server :showNo="true" title="Student" :serverItems="serverItems" :items-length="totalItems"
         :headers="headers" :loading="loading" :items-per-page="itemsPerPage" item-value="id" @update:options="loadItems"
         :has-create="true" @view="viewCallback" @delete="deleteCallback" @edit="editCallback"
@@ -31,7 +68,20 @@
 
     const loading = ref(false);
 
+    const filter = ref({
+        first_name: route().params.filter?.first_name ?? null,
+        last_name: route().params.filter?.last_name ?? null,
+        phone: route().params.filter?.phone ?? null,
+        email: route().params.filter?.email ?? null,
+    });
+
     const headers = [
+        {
+            title: 'Image',
+            align: 'start',
+            sortable: true,
+            key: 'image',
+        },
         {
             title: 'Student ID',
             align: 'start',
@@ -123,5 +173,21 @@
 
     const createCallback = () => {
         visitModal(route('students.create'));
+    };
+
+    /**
+     * Filter callback
+     *
+     * @return void
+     */
+    const filterCallback = () => {
+        router.reload({
+            only: ["students"],
+            data: {
+                filter: filter.value,
+                page: 1,
+                itemsPerPage: itemsPerPage.value,
+            },
+        });
     };
 </script>
