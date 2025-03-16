@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Gender;
 use App\Http\Requests\StudentStoreRequest;
 use App\Http\Requests\StudentUpdateRequest;
 use App\Models\Student;
@@ -12,6 +11,7 @@ use Illuminate\Support\Facades\Process;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\QueryBuilder;
 use InertiaUI\Modal\Modal;
+use Spatie\QueryBuilder\AllowedFilter;
 
 class StudentController extends Controller
 {
@@ -22,11 +22,24 @@ class StudentController extends Controller
      */
     public function index(): \Inertia\Response
     {
+        Gate::authorize('viewAny', Student::class);
+
         $perPage = request()->query('itemsPerPage', 5);
 
         $students = QueryBuilder::for(Student::class)
-            ->allowedFilters(['first_name', 'last_name', 'email', 'phone'])
-            ->allowedSorts(['first_name', 'last_name', 'email', 'phone'])
+            ->allowedFilters([
+                AllowedFilter::exact('student_id'),
+                'first_name',
+                'last_name',
+                'email',
+                'phone'
+            ])
+            ->allowedSorts([
+                'first_name',
+                'last_name',
+                'email',
+                'phone'
+            ])
             ->with('image')
             ->paginate($perPage)
             ->appends(request()->query());
@@ -45,18 +58,21 @@ class StudentController extends Controller
     {
         Gate::authorize('create', Student::class);
 
-        return Inertia::modal('Dashboard/Students/Create')->baseRoute('students.index');
+        return Inertia::modal('Dashboard/Students/Create')
+            ->baseRoute('students.index');
     }
 
     /**
      * Store a newly created student in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\StudentStoreRequest  $request
      *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StudentStoreRequest $request): \Illuminate\Http\RedirectResponse
     {
+        Gate::authorize('create', Student::class);
+
         $data = $request->validated();
 
         DB::beginTransaction();
@@ -84,17 +100,16 @@ class StudentController extends Controller
 
             DB::commit();
 
-            // $scriptPath = storage_path('scripts/create_user.sh');
+            $scriptPath = storage_path('scripts/create_user.sh');
 
-            // $result = Process::run(["sudo", $scriptPath, $data['last_name'], 12345678]);
+            $result = Process::run(["sudo", $scriptPath, $data['last_name'], 12345678]);
 
-            // if ($result->successful()) {
-            //     return redirect()->route('students.index')->with('error', 'Student not created.');
-            // }
+            if ($result->successful()) {
+                return redirect()->route('students.index')->with('error', 'Student not created.');
+            }
 
             return redirect()->route('students.index')->with('success', 'student created.');
         } catch (\Exception $e) {
-            dd($e);
             DB::rollBack();
 
             return redirect()->route('students.index')->with('error', 'Student not created.');
@@ -102,40 +117,51 @@ class StudentController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified student.
+     *
+     * @param  \App\Models\Student  $student
+     *
+     * @return Inertia\Response
      */
-    public function show(Student $student)
+    public function show(Student $student): \Inertia\Response
     {
         return Inertia::render('Dashboard/Students/Show', [
-            'student' => $student,
+            'student'       => $student,
         ]);
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified student.
+     *
+     * @param  \App\Models\Student  $student
+     *
+     * @return Inertia\Response
      */
-    public function edit(Student $student)
+    public function edit(Student $student): \Inertia\Response
     {
-        $genders = array_column(Gender::cases(), 'value');
+        Gate::authorize('update', $student);
 
         return Inertia::render('Dashboard/Students/Edit', [
-            'student' => $student,
-            'genders' => $genders,
+            'student'       => $student,
         ]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified student in storage.
+     *
+     * @param  \App\Http\Requests\StudentUpdateRequest  $request
+     *
+     * @param  \App\Models\Student  $student
      */
     public function update(StudentUpdateRequest $request, Student $student):\Illuminate\Http\RedirectResponse
     {
+        Gate::authorize('update', $student);
 
         $data = $request->validated();
 
         DB::beginTransaction();
 
         try {
-
             $student->update([
               'student_id'          => $data['student_id'],
               'first_name'          => $data['first_name'],
@@ -147,6 +173,14 @@ class StudentController extends Controller
               'phone'               => $data['phone'],
             ]);
 
+            $image = $request->file('image');
+
+            if ($image) {
+                $student->image()->create([
+                  'path' => $image->store('students', 'public'),
+                ]);
+            }
+
             DB::commit();
 
             return redirect()->route('students.index')->with('success', 'Student updated.');
@@ -157,16 +191,25 @@ class StudentController extends Controller
         }
     }
 
-    public function delete(Student $student)
+    /**
+     * Show the form for deleting the specified student.
+     *
+     * @param  \App\Models\Student  $student
+     *
+     * @return Modal
+     */
+    public function delete(Student $student): Modal
     {
-        return Inertia::render('Dashboard/Students/Delete', [
-            'student' => $student,
-        ]);
+        Gate::authorize('delete', $student);
+
+        return Inertia::modal('Dashboard/Students/Delete', [
+            'student'       => $student,
+        ])->baseRoute('students.index');
     }
 
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified student from storage.
      *
      * @param  \App\Models\Student  $student
      *
@@ -174,6 +217,7 @@ class StudentController extends Controller
      */
     public function destroy(Student $student): \Illuminate\Http\RedirectResponse
     {
+        Gate::authorize('delete', $student);
 
         DB::beginTransaction();
 

@@ -30,7 +30,7 @@ return new class extends Migration
                     Gender::MALE->value,
                     Gender::FEMALE->value,
                     Gender::OTHER->value
-            ])->default(Gender::OTHER->value)
+                ])->default(Gender::OTHER->value)
                 ->comment('Gender of the student');
 
             $table->date('date_of_birth')
@@ -48,12 +48,6 @@ return new class extends Migration
             $table->string('phone')
                 ->nullable()
                 ->comment('Phone number of the student');
-
-            $table->foreignId('specialty_id')
-                ->nullable( )
-                ->constrained('specialties')
-                ->cascadeOnDelete()
-                ->comment('Specialty of the student');
 
             $table->softDeletes();
             $table->timestamps();

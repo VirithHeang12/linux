@@ -2,8 +2,9 @@
     <v-expansion-panels class="mb-3">
         <v-expansion-panel>
             <v-expansion-panel-title>
-                <v-icon>mdi-magnify</v-icon>
-                Search</v-expansion-panel-title>
+                <v-icon left>mdi-filter</v-icon>
+                <span class="ml-4">Filter</span>
+            </v-expansion-panel-title>
             <v-expansion-panel-text>
                 <v-row dense>
                     <v-col cols="12" md="3">
@@ -29,7 +30,7 @@
                     <v-col :cols="12">
                         <v-btn class="mt-3" color="black" @click="filterCallback">
                             <v-icon left>mdi-filter</v-icon>
-                            Search
+                            Filter
                         </v-btn>
                     </v-col>
                 </v-row>
@@ -139,7 +140,6 @@
      * @param {Object} options
      * @param {Number} options.page
      * @param {Number} options.itemsPerPage
-     * @param {Array} options.sortBy
      *
      * @return {void}
      */
@@ -152,18 +152,39 @@
         });
     }
 
+    /**
+     * View callback
+     *
+     * @param {Object} item
+     *
+     * @return {void}
+     */
     const viewCallback = (item) => {
         visitModal(route('students.show', {
             student: item.id,
         }));
     };
 
+    /**
+     * Edit callback
+     *
+     * @param {Object} item
+     *
+     * @return {void}
+     */
     const editCallback = (item) => {
         visitModal(route('students.edit', {
             student: item.id,
         }));
     };
 
+    /**
+     * Delete callback
+     *
+     * @param {Object} item
+     *
+     * @return {void}
+     */
     const deleteCallback = (item) => {
         visitModal(route('students.delete', {
             student: item.id,
@@ -171,6 +192,11 @@
 
     };
 
+    /**
+     * Create callback
+     *
+     * @return {void}
+     */
     const createCallback = () => {
         visitModal(route('students.create'));
     };
@@ -178,7 +204,7 @@
     /**
      * Filter callback
      *
-     * @return void
+     * @return {void}
      */
     const filterCallback = () => {
         router.reload({

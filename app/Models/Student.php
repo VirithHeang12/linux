@@ -27,7 +27,6 @@ class Student extends Model
      */
     protected $fillable = [
         'student_id',
-        'specialty_id',
         'first_name',
         'last_name',
         'gender',
@@ -46,7 +45,7 @@ class Student extends Model
     {
         static::created(function ($student) {
             $user = $student->user()->create([
-                'name'          => $student['first_name'] . ' ' . $student['last_name'],
+                'name'          => 'IT' . $student->student_id,
                 'email'         => $student->email,
                 'password'      => bcrypt(12345678),
             ]);
@@ -73,5 +72,15 @@ class Student extends Model
     public function image(): \Illuminate\Database\Eloquent\Relations\MorphOne
     {
         return $this->morphOne(Image::class, 'imageable');
+    }
+
+    /**
+     * Get the classes that belong to the student.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function classes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(StudentClass::class, 'student_id', 'id');
     }
 }

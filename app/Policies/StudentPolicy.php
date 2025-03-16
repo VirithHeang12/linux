@@ -67,8 +67,8 @@ class StudentPolicy
         if ($user->can(PermissionEnum::UPDATE_ANY_STUDENTS, Student::class)) {
             return Response::allow();
         }
-
-        return $user->can(PermissionEnum::UPDATE_OWN_STUDENT, $student) && $user->id === $student->user_id
+        
+        return $user->can(PermissionEnum::UPDATE_OWN_STUDENT, $student) && $user->id === $student->user?->id
             ? Response::allow()
             : Response::deny('You do not have permission to update this student.');
     }

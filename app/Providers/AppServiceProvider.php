@@ -26,7 +26,6 @@ class AppServiceProvider extends ServiceProvider
             if ($user->hasRole(RoleEnum::ADMIN)) {
                 return true;
             }
-
             return null;
         });
     }

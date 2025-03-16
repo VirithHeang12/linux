@@ -13,8 +13,27 @@ return new class extends Migration
     {
         Schema::create('student_classes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('academic_id')->constrained()->cascadeOnDelete();
+
+            $table->foreignId('student_id')
+                ->nullable()
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->foreignId('academic_id')
+                ->nullable()
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->string('room_no')
+                ->nullable(false)
+                ->comment('Room number');
+
+            $table->string('class')
+                ->nullable(false)
+                ->comment('Class name');
+
             $table->timestamps();
         });
     }
