@@ -36,6 +36,6 @@ class Academic extends Model
      */
     public function classes(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(StudentClass::class, 'academic_id', 'id');
+        return $this->hasMany(StudentAcademic::class, 'academic_id', 'id');
     }
 }

@@ -23,30 +23,29 @@
         </v-menu>
         <v-app-bar-title>Royal University Of Phnom Penh</v-app-bar-title>
         <v-spacer></v-spacer>
-        <v-img src="assets/logo.png" alt="Logo" class="ml-auto mr-3" max-height="60" max-width="60"></v-img>
+        <v-img src="/assets/logo.png" alt="Logo" class="ml-auto mr-3" max-height="60" max-width="60"></v-img>
     </v-app-bar>
 </template>
 
 <script setup>
 
-import { ref } from 'vue';
-import { router } from '@inertiajs/vue3';
-import { route } from 'ziggy-js';
+    import { ref } from 'vue';
+    import { router } from '@inertiajs/vue3';
+    import { route } from 'ziggy-js';
 
-const items = ref([
-    { title: 'Home', icon: 'mdi-home', route: 'index' },
-    { title: 'Logout', icon: 'mdi-logout', route: 'logout' },
-    { title: 'Student', icon: 'mdi-school', route: 'students.index'}
-]);
+    const items = ref([
+        { title: 'Home', icon: 'mdi-home', route: 'index' },
+        { title: 'Logout', icon: 'mdi-logout', route: 'logout' },
+        { title: 'Student', icon: 'mdi-school', route: 'students.index' }
+    ]);
 
-const handleRoute = (item) => {
+    const handleRoute = (item) => {
 
-    if (item.route === 'logout') {
-        router.post(route(item.route));
-        return;
+        if (item.route === 'logout') {
+            router.post(route(item.route));
+            return;
+        }
+        router.get(route(item.route));
     }
-    router.get(route(item.route));
-
-}
 
 </script>

@@ -173,7 +173,7 @@
      * @return {void}
      */
     const editCallback = (item) => {
-        visitModal(route('students.edit', {
+        router.get(route('students.edit', {
             student: item.id,
         }));
     };

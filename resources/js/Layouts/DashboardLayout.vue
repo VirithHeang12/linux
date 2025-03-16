@@ -4,7 +4,7 @@
     <v-app>
         <Header />
         <v-main class="d-flex align-start justify-center bg-neutral-50" style="min-height: 300px;">
-            <v-container>
+            <v-container fluid class="px-5">
                 <slot>
                     Main content
                 </slot>

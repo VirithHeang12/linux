@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StudentStoreRequest;
 use App\Http\Requests\StudentUpdateRequest;
+use App\Models\Academic;
 use App\Models\Student;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -125,8 +126,10 @@ class StudentController extends Controller
      */
     public function show(Student $student): \Inertia\Response
     {
+        Gate::authorize('view', $student);
+
         return Inertia::render('Dashboard/Students/Show', [
-            'student'       => $student,
+            'student'       => $student->load('image'),
         ]);
     }
 
@@ -141,8 +144,39 @@ class StudentController extends Controller
     {
         Gate::authorize('update', $student);
 
+        $academicYears = Academic::where('end_date', '>=', now())->get();
+        $rooms = config('rooms');
+        $classes = config('classes');
+
+        $academicYears = collect($academicYears)->map(function ($year) {
+            return [
+              'value'       => $year['id'],
+              'title'       => 'Year ' . $year['year'] . ' (' . $year['start_date'] . ' - ' . $year['end_date'] . ')',
+            ];
+        });
+
+        $rooms = collect($rooms)->map(function ($room) {
+            return [
+              'value'       => $room['building'] . $room['room_no'],
+              'title'       => $room['building'] . $room['room_no'],
+            ];
+        });
+
+        $classes = collect($classes)->map(function ($class) {
+            return [
+              'value'       => $class['class'],
+              'title'       => $class['class'],
+            ];
+        });
+
         return Inertia::render('Dashboard/Students/Edit', [
-            'student'       => $student,
+            'student'       => $student->load([
+                'image',
+                'academics',
+            ]),
+            'academicYears' => $academicYears,
+            'rooms'         => $rooms,
+            'classes'       => $classes,
         ]);
     }
 
@@ -173,9 +207,23 @@ class StudentController extends Controller
               'phone'               => $data['phone'],
             ]);
 
+            $student->academics()->delete();
+            $academics = $data['academics'];
+
+            if ($academics) {
+                foreach ($academics as $academic) {
+                    $student->academics()->create([
+                      'academic_id'       => $academic['academic_id'],
+                      'room_no'           => $academic['room_no'],
+                      'class'             => $academic['class'],
+                    ]);
+                }
+            }
+
             $image = $request->file('image');
 
             if ($image) {
+                $student->image()->delete();
                 $student->image()->create([
                   'path' => $image->store('students', 'public'),
                 ]);
@@ -185,6 +233,8 @@ class StudentController extends Controller
 
             return redirect()->route('students.index')->with('success', 'Student updated.');
         } catch (\Exception $e) {
+
+            dd($e);
             DB::rollBack();
 
             return redirect()->route('students.index')->with('error', 'Students not updated.');
@@ -203,7 +253,7 @@ class StudentController extends Controller
         Gate::authorize('delete', $student);
 
         return Inertia::modal('Dashboard/Students/Delete', [
-            'student'       => $student,
+            'student'       => $student->load('image'),
         ])->baseRoute('students.index');
     }
 

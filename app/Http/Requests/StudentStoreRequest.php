@@ -29,8 +29,10 @@ class StudentStoreRequest extends FormRequest
             'last_name'     => ['required', 'string', 'max:255'],
             'gender'        => [new Enum(Gender::class)],
             'date_of_birth' => ['required', 'date'],
+            'address'       => ['nullable', 'string'],
             'email'         => ['required', 'string', 'email', 'max:255', 'unique:students'],
-            'phone'         => ['required', 'string', 'regex:/^(\+?\d{1,3})? ?\d{8,15}$/']
+            'phone'         => ['required', 'string', 'regex:/^(\+?\d{1,3})? ?\d{8,15}$/'],
+            'image'         => ['nullable', 'image', 'max:2048'],
         ];
     }
 
@@ -55,6 +57,7 @@ class StudentStoreRequest extends FormRequest
             'gender.enum'            => 'Invalid gender.',
             'date_of_birth.required' => 'Date of birth is required.',
             'date_of_birth.date'     => 'Date of birth must be a date.',
+            'address.string'         => 'Address must be a string.',
             'email.required'         => 'Email is required.',
             'email.string'           => 'Email must be a string.',
             'email.email'            => 'Email must be a valid email address.',
@@ -62,7 +65,9 @@ class StudentStoreRequest extends FormRequest
             'email.unique'           => 'Email has already been taken.',
             'phone.required'         => 'Phone number is required.',
             'phone.string'           => 'Phone number must be a string.',
-            'phone.regex'            => 'Invalid phone number.'
+            'phone.regex'            => 'Invalid phone number.',
+            'image.image'            => 'Image must be an image.',
+            'image.max'              => 'Image must not be greater than :max kilobytes.',
         ];
     }
 }

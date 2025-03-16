@@ -79,8 +79,8 @@ class Student extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function classes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function academics(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(StudentClass::class, 'student_id', 'id');
+        return $this->hasMany(StudentAcademic::class, 'student_id', 'id');
     }
 }

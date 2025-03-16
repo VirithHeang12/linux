@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class StudentClass extends Model
+class StudentAcademic extends Model
 {
     /** @use HasFactory<\Database\Factories\StudentClassFactory> */
     use HasFactory;
@@ -15,7 +15,7 @@ class StudentClass extends Model
      *
      * @var string
      */
-    protected $table = 'student_classes';
+    protected $table = 'student_academics';
 
     /**
      * The attributes that are mass assignable.
@@ -25,6 +25,8 @@ class StudentClass extends Model
     protected $fillable = [
         'student_id',
         'academic_id',
+        'room_no',
+        'class',
     ];
 
     /**

@@ -119,6 +119,11 @@
         image: null,
     });
 
+    /**
+     * Submit callback to store student.
+     *
+     * @param setErrors
+     */
     const submitForm = (setErrors) => {
         form.post(route('students.store'), {
             onError: (errors) => {

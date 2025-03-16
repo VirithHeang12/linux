@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\Gender;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
 class StudentUpdateRequest extends FormRequest
@@ -24,13 +25,30 @@ class StudentUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'student_id'    => ['required', 'string', 'max:30', 'unique:students'],
+            'student_id' => [
+                'required',
+                'string',
+                'max:30',
+                Rule::unique('students', 'student_id')->ignore($this->route('student'))
+            ],
             'first_name'    => ['required', 'string', 'max:255'],
             'last_name'     => ['required', 'string', 'max:255'],
             'gender'        => [new Enum(Gender::class)],
             'date_of_birth' => ['required', 'date'],
-            'email'         => ['required', 'string', 'email', 'max:255', 'unique:students'],
-            'phone'         => ['required', 'string', 'regex:/^(\+?\d{1,3})? ?\d{8,15}$/']
+            'address'       => ['nullable', 'string'],
+            'email'         => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('students', 'email')->ignore($this->route('student'))
+            ],
+            'phone'         => ['required', 'string', 'regex:/^(\+?\d{1,3})? ?\d{8,15}$/'],
+            'academics'     => ['array'],
+            'academics.*.academic_id' => ['required', 'exists:academics,id'],
+            'academics.*.room_no'     => ['required', 'string'],
+            'academics.*.class'       => ['required', 'string'],
+            'image'         => ['nullable', 'image', 'max:2048']
         ];
     }
 
@@ -42,7 +60,7 @@ class StudentUpdateRequest extends FormRequest
     public function messages(): array
     {
         return [
-                        'student_id.required'    => 'Student ID is required.',
+            'student_id.required'    => 'Student ID is required.',
             'student_id.string'      => 'Student ID must be a string.',
             'student_id.max'         => 'Student ID must not be greater than :max characters.',
             'student_id.unique'      => 'Student ID has already been taken.',
@@ -55,6 +73,7 @@ class StudentUpdateRequest extends FormRequest
             'gender.enum'            => 'Invalid gender.',
             'date_of_birth.required' => 'Date of birth is required.',
             'date_of_birth.date'     => 'Date of birth must be a date.',
+            'address.string'         => 'Address must be a string.',
             'email.required'         => 'Email is required.',
             'email.string'           => 'Email must be a string.',
             'email.email'            => 'Email must be a valid email address.',
@@ -62,7 +81,16 @@ class StudentUpdateRequest extends FormRequest
             'email.unique'           => 'Email has already been taken.',
             'phone.required'         => 'Phone number is required.',
             'phone.string'           => 'Phone number must be a string.',
-            'phone.regex'            => 'Invalid phone number.'
+            'phone.regex'            => 'Invalid phone number.',
+            'academics.array'        => 'Academics must be an array.',
+            'academics.*.academic_id.required' => 'Academic ID is required.',
+            'academics.*.academic_id.exists'   => 'Academic ID does not exist.',
+            'academics.*.room_no.required'     => 'Room number is required.',
+            'academics.*.room_no.string'       => 'Room number must be a string.',
+            'academics.*.class.required'       => 'Class name is required.',
+            'academics.*.class.string'         => 'Class name must be a string.',
+            'image.image'            => 'Image must be an image.',
+            'image.max'              => 'Image must not be greater than :max kilobytes.'
         ];
     }
 }
