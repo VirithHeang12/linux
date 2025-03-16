@@ -1,5 +1,5 @@
 <template>
-    <v-footer class="items-start justify-center d-flex flex-column"
+    <v-footer app class="items-start justify-center d-flex flex-column"
         style="background: linear-gradient(to top right, rgba(19,84,122,0.8), rgba(128,208,199,0.8));" rounded="lg">
         <div class="px-4 py-2 d-flex w-100 align-center">
             <strong>Get connected with us on social networks!</strong>
@@ -15,9 +15,9 @@
     </v-footer>
 </template>
 <script setup>
-const icons = [
-    'mdi-facebook',
-    'mdi-email',
-    'mdi-instagram',
-]
+    const icons = [
+        'mdi-facebook',
+        'mdi-email',
+        'mdi-instagram',
+    ]
 </script>
