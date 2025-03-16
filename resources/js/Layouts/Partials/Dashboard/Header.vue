@@ -1,5 +1,5 @@
 <template>
-    <v-app-bar :elevation="0" color="#242424f1" flat compact class="relative app-bar"
+    <v-app-bar :elevation="0" color="#242424f1" flat compact class="relative app-bar" style="z-index: 1;"
         image="/assets/rupp-landscape.jpg">
         <template v-slot:image>
             <v-img gradient="to top right, rgba(19,84,122,.8), rgba(128,208,199,.8)"></v-img>
@@ -27,23 +27,3 @@
     </v-app-bar>
 
 </template>
-
-<script setup>
-
-</script>
-
-<style scoped>
-    .bg-blur::before {
-        content: '';
-        width: 65%;
-        height: 100%;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, 100%);
-        background-color: red;
-        filter: blur(200px);
-        border-radius: 100%;
-        z-index: -1;
-    }
-</style>
