@@ -8,7 +8,7 @@
         <v-container class="pb-2 text-white">
             <div class="row border-b-[1.8px] border-white/[28%] z-10">
                 <div class="flex-col justify-center col-12 d-flex align-center">
-                    <h4 class="opacity-80">Eternal Cineplex</h4>
+                    <h4 class="opacity-80">Group 2 Cineplex</h4>
 
                     <span class="text-sm font-light leading-5 text-center opacity-60">
                         Your ultimate destination for movies and magic. <br>
@@ -38,7 +38,7 @@
             <div class="z-10 py-1 mt-2 row">
                 <div class="flex-wrap px-0 col-12 gap-y-4 d-flex justify-content-center justify-content-sm-between">
                     <div class="text-center col-12 col-sm-6 text-sm-left">
-                        <span class="text-sm opacity-65">© 2025 Eternal Cineplex. All rights reserved.</span>
+                        <span class="text-sm opacity-65">© 2025 Group 2 Cineplex. All rights reserved.</span>
                     </div>
                     <div class="flex gap-4 col-12 col-sm-6 justify-content-center justify-content-sm-end">
                         <a href="https://www.facebook.com/" class="text-white transition opacity-65 hover:opacity-100">

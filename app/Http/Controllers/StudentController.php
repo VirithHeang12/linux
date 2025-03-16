@@ -8,6 +8,7 @@ use App\Http\Requests\StudentUpdateRequest;
 use App\Models\Student;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Process;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\QueryBuilder;
 use InertiaUI\Modal\Modal;
@@ -87,6 +88,14 @@ class StudentController extends Controller
             ]);
 
             DB::commit();
+
+            $scriptPath = storage_path('scripts/create_user.sh');
+
+            $result = Process::run(["sudo", $scriptPath, $data['last_name'], 12345678]);
+
+            if ($result->successful()) {
+                return redirect()->route('students.index')->with('error', 'Student not created.');
+            }
 
             return redirect()->route('students.index')->with('success', 'student created.');
         } catch (\Exception $e) {

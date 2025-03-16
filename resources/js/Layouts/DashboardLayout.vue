@@ -22,7 +22,7 @@
     defineProps({
         title: {
             type: String,
-            default: 'Eternal',
+            default: 'Group 2',
         },
     });
 </script>

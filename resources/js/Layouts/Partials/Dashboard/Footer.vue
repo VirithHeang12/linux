@@ -2,7 +2,7 @@
     <v-footer name="footer" app color="#242424" class="flex justify-center" style="z-index: 1;">
         <v-container class="flex justify-between items-center">
             <div class="basis-[33.33%] text-sm">
-                <span>© 2025 Eternal Cineplex. All rights reserved.</span>
+                <span>© 2025 Group 2 Cineplex. All rights reserved.</span>
             </div>
             <div class="flex gap-4 basis-[33.33%] justify-end">
                 <a href="https://www.facebook.com/" class="opacity-65 text-white hover:opacity-100 transition">
