@@ -235,17 +235,17 @@
     });
 
     const form = useForm({
-        student_id: props.student.student_id,
-        first_name: props.student.first_name,
-        last_name: props.student.last_name,
-        gender: props.student.gender,
-        date_of_birth: props.student.date_of_birth,
-        address: props.student.address,
-        email: props.student.email,
-        phone: props.student.phone,
+        student_id: props.student.data.student_id,
+        first_name: props.student.data.first_name,
+        last_name: props.student.data.last_name,
+        gender: props.student.data.gender,
+        date_of_birth: props.student.data.date_of_birth,
+        address: props.student.data.address,
+        email: props.student.data.email,
+        phone: props.student.data.phone,
         image: null,
-        image_url: '/' + props.student.image?.path,
-        academics: props.student.academics ?? [],
+        image_url: props.student.data.image?.path,
+        academics: props.student.data.academics ?? [],
     });
 
     const deleteDialog = ref(false);
@@ -354,7 +354,7 @@
             _method: "PUT",
         })).post(
             route("students.update", {
-                student: props.student.id,
+                student: props.student.data.id,
             }),
             {
                 onError: (errors) => {

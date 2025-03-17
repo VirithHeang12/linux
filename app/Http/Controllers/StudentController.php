@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StudentStoreRequest;
 use App\Http\Requests\StudentUpdateRequest;
+use App\Http\Resources\StudentResource;
 use App\Models\Academic;
 use App\Models\Student;
 use Illuminate\Support\Facades\DB;
@@ -45,6 +46,8 @@ class StudentController extends Controller
             ->with('image')
             ->paginate($perPage)
             ->appends(request()->query());
+
+        $students = StudentResource::collection($students);
 
         return Inertia::render('Dashboard/Students/Index', [
             'students'     => $students,
@@ -96,7 +99,7 @@ class StudentController extends Controller
 
             if ($image) {
                 $student->image()->create([
-                  'path' => $image->store('students', 'public'),
+                  'path' => $image->store('students'),
                 ]);
             }
 
@@ -138,12 +141,15 @@ class StudentController extends Controller
             ];
         });
 
+        $student->load([
+            'image',
+            'academics'
+        ]);
+
+        $student = StudentResource::make($student);
 
         return Inertia::render('Dashboard/Students/Show', [
-            'student'       => $student->load([
-                'image',
-                'academics'
-            ]),
+            'student'       => $student,
             'academicYears' => $academicYears
         ]);
     }
@@ -184,11 +190,14 @@ class StudentController extends Controller
             ];
         });
 
+        $student->load([
+            'image',
+            'academics'
+        ]);
+        $student = StudentResource::make($student);
+
         return Inertia::render('Dashboard/Students/Edit', [
-            'student'       => $student->load([
-                'image',
-                'academics',
-            ]),
+            'student'       => $student,
             'academicYears' => $academicYears,
             'rooms'         => $rooms,
             'classes'       => $classes,
@@ -238,10 +247,10 @@ class StudentController extends Controller
             $image = $request->file('image');
 
             if ($image) {
-                Storage::disk('public')->delete($student->image->path);
+                Storage::delete($student->image->path);
                 $student->image()->delete();
                 $student->image()->create([
-                  'path' => $image->store('students', 'public'),
+                    'path' => $image->store('students'),
                 ]);
             }
 
@@ -251,8 +260,6 @@ class StudentController extends Controller
                 'student'       => $student,
             ])->with('success', 'Student updated successfully.');
         } catch (\Exception $e) {
-
-            dd($e);
             DB::rollBack();
 
             return redirect()->route('students.index')->with('error', 'Students not updated.');
