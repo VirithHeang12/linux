@@ -70,10 +70,6 @@ createInertiaApp({
 
         page.default.layout = DashboardLayout
 
-        if (!isAdmin) {
-            page.default.layout = StudentLayout;
-        }
-
         if (name === "Auth/Login" || name === "Auth/Register") {
             page.default.layout = null;
             return page;
