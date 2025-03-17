@@ -161,7 +161,7 @@
      * @return {void}
      */
     const viewCallback = (item) => {
-        visitModal(route('students.show', {
+        router.get(route('students.show', {
             student: item.id,
         }));
     };

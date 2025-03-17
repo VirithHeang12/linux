@@ -129,8 +129,22 @@ class StudentController extends Controller
     {
         Gate::authorize('view', $student);
 
+        $academicYears = Academic::get();
+
+        $academicYears = collect($academicYears)->map(function ($year) {
+            return [
+              'value'       => $year['id'],
+              'title'       => 'Year ' . $year['year'] . ' (' . $year['start_date'] . ' - ' . $year['end_date'] . ')',
+            ];
+        });
+
+
         return Inertia::render('Dashboard/Students/Show', [
-            'student'       => $student->load('image'),
+            'student'       => $student->load([
+                'image',
+                'academics'
+            ]),
+            'academicYears' => $academicYears
         ]);
     }
 
