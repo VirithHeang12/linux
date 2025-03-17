@@ -17,8 +17,9 @@ Route::middleware('auth')->group(function () {
         ->name('students.delete');
 
     Route::resource('students', StudentController::class);
-
 });
+
+//@TODO: Add middleware to student routes to check if the logged-in student is expired
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthenticationController::class, 'createLogin'])
