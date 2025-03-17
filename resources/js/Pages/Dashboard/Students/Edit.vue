@@ -8,7 +8,7 @@
                         <v-row dense>
                             <v-col :cols="12" :md="4" class="px-0">
                                 <vee-field name="student_id" v-slot="{ field, errors }">
-                                    <v-text-field v-bind="field" v-model="form.student_id" label="Student ID"
+                                    <v-text-field v-bind="field" v-model="form.student_id" label="Student ID *"
                                         variant="outlined" :error-messages="errors"></v-text-field>
                                 </vee-field>
                             </v-col>
@@ -25,7 +25,7 @@
                         <v-row dense>
                             <v-col :cols="12" :md="12" class="px-0">
                                 <vee-field name="first_name" v-slot="{ field, errors }">
-                                    <v-text-field v-bind="field" v-model="form.first_name" label="First Name"
+                                    <v-text-field v-bind="field" v-model="form.first_name" label="First Name *"
                                         variant="outlined" :error-messages="errors"></v-text-field>
                                 </vee-field>
                             </v-col>
@@ -33,7 +33,7 @@
                         <v-row dense>
                             <v-col :cols="12" :md="12">
                                 <vee-field name="last_name" v-slot="{ field, errors }">
-                                    <v-text-field v-bind="field" v-model="form.last_name" label="Last Name"
+                                    <v-text-field v-bind="field" v-model="form.last_name" label="Last Name *"
                                         variant="outlined" :error-messages="errors"></v-text-field>
                                 </vee-field>
                             </v-col>
@@ -48,14 +48,14 @@
                 <v-row dense>
                     <v-col :cols="12" :md="6">
                         <vee-field name="date_of_birth" v-slot="{ field, errors }">
-                            <v-text-field v-bind="field" v-model="form.date_of_birth" label="Date of Birth"
+                            <v-text-field v-bind="field" v-model="form.date_of_birth" label="Date of Birth *"
                                 variant="outlined" type="date" :error-messages="errors">
                             </v-text-field>
                         </vee-field>
                     </v-col>
                     <v-col :cols="12" :md="6">
                         <vee-field name="email" v-slot="{ field, errors }">
-                            <v-text-field v-bind="field" v-model="form.email" label="Email" variant="outlined"
+                            <v-text-field v-bind="field" v-model="form.email" label="Email *" variant="outlined"
                                 :error-messages="errors">
                             </v-text-field>
                         </vee-field>
@@ -65,7 +65,7 @@
                 <v-row dense>
                     <v-col :cols="12" :md="6">
                         <vee-field name="phone" v-slot="{ field, errors }">
-                            <v-text-field v-bind="field" v-model="form.phone" label="Phone" variant="outlined"
+                            <v-text-field v-bind="field" v-model="form.phone" label="Phone *" variant="outlined"
                                 :error-messages="errors">
                             </v-text-field>
                         </vee-field>

@@ -9,6 +9,7 @@ use App\Models\Student;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Process;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\QueryBuilder;
 use InertiaUI\Modal\Modal;
@@ -144,7 +145,7 @@ class StudentController extends Controller
     {
         Gate::authorize('update', $student);
 
-        $academicYears = Academic::where('end_date', '>=', now())->get();
+        $academicYears = Academic::get();
         $rooms = config('rooms');
         $classes = config('classes');
 
@@ -223,6 +224,7 @@ class StudentController extends Controller
             $image = $request->file('image');
 
             if ($image) {
+                Storage::disk('public')->delete($student->image->path);
                 $student->image()->delete();
                 $student->image()->create([
                   'path' => $image->store('students', 'public'),

@@ -13,7 +13,7 @@ class AcademicSeeder extends Seeder
      */
     public function run(): void
     {
-        $years      = config('academic_year');
+        $years      = config('years');
 
         $academics  = [
             [
@@ -32,10 +32,6 @@ class AcademicSeeder extends Seeder
                 'start_date'    => '2024-09-01',
                 'end_date'      => '2025-06-30',
             ],
-            [
-                'start_date'    => '2025-09-01',
-                'end_date'      => '2026-06-30',
-            ]
         ];
 
         foreach ($years as $year) {
