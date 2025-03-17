@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\RoleEnum;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -42,7 +43,7 @@ class LoginRequest extends FormRequest
         return [
             'email.required'    => 'Email is required.',
             'email.email'       => 'Email must be a valid email address.',
-            'email.exists'      => 'Ah Bek',
+            'email.exists'      => 'These credentials do not match our records.',
             'password.required' => 'Password is required.',
             'password.string'   => 'Password must be a string.',
         ];
@@ -63,6 +64,28 @@ class LoginRequest extends FormRequest
             throw ValidationException::withMessages([
                 'email' => __('auth.failed'),
             ]);
+        }
+
+        $user = Auth::user();
+
+        if ($user->hasRole(RoleEnum::STUDENT)) {
+            $student = $user->userable;
+
+            $academics = $student->academics;
+
+            $year4 = collect($academics)->first(function ($academic) {
+                return $academic->academic?->year == 4;
+            })?->academic;
+
+            if ($year4) {
+                if ($year4->end_date < now()) {
+                    Auth::logout();
+
+                    throw ValidationException::withMessages([
+                        'email' => 'Your account is expired.',
+                    ]);
+                }
+            }
         }
 
         RateLimiter::clear($this->throttleKey());
