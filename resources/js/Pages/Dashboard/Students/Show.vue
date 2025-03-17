@@ -20,36 +20,36 @@
 
                 <v-list class="w-full">
                     <v-container class="justify-center py-4 d-flex align-center">
-                        <v-row no-gutters>
-                            <v-col cols="12" md="6">
+                        <v-row dense>
+                            <v-col :cols="12" :md="6">
                                 <v-list-item class="p-4 mb-4 text-lg">
                                     <v-list-item-title><strong>ID:</strong> {{ student.id }}</v-list-item-title>
                                 </v-list-item>
                             </v-col>
-                            <v-col cols="12" md="6">
+                            <v-col :cols="12" :md="6">
                                 <v-list-item class="p-4 mb-4 text-lg ">
                                     <v-list-item-title><strong>Gender:</strong> {{ student.gender.toUpperCase()
                                         }}</v-list-item-title>
                                 </v-list-item>
                             </v-col>
-                            <v-col cols="12" md="6">
+                            <v-col :cols="12" :md="6">
                                 <v-list-item class="p-4 mb-4 text-lg ">
                                     <v-list-item-title><strong>Date of Birth:</strong> {{ student.date_of_birth
-                                        }}</v-list-item-title>
+                                    }}</v-list-item-title>
                                 </v-list-item>
                             </v-col>
-                            <v-col cols="12" md="6">
+                            <v-col :cols="12" :md="6">
                                 <v-list-item class="p-4 mb-4 text-lg">
                                     <v-list-item-title><strong>Address:</strong> {{ student.address
-                                        }}</v-list-item-title>
+                                    }}</v-list-item-title>
                                 </v-list-item>
                             </v-col>
-                            <v-col cols="12" md="6">
+                            <v-col :cols="12" :md="6">
                                 <v-list-item class="p-4 mb-4 text-lg ">
                                     <v-list-item-title><strong>Phone:</strong> {{ student.phone }}</v-list-item-title>
                                 </v-list-item>
                             </v-col>
-                            <v-col cols="12" md="6">
+                            <v-col :cols="12" :md="6">
                                 <v-list-item class="p-4 mb-4 text-lg ">
                                     <v-list-item-title><strong>Email:</strong> {{ student.email }}</v-list-item-title>
                                 </v-list-item>
