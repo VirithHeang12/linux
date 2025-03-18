@@ -7,6 +7,7 @@ use App\Http\Requests\StudentUpdateRequest;
 use App\Http\Resources\StudentResource;
 use App\Models\Academic;
 use App\Models\Student;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Process;
@@ -216,7 +217,7 @@ class StudentController extends Controller
         Gate::authorize('update', $student);
 
         $data = $request->validated();
-
+      
         DB::beginTransaction();
 
         try {
@@ -233,6 +234,7 @@ class StudentController extends Controller
 
             $student->academics()->delete();
             $academics = $data['academics'];
+            
 
             if ($academics) {
                 foreach ($academics as $academic) {
@@ -245,7 +247,6 @@ class StudentController extends Controller
             }
 
             $image = $request->file('image');
-
             if ($image) {
                 Storage::delete($student->image->path);
                 $student->image()->delete();
@@ -253,7 +254,6 @@ class StudentController extends Controller
                     'path' => $image->store('students'),
                 ]);
             }
-
             DB::commit();
 
             return redirect()->route('students.edit', [
@@ -309,4 +309,7 @@ class StudentController extends Controller
             return redirect()->route('students.index')->with('error', 'Student not deleted.');
         }
     }
+   
+    
+    
 }

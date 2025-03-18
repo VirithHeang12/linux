@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticationController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Pest\Plugins\Profile;
 
 Route::middleware('auth')->group(function () {
     Route::get('/', function () {
@@ -17,6 +19,8 @@ Route::middleware('auth')->group(function () {
         ->name('students.delete');
 
     Route::resource('students', StudentController::class);
+    Route::get("/students/{student}/profile", [ProfileController::class, 'profile'])
+        ->name('profile');
 });
 
 //@TODO: Add middleware to student routes to check if the logged-in student is expired
