@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('it_classes', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->foreignId('generation_id')->constrained('generation')
+            $table->foreignId('generation_id')->constrained('generations')
                   ->onDelete('cascade');
             $table->timestamps();
         });
