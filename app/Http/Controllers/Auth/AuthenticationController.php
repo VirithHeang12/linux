@@ -100,7 +100,7 @@ class AuthenticationController extends Controller
                 ]);
             }
 
-            $user = User::create([
+            $user = $student->user()->create([
               'name'          => $data['first_name'] . ' ' . $data['last_name'],
               'email'         => $data['email'],
               'password'      => Hash::make($data['password']),
