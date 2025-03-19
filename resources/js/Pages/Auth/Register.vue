@@ -99,7 +99,7 @@
 
                 <v-row dense>
                     <v-col :cols="12">
-                        <v-btn color="primary" class="mt-4 d-inline-flex justify-content-start "
+                        <v-btn color="primary" class="mt-4 mb-4 d-inline-flex justify-content-start"
                             :disabled="!meta.valid || form.processing" @click.prevent="submitForm(setErrors)">
                             <span v-if="form.processing" class="spinner-border spinner-border-sm me-2" role="status"
                                 aria-hidden="true"></span>
