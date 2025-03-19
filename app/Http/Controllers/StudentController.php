@@ -7,7 +7,6 @@ use App\Http\Requests\StudentUpdateRequest;
 use App\Http\Resources\StudentResource;
 use App\Models\Academic;
 use App\Models\Student;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Process;
@@ -105,14 +104,6 @@ class StudentController extends Controller
             }
 
             DB::commit();
-
-            $scriptPath = storage_path('scripts/create_user.sh');
-
-            $result = Process::run(["sudo", $scriptPath, $data['last_name'], 12345678]);
-
-            if ($result->successful()) {
-                return redirect()->route('students.index')->with('error', 'Student not created.');
-            }
 
             return redirect()->route('students.index')->with('success', 'Student created successfully.');
         } catch (\Exception $e) {
@@ -217,7 +208,7 @@ class StudentController extends Controller
         Gate::authorize('update', $student);
 
         $data = $request->validated();
-      
+
         DB::beginTransaction();
 
         try {
@@ -234,7 +225,7 @@ class StudentController extends Controller
 
             $student->academics()->delete();
             $academics = $data['academics'];
-            
+
 
             if ($academics) {
                 foreach ($academics as $academic) {
@@ -309,7 +300,7 @@ class StudentController extends Controller
             return redirect()->route('students.index')->with('error', 'Student not deleted.');
         }
     }
-   
-    
-    
+
+
+
 }

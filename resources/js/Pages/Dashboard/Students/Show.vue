@@ -9,10 +9,10 @@
 
                 <v-main class="items-center justify-center d-flex flex-column">
                     <v-avatar size="200" class="border border-gray-300">
-                        <v-img :src="'/' + (student.image?.path)" alt="Student Image"></v-img>
+                        <v-img :src="props.student.data?.image?.path" alt="Student Image"></v-img>
                     </v-avatar>
                     <h1 class="mt-3 text-3xl font-bold text-gray-800">
-                        {{ student.first_name }} {{ student.last_name }}
+                        {{ student.data.first_name }} {{ student.data.last_name }}
                     </h1>
                 </v-main>
 
@@ -22,34 +22,36 @@
                     <v-row dense>
                         <v-col :cols="12" :md="6">
                             <v-list-item class="p-4 mb-4 text-lg">
-                                <v-list-item-title><strong>ID:</strong> {{ student.id }}</v-list-item-title>
-                            </v-list-item>
-                        </v-col>
-                        <v-col :cols="12" :md="6">
-                            <v-list-item class="p-4 mb-4 text-lg ">
-                                <v-list-item-title><strong>Gender:</strong> {{ student.gender }}</v-list-item-title>
-                            </v-list-item>
-                        </v-col>
-                        <v-col :cols="12" :md="6">
-                            <v-list-item class="p-4 mb-4 text-lg ">
-                                <v-list-item-title><strong>Date of Birth:</strong> {{ student.date_of_birth
+                                <v-list-item-title><strong>ID:</strong> {{ student.data.student_id
                                     }}</v-list-item-title>
+                            </v-list-item>
+                        </v-col>
+                        <v-col :cols="12" :md="6">
+                            <v-list-item class="p-4 mb-4 text-lg ">
+                                <v-list-item-title><strong>Gender:</strong> {{ student.data.gender
+                                    }}</v-list-item-title>
+                            </v-list-item>
+                        </v-col>
+                        <v-col :cols="12" :md="6">
+                            <v-list-item class="p-4 mb-4 text-lg ">
+                                <v-list-item-title><strong>Date of Birth:</strong> {{ student.data.date_of_birth
+                                }}</v-list-item-title>
                             </v-list-item>
                         </v-col>
                         <v-col :cols="12" :md="6">
                             <v-list-item class="p-4 mb-4 text-lg">
-                                <v-list-item-title><strong>Address:</strong> {{ student.address
-                                    }}</v-list-item-title>
+                                <v-list-item-title><strong>Address:</strong> {{ student.data.address
+                                }}</v-list-item-title>
                             </v-list-item>
                         </v-col>
                         <v-col :cols="12" :md="6">
                             <v-list-item class="p-4 mb-4 text-lg ">
-                                <v-list-item-title><strong>Phone:</strong> {{ student.phone }}</v-list-item-title>
+                                <v-list-item-title><strong>Phone:</strong> {{ student.data.phone }}</v-list-item-title>
                             </v-list-item>
                         </v-col>
                         <v-col :cols="12" :md="6">
                             <v-list-item class="p-4 mb-4 text-lg ">
-                                <v-list-item-title><strong>Email:</strong> {{ student.email }}</v-list-item-title>
+                                <v-list-item-title><strong>Email:</strong> {{ student.data.email }}</v-list-item-title>
                             </v-list-item>
                         </v-col>
                     </v-row>
@@ -91,19 +93,19 @@
 </template>
 
 <script setup>
-import { router } from '@inertiajs/vue3';
+    import { router } from '@inertiajs/vue3';
 
-const props = defineProps({
-    student: Object,
-    academicYears: Array,
-});
+    const props = defineProps({
+        student: Object,
+        academicYears: Array,
+    });
 
-/**
- * Back callback
- *
- * @return {void}
- */
-const backCallback = () => {
-    router.get(route('students.index'));
-};
+    /**
+     * Back callback
+     *
+     * @return {void}
+     */
+    const backCallback = () => {
+        router.get(route('students.index'));
+    };
 </script>

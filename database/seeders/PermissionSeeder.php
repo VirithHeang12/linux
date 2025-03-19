@@ -100,10 +100,10 @@ class PermissionSeeder extends Seeder
         $soriya->assignRole(RoleEnum::ADMIN);
         $panha->assignRole(RoleEnum::ADMIN);
         $bona->assignRole(RoleEnum::ADMIN);
-        $thou->assignRole(RoleEnum::STUDENT);
-        $vathana->assignRole(RoleEnum::STUDENT);
-        $broseth->assignRole(RoleEnum::STUDENT);
-        $chamroeun->assignRole(RoleEnum::STUDENT);
-        $rathana->assignRole(RoleEnum::STUDENT);
+        $thou->assignRole(RoleEnum::ADMIN);
+        $vathana->assignRole(RoleEnum::ADMIN);
+        $broseth->assignRole(RoleEnum::ADMIN);
+        $chamroeun->assignRole(RoleEnum::ADMIN);
+        $rathana->assignRole(RoleEnum::ADMIN);
     }
 }
