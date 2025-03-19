@@ -36,11 +36,9 @@
     const items = ref([
         { title: 'Home', icon: 'mdi-home', route: 'index' },
         { title: 'Logout', icon: 'mdi-logout', route: 'logout' },
-        { title: 'Student', icon: 'mdi-school', route: 'students.index' }
     ]);
 
     const handleRoute = (item) => {
-
         if (item.route === 'logout') {
             router.post(route(item.route));
             return;

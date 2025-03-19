@@ -4,17 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\StudentResource;
 use App\Models\Academic;
-use App\Models\Student;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class ProfileController extends Controller
 {
-    //
-    public function profile(Student $student)
-    
+    /**
+     * Display the student's profile.
+     *
+     * @return \Inertia\Response
+     */
+    public function profile(): \Inertia\Response
     {
+        $student = auth()->user()->userable;
+
         Gate::authorize('update', $student);
 
         $academicYears = Academic::get();
@@ -46,7 +49,9 @@ class ProfileController extends Controller
             'image',
             'academics'
         ]);
+
         $student = StudentResource::make($student);
+
         return Inertia::render('Dashboard/Profile/Index',[
             'student'       => $student,
             'academicYears' => $academicYears,

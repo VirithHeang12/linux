@@ -12,9 +12,7 @@ Route::middleware('auth')->group(function () {
             return redirect()->route('students.index');
         }
         if (auth()->user()->hasRole(RoleEnum::STUDENT)) {
-            return redirect()->route('students.profile', [
-                'student'   => auth()->user()->userable,
-            ])->with([
+            return redirect()->route('students.profile')->with([
                 'success' => 'Welcome back, ' . auth()->user()->name . '!',
             ]);
         }
@@ -23,13 +21,14 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticationController::class, 'destroy'])
         ->name('logout');
 
+    Route::get("/students/profile", [ProfileController::class, 'profile'])
+        ->name('students.profile');
     Route::get('students/{student}/delete', [StudentController::class, 'delete'])
         ->name('students.delete');
 
     Route::resource('students', StudentController::class);
 
-    Route::get("/students/{student}/profile", [ProfileController::class, 'profile'])
-        ->name('students.profile');
+
 });
 
 //@TODO: Add middleware to student routes to check if the logged-in student is expired

@@ -39,7 +39,7 @@ class AuthenticationController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->route('students.index')->with('success', 'You are logged in');
+        return redirect()->route('index')->with('success', 'You are logged in');
     }
 
     /**
