@@ -18,45 +18,42 @@
 
                 <v-divider></v-divider>
 
-                <v-list class="w-full">
-                    <v-container class="justify-center py-4 d-flex align-center">
-                        <v-row dense>
-                            <v-col :cols="12" :md="6">
-                                <v-list-item class="p-4 mb-4 text-lg">
-                                    <v-list-item-title><strong>ID:</strong> {{ student.id }}</v-list-item-title>
-                                </v-list-item>
-                            </v-col>
-                            <v-col :cols="12" :md="6">
-                                <v-list-item class="p-4 mb-4 text-lg ">
-                                    <v-list-item-title><strong>Gender:</strong> {{ student.gender.toUpperCase()
-                                        }}</v-list-item-title>
-                                </v-list-item>
-                            </v-col>
-                            <v-col :cols="12" :md="6">
-                                <v-list-item class="p-4 mb-4 text-lg ">
-                                    <v-list-item-title><strong>Date of Birth:</strong> {{ student.date_of_birth
+                <v-container class="justify-center py-4 d-flex align-center">
+                    <v-row dense>
+                        <v-col :cols="12" :md="6">
+                            <v-list-item class="p-4 mb-4 text-lg">
+                                <v-list-item-title><strong>ID:</strong> {{ student.id }}</v-list-item-title>
+                            </v-list-item>
+                        </v-col>
+                        <v-col :cols="12" :md="6">
+                            <v-list-item class="p-4 mb-4 text-lg ">
+                                <v-list-item-title><strong>Gender:</strong> {{ student.gender }}</v-list-item-title>
+                            </v-list-item>
+                        </v-col>
+                        <v-col :cols="12" :md="6">
+                            <v-list-item class="p-4 mb-4 text-lg ">
+                                <v-list-item-title><strong>Date of Birth:</strong> {{ student.date_of_birth
                                     }}</v-list-item-title>
-                                </v-list-item>
-                            </v-col>
-                            <v-col :cols="12" :md="6">
-                                <v-list-item class="p-4 mb-4 text-lg">
-                                    <v-list-item-title><strong>Address:</strong> {{ student.address
+                            </v-list-item>
+                        </v-col>
+                        <v-col :cols="12" :md="6">
+                            <v-list-item class="p-4 mb-4 text-lg">
+                                <v-list-item-title><strong>Address:</strong> {{ student.address
                                     }}</v-list-item-title>
-                                </v-list-item>
-                            </v-col>
-                            <v-col :cols="12" :md="6">
-                                <v-list-item class="p-4 mb-4 text-lg ">
-                                    <v-list-item-title><strong>Phone:</strong> {{ student.phone }}</v-list-item-title>
-                                </v-list-item>
-                            </v-col>
-                            <v-col :cols="12" :md="6">
-                                <v-list-item class="p-4 mb-4 text-lg ">
-                                    <v-list-item-title><strong>Email:</strong> {{ student.email }}</v-list-item-title>
-                                </v-list-item>
-                            </v-col>
-                        </v-row>
-                    </v-container>
-                </v-list>
+                            </v-list-item>
+                        </v-col>
+                        <v-col :cols="12" :md="6">
+                            <v-list-item class="p-4 mb-4 text-lg ">
+                                <v-list-item-title><strong>Phone:</strong> {{ student.phone }}</v-list-item-title>
+                            </v-list-item>
+                        </v-col>
+                        <v-col :cols="12" :md="6">
+                            <v-list-item class="p-4 mb-4 text-lg ">
+                                <v-list-item-title><strong>Email:</strong> {{ student.email }}</v-list-item-title>
+                            </v-list-item>
+                        </v-col>
+                    </v-row>
+                </v-container>
             </v-card>
         </v-col>
         <v-col :cols="12" :md="5">
@@ -74,7 +71,7 @@
                                 <th>Room No</th>
                             </tr>
                         </thead>
-                        <tbody v-if="student.academics.length > 0">
+                        <tbody v-if="student?.academics?.length > 0">
                             <tr v-for="(academic, index) in student.academics" :key="index">
                                 <td>{{academicYears.find(a => a.value === academic.academic_id)?.title}}</td>
                                 <td>{{ academic.class }}</td>

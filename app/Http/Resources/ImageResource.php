@@ -17,7 +17,7 @@ class ImageResource extends JsonResource
     {
         return [
             'id'                => $this->id,
-            'path'              => Storage::temporaryUrl($this->path, now()->addMinutes(5)),
+            'path'              => Storage::temporaryUrl($this->path, now()->addMinutes(1)),
         ];
     }
 }
