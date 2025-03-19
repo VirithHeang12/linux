@@ -1,13 +1,22 @@
 <?php
 
+use App\Enums\RoleEnum;
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::middleware('auth')->group(function () {
     Route::get('/', function () {
-        return Inertia::render('Index');
+        if (auth()->user()->hasRole(RoleEnum::ADMIN)) {
+            return redirect()->route('students.index');
+        }
+        if (auth()->user()->hasRole(RoleEnum::STUDENT)) {
+            return redirect()->route('students.edit', [
+                'student'   => auth()->user()->userable,
+            ])->with([
+                'success' => 'Welcome back, ' . auth()->user()->name . '!',
+            ]);
+        }
     })->name('index');
 
     Route::post('logout', [AuthenticationController::class, 'destroy'])
