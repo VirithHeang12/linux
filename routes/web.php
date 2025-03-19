@@ -23,6 +23,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get("/students/profile", [ProfileController::class, 'profile'])
         ->name('students.profile');
+    Route::get("/students/{student}/profile/edit", [ProfileController::class, 'edit'])
+        ->name('students.profile.edit');
+     Route::put("/students/{student}/profile/update", [ProfileController::class, 'update'])
+        ->name('students.profile.update');
     Route::get('students/{student}/delete', [StudentController::class, 'delete'])
         ->name('students.delete');
 

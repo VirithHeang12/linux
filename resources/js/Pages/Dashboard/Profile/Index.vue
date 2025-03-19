@@ -54,6 +54,7 @@
                                 </v-list-item>
                             </v-col>
                         </v-row>
+                        <button @click="callbackEdit">Update</button>
                     </v-container>
                 </v-list>
             </v-card>
@@ -93,12 +94,15 @@
 </template>
 
 <script setup>
-
+import { route } from 'ziggy-js';
+import { Link, router } from '@inertiajs/vue3';
 const props = defineProps({
     student: Object,
     academicYears: Array,
     rooms: Array,
     classes: Array,
 });
-
+const callbackEdit = () => {
+    router.get(route('students.profile.edit', props.student.data.id));
+}
 </script>
