@@ -71,7 +71,7 @@ class LoginRequest extends FormRequest
         if ($user->hasRole(RoleEnum::STUDENT)) {
             $student = $user->userable;
 
-            $academics = $student->academics;
+            $academics = $student?->academics;
 
             $year4 = collect($academics)->first(function ($academic) {
                 return $academic->academic?->year == 4;

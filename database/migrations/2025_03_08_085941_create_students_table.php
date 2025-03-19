@@ -45,6 +45,10 @@ return new class extends Migration
                 ->unique()
                 ->comment('Email of the student');
 
+            $table->string('password')
+                ->nullable()
+                ->comment('Password of the student');
+
             $table->string('phone')
                 ->nullable()
                 ->comment('Phone number of the student');

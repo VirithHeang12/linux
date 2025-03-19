@@ -41,18 +41,18 @@ class Student extends Model
      *
      * @return void
      */
-    protected static function booted(): void
-    {
-        static::created(function ($student) {
-            $user = $student->user()->create([
-                'name'          => 'IT' . $student->student_id,
-                'email'         => $student->email,
-                'password'      => bcrypt(12345678),
-            ]);
+    // protected static function booted(): void
+    // {
+    //     static::created(function ($student) {
+    //         $user = $student->user()->create([
+    //             'name'          => 'IT' . $student->student_id,
+    //             'email'         => $student->email,
+    //             'password'      => bcrypt(12345678),
+    //         ]);
 
-            $user->assignRole(RoleEnum::STUDENT);
-        });
-    }
+    //         $user->assignRole(RoleEnum::STUDENT);
+    //     });
+    // }
 
     /**
      * Get the user that owns the student.
