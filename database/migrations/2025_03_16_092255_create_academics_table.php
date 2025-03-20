@@ -11,9 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('generations', function (Blueprint $table) {
+        Schema::create('academics', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+
+            $table->integer('year')
+                ->comment('Year of the academic year. e.g. 1, 2, 3, 4');
+
+            $table->date('start_date')
+                ->comment('Start date of the academic year');
+
+            $table->date('end_date')
+                ->comment('End date of the academic year');
+
             $table->timestamps();
         });
     }
@@ -23,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('generations');
+        Schema::dropIfExists('academics');
     }
 };

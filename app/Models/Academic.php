@@ -30,12 +30,12 @@ class Academic extends Model
     ];
 
     /**
-     * Get the classes that belong to the academic year.
+     * Get IT class generation academics for the academic.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function classes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function itClassGenerationAcademics(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(StudentAcademic::class, 'academic_id', 'id');
+        return $this->hasMany(ItClassGenerationAcademic::class);
     }
 }

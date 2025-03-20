@@ -34,7 +34,6 @@ return new class extends Migration
                 ->comment('Gender of the student');
 
             $table->date('date_of_birth')
-                ->nullable()
                 ->comment('Date of birth of the student');
 
             $table->string('address')
@@ -45,15 +44,9 @@ return new class extends Migration
                 ->unique()
                 ->comment('Email of the student');
 
-            $table->string('password')
-                ->nullable()
-                ->comment('Password of the student');
-
             $table->string('phone')
-                ->nullable()
                 ->comment('Phone number of the student');
 
-            $table->softDeletes();
             $table->timestamps();
         });
     }

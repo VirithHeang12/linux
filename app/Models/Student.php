@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\RoleEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -37,24 +36,6 @@ class Student extends Model
     ];
 
     /**
-     * The 'booted' method of the model.
-     *
-     * @return void
-     */
-    // protected static function booted(): void
-    // {
-    //     static::created(function ($student) {
-    //         $user = $student->user()->create([
-    //             'name'          => 'IT' . $student->student_id,
-    //             'email'         => $student->email,
-    //             'password'      => bcrypt(12345678),
-    //         ]);
-
-    //         $user->assignRole(RoleEnum::STUDENT);
-    //     });
-    // }
-
-    /**
      * Get the user that owns the student.
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphOne
@@ -75,12 +56,12 @@ class Student extends Model
     }
 
     /**
-     * Get the classes that belong to the student.
+     * Get the it class generation academic students for the student.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function academics(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function itClassGenerationAcademicStudents(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(StudentAcademic::class, 'student_id', 'id');
+        return $this->hasMany(ItClassGenerationAcademicStudent::class);
     }
 }

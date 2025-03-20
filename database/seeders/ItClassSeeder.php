@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Generation;
+use App\Models\ItClass;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,8 +14,6 @@ class ItClassSeeder extends Seeder
      */
     public function run(): void
     {
-        $generations = Generation::all();
-
         $classes = [
             'SLS',
             'M1',
@@ -49,15 +48,10 @@ class ItClassSeeder extends Seeder
             'E10',
         ];
 
-        foreach ($generations as $generation) {
-            foreach ($classes as $class) {
-                $generation->classes()->create([
-                    'name'          => $class,
-                    'generation_id' => $generation->id,
-                ]);
-            }
+        foreach ($classes as $class) {
+            ItClass::create([
+                'name' => $class,
+            ]);
         }
-
-
     }
 }

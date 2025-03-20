@@ -11,28 +11,27 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('student_academics', function (Blueprint $table) {
+        Schema::create('it_class_generation_academics', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('student_id')
+            $table->foreignId('it_class_generation_id')
                 ->nullable()
-                ->constrained()
+                ->index()
+                ->constrained('it_class_generations')
+                ->onDelete('cascade')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->comment('Foreign key to it_class_generations table');
 
             $table->foreignId('academic_id')
                 ->nullable()
-                ->constrained()
+                ->index()
+                ->constrained('academics')
+                ->onDelete('cascade')
                 ->onUpdate('cascade')
-                ->onDelete('cascade');
+                ->comment('Foreign key to academics table');
 
             $table->string('room_no')
-                ->nullable(false)
-                ->comment('Room number');
-
-            $table->string('class')
-                ->nullable(false)
-                ->comment('Class name');
+                ->comment('Room number of the class');
 
             $table->timestamps();
         });
@@ -43,6 +42,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('student_academics');
+        Schema::dropIfExists('it_class_generation_academics');
     }
 };

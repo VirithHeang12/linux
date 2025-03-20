@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('it_classes', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->foreignId('generation_id')->constrained('generations')
-                  ->onDelete('cascade');
+
+            $table->string('name')
+                ->unique()
+                ->comment('Name of the class. e.g. SLS, M1, M2 etc.');
+
             $table->timestamps();
         });
     }

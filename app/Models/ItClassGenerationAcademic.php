@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class StudentAcademic extends Model
+class ItClassGenerationAcademic extends Model
 {
-    /** @use HasFactory<\Database\Factories\StudentClassFactory> */
+    /** @use HasFactory<\Database\Factories\ItClassGenerationAcademicFactory> */
     use HasFactory;
 
     /**
@@ -15,37 +15,36 @@ class StudentAcademic extends Model
      *
      * @var string
      */
-    protected $table = 'student_academics';
+    protected $table = 'it_class_generation_academics';
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<string>
+     * @var array
      */
     protected $fillable = [
-        'student_id',
+        'it_class_generation_id',
         'academic_id',
-        'room_no',
-        'class',
+        'room_no'
     ];
 
     /**
-     * Get the student that belongs to the class.
+     * Get the it class generation that owns the it class generation academic.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function student(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function itClassGeneration(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Student::class, 'student_id', 'id');
+        return $this->belongsTo(ItClassGeneration::class);
     }
 
     /**
-     * Get the academic year that belongs to the class.
+     * Get the academic that owns the it class generation academic.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function academic(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Academic::class, 'academic_id', 'id');
+        return $this->belongsTo(Academic::class);
     }
 }
