@@ -29,13 +29,13 @@
 
             <template v-slot:[`item.actions`]="{ item }">
                 <div class="w-20 d-flex justify-content-center">
-                    <v-icon class="me-3" color="primary" size="small" @click="viewItem(item)">
+                    <v-icon v-if="hasShow" class="me-3" color="primary" size="small" @click="viewItem(item)">
                         mdi-eye
                     </v-icon>
-                    <v-icon class="me-3" color="secondary" size="small" @click="editItem(item)">
+                    <v-icon v-if="hasEdit" class="me-3" color="secondary" size="small" @click="editItem(item)">
                         mdi-pencil
                     </v-icon>
-                    <v-icon class="me-3" color="danger" size="small" @click="deleteItem(item)">
+                    <v-icon v-if="hasDelete" class="me-3" color="danger" size="small" @click="deleteItem(item)">
                         mdi-delete
                     </v-icon>
                 </div>
@@ -52,6 +52,21 @@ import { computed, ref } from 'vue';
 
 const props = defineProps({
     hasCreate: {
+        type: Boolean,
+        required: false,
+        default: true,
+    },
+    hasEdit: {
+        type: Boolean,
+        required: false,
+        default: true,
+    },
+    hasDelete: {
+        type: Boolean,
+        required: false,
+        default: true,
+    },
+    hasShow: {
         type: Boolean,
         required: false,
         default: true,

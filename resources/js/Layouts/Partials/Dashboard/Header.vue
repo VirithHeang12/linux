@@ -38,7 +38,7 @@
     import { route } from 'ziggy-js';
 
     const items = ref([
-        { title: 'Classes', icon: 'mdi-book-open-page-variant', route: 'classes.index' },
+        { title: 'Classes', icon: 'mdi-book-open-page-variant', route: 'it_classes.index' },
         { title: 'Students', icon: 'mdi-account-multiple', route: 'students.index' },
         { title: 'Logout', icon: 'mdi-logout', route: 'logout' },
     ]);
