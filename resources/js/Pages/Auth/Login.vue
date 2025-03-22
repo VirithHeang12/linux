@@ -18,9 +18,6 @@
                         <v-text-field v-bind="field" :error-messages="errors" v-model="form.password" label="Password"
                             type="password" variant="outlined"></v-text-field>
                     </vee-field>
-                    <v-row class="justify-end my-1 mr-1 d-flex">
-                        <v-btn @click="handleFormRegister">Register</v-btn>
-                    </v-row>
                     <v-btn color="primary" class="mt-4 d-inline-flex justify-content-start w-100"
                         :disabled="!meta.valid || form.processing" @click.prevent="submitForm(setErrors)">
                         <span v-if="form.processing" class="spinner-border spinner-border-sm me-2" role="status"
@@ -28,42 +25,44 @@
                         LOGIN
                     </v-btn>
                 </vee-form>
+                <v-row class="justify-end my-1 mr-1 d-flex">
+                    <v-btn @click="registerCallback">Register</v-btn>
+                </v-row>
             </v-col>
         </v-row>
     </v-container>
 </template>
 
 <script setup>
-import { Link, useForm } from '@inertiajs/vue3';
-import * as yup from 'yup';
-import { route } from 'ziggy-js';
+    import { useForm, router } from '@inertiajs/vue3';
+    import * as yup from 'yup';
+    import { route } from 'ziggy-js';
 
-const schema = yup.object().shape({
-    email: yup.string().email().required('Please enter your email'),
-    password: yup.string().min(8).required('Please enter your password'),
-})
-
-
-const form = useForm({
-    email: '',
-    password: '',
-});
-
-const submitForm = (setErrors) => {
-    form.post(route('login.store'), {
-        onError: (errors) => {
-            setErrors(errors);
-        },
+    const schema = yup.object().shape({
+        email: yup.string().email().required('Please enter your email'),
+        password: yup.string().min(8).required('Please enter your password'),
     });
-}
 
-const handleFormRegister = () => {
-    form.get(route('register'), {
-        onError: (errors) => {
-            setErrors(errors);
-        },
+    const form = useForm({
+        email: '',
+        password: '',
     });
-};
+
+    const submitForm = (setErrors) => {
+        form.post(route('login.store'), {
+            onError: (errors) => {
+                setErrors(errors);
+            },
+        });
+    }
+
+    const registerCallback = () => {
+        router.visit(route('register'), {
+            method: 'get',
+            preserveState: true,
+            preserveScroll: true,
+        });
+    };
 </script>
 
 <style scoped></style>

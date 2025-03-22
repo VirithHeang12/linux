@@ -16,10 +16,12 @@ class StudentAcademicResource extends JsonResource
     {
         return [
             'id'                => $this->id,
-            'student_id'        => $this->student_id,
-            'academic_id'       => $this->academic_id,
-            'class'             => $this->class,
-            'room_no'           => $this->room_no,
+            'year'              => $this->itClassGenerationAcademic?->academic?->year,
+            'start_date'        => $this->itClassGenerationAcademic?->academic?->start_date,
+            'end_date'          => $this->itClassGenerationAcademic?->academic?->end_date,
+            'room_no'           => $this->itClassGenerationAcademic?->room_no,
+            'class'             => $this->itClassGenerationAcademic?->itClassGeneration?->class?->name,
+            'generation'        => $this->itClassGenerationAcademic?->itClassGeneration?->generation?->name,
         ];
     }
 }

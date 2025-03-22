@@ -30,6 +30,16 @@ class Academic extends Model
     ];
 
     /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'start_date'            => 'date',
+        'end_date'              => 'date',
+    ];
+
+    /**
      * Get IT class generation academics for the academic.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

@@ -24,7 +24,7 @@ class StudentResource extends JsonResource
             'gender'            => $this->gender,
             'date_of_birth'     => $this->date_of_birth,
             'address'           => $this->address,
-            'academics'         => StudentAcademicResource::collection($this->whenLoaded('academics')),
+            'academics'         => StudentAcademicResource::collection($this->whenLoaded('itClassGenerationAcademicStudents')),
             'image'             => new ImageResource($this->image),
         ];
     }

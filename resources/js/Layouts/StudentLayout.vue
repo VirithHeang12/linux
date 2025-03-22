@@ -3,8 +3,8 @@
     <Head :title="title" />
     <v-app>
         <Header />
-        <v-main class="d-flex align-start justify-center bg-neutral-50" style="min-height: 300px;">
-            <v-container>
+        <v-main class="bg-neutral-50">
+            <v-container fluid class="fill-height pa-0">
                 <slot>
                     Main content
                 </slot>
@@ -12,7 +12,6 @@
         </v-main>
         <Footer />
     </v-app>
-
 </template>
 
 <script setup>
@@ -27,3 +26,26 @@
         },
     });
 </script>
+
+<style>
+
+    /* Global style to remove unwanted scrollbars */
+    html,
+    body {
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 100%;
+    }
+
+    .v-application {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .v-main {
+        flex: 1 0 auto;
+        display: flex;
+        flex-direction: column;
+    }
+</style>

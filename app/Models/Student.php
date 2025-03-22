@@ -10,7 +10,6 @@ class Student extends Model
 {
     /** @use HasFactory<\Database\Factories\StudentFactory> */
     use HasFactory;
-    use SoftDeletes;
 
     /**
      * The table associated with the model.

@@ -21,12 +21,11 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticationController::class, 'destroy'])
         ->name('logout');
 
-    Route::get("/students/profile", [ProfileController::class, 'profile'])
+    Route::get("/student/profile", [ProfileController::class, 'profile'])
         ->name('students.profile');
-    Route::get("/students/{student}/profile/edit", [ProfileController::class, 'edit'])
-        ->name('students.profile.edit');
-     Route::put("/students/{student}/profile/update", [ProfileController::class, 'update'])
+     Route::put("/student/profile/update", [ProfileController::class, 'update'])
         ->name('students.profile.update');
+
     Route::get('students/{student}/delete', [StudentController::class, 'delete'])
         ->name('students.delete');
 
@@ -34,8 +33,6 @@ Route::middleware('auth')->group(function () {
 
 
 });
-
-//@TODO: Add middleware to student routes to check if the logged-in student is expired
 
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthenticationController::class, 'createLogin'])

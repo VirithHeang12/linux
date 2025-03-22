@@ -7,13 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\Student;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Process;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -59,6 +57,11 @@ class AuthenticationController extends Controller
         return redirect('/');
     }
 
+    /**
+     * Display the registration view.
+     *
+     * @return Response
+     */
     public function createRegister(): Response
     {
         return Inertia::render('Auth/Register');
@@ -72,7 +75,6 @@ class AuthenticationController extends Controller
      * @return RedirectResponse
      *
      */
-
     public function storeRegister(RegisterRequest $request): RedirectResponse
     {
         $data = $request->validated();
@@ -80,7 +82,6 @@ class AuthenticationController extends Controller
         DB::beginTransaction();
 
         try {
-
             $student = Student::create([
               'student_id'          => $data['student_id'],
               'first_name'          => $data['first_name'],
