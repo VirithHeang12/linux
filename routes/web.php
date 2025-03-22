@@ -3,6 +3,8 @@
 use App\Enums\RoleEnum;
 use App\Http\Controllers\Auth\AuthenticationController;
 use App\Http\Controllers\ItClassController;
+use App\Http\Controllers\ItClassGenerationAcademicController;
+use App\Http\Controllers\ItClassGenerationAcademicStudentController;
 use App\Http\Controllers\ItClassGenerationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
@@ -31,8 +33,24 @@ Route::middleware('auth')->group(function () {
     Route::get('students/{student}/delete', [StudentController::class, 'delete'])
         ->name('students.delete');
 
-    Route::resource('it_classes', ItClassController::class)
-        ->except(['show', 'destroy', 'create', 'store']);
+    Route::resource('classes', ItClassController::class)
+        ->except(['destroy', 'create', 'store', 'edit', 'update', 'show']);
+
+    Route::prefix('classes/{class}/generations')->group(function () {
+        Route::get('/', [ItClassGenerationController::class, 'index'])
+            ->name('classes.generations.index');
+
+        Route::prefix('{generation}/academics')->group(function () {
+            Route::get('/', [ItClassGenerationAcademicController::class, 'index'])
+                ->name('classes.generations.academics.index');
+
+            Route::prefix('{academic}/students')->group(function () {
+                Route::get('/', [ItClassGenerationAcademicStudentController::class, 'index'])
+                    ->name('classes.generations.academics.students.index');
+            });
+        });
+    });
+
     Route::resource('students', StudentController::class);
 
 
