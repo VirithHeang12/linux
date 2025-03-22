@@ -33,39 +33,39 @@
 </template>
 
 <script setup>
-    import { onMounted, ref } from 'vue';
-    import { router } from '@inertiajs/vue3';
-    import { route } from 'ziggy-js';
+import { onMounted, ref } from 'vue';
+import { router } from '@inertiajs/vue3';
+import { route } from 'ziggy-js';
 
-    const items = ref([
-        { title: 'Classes', icon: 'mdi-book-open-page-variant', route: 'classes.index' },
-        { title: 'Students', icon: 'mdi-account-multiple', route: 'students.index' },
-        { title: 'Logout', icon: 'mdi-logout', route: 'logout' },
-    ]);
+const items = ref([
+    { title: 'Classes', icon: 'mdi-book-open-page-variant', route: 'it_classes.index' },
+    { title: 'Students', icon: 'mdi-account-multiple', route: 'students.index' },
+    { title: 'Logout', icon: 'mdi-logout', route: 'logout' },
+]);
 
-    const handleRoute = (item) => {
-        if (item.route === 'logout') {
-            router.post(route(item.route));
-            return;
-        }
-        router.get(route(item.route));
+const handleRoute = (item) => {
+    if (item.route === 'logout') {
+        router.post(route(item.route));
+        return;
     }
+    router.get(route(item.route));
+}
 </script>
 
 <style scoped>
-    .header-bar {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
+.header-bar {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
 
-    .university-logo {
-        border-radius: 50%;
-        padding: 2px;
-    }
+.university-logo {
+    border-radius: 50%;
+    padding: 2px;
+}
 
-    .menu-list {
-        background: white;
-        border-radius: 12px;
-        padding: 8px;
-        min-width: 200px;
-    }
+.menu-list {
+    background: white;
+    border-radius: 12px;
+    padding: 8px;
+    min-width: 200px;
+}
 </style>
