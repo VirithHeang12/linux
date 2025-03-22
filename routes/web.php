@@ -2,6 +2,7 @@
 
 use App\Enums\RoleEnum;
 use App\Http\Controllers\Auth\AuthenticationController;
+use App\Http\Controllers\ItClassController;
 use App\Http\Controllers\ItClassGenerationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
@@ -30,7 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::get('students/{student}/delete', [StudentController::class, 'delete'])
         ->name('students.delete');
 
-    Route::resource('it_class_generations', ItClassGenerationController::class)
+    Route::resource('it_classes', ItClassController::class)
         ->except(['show', 'destroy', 'create', 'store']);
     Route::resource('students', StudentController::class);
 
