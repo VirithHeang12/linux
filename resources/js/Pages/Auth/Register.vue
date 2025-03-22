@@ -70,9 +70,8 @@
                                     </v-row>
                                 </v-col>
 
-                                <v-col cols="12" md="4" class="d-flex justify-center align-items-center">
-                                    <image-uploader v-model="form.image" :placeholder="form.image_url"
-                                        class="profile-uploader"></image-uploader>
+                                <v-col cols="12" md="4" class="d-flex justify-center align-items-start">
+                                    <image-uploader v-model="form.image" :placeholder="form.image_url"></image-uploader>
                                 </v-col>
                             </v-row>
 

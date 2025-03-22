@@ -33,12 +33,13 @@
 </template>
 
 <script setup>
-    import { ref } from 'vue';
+    import { onMounted, ref } from 'vue';
     import { router } from '@inertiajs/vue3';
     import { route } from 'ziggy-js';
 
     const items = ref([
-        { title: 'Profile', icon: 'mdi-account', route: 'students.profile' },
+        { title: 'Classes', icon: 'mdi-book-open-page-variant', route: 'classes.index' },
+        { title: 'Students', icon: 'mdi-account-multiple', route: 'students.index' },
         { title: 'Logout', icon: 'mdi-logout', route: 'logout' },
     ]);
 

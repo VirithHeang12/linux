@@ -75,7 +75,15 @@ createInertiaApp({
             return page;
         }
 
-        return page;
+        if (isAdmin) {
+            page.default.layout = DashboardLayout;
+
+            return page;
+        } else {
+            page.default.layout = StudentLayout;
+
+            return page;
+        }
     },
     setup({ el, App, props, plugin }) {
         const app = createApp({ render: renderApp(App, props) })
