@@ -1,6 +1,6 @@
 <template>
     <v-card class="mb-4 d-flex align-center">
-        <v-card-title>Classes</v-card-title>
+        <v-card-title>Generations</v-card-title>
         <v-spacer></v-spacer>
         <v-breadcrumbs :items="breadcrumbs">
             <template v-slot:item="{ item, index }">
@@ -24,7 +24,7 @@
             <v-expansion-panel-text>
                 <v-row dense>
                     <v-col cols="12" md="12">
-                        <v-text-field v-model.lazy="filter.name" label="Class Name" clearable variant="outlined"
+                        <v-text-field v-model.lazy="filter.generation" label="Generation" clearable variant="outlined"
                             hide-details>
                         </v-text-field>
                     </v-col>
@@ -38,7 +38,7 @@
             </v-expansion-panel-text>
         </v-expansion-panel>
     </v-expansion-panels>
-    <data-table-server :showNo="true" title="Classes" :serverItems="serverItems" :items-length="totalItems"
+    <data-table-server :showNo="true" title="Generations" :serverItems="serverItems" :items-length="totalItems"
         :headers="headers" :loading="loading" :items-per-page="itemsPerPage" item-value="id" @update:options="loadItems"
         :has-create="false" :has-import="false" :has-edit="false" :has-delete="false" @view="showCallback" />
 </template>
@@ -47,40 +47,43 @@
     import { computed, ref } from 'vue'
     import { router } from '@inertiajs/vue3';
     import { route } from 'ziggy-js';
-    import { toast } from 'vue3-toastify';
 
     const props = defineProps({
-        itClasses: {
+        itClassGenerations: {
             type: Object,
             required: true,
-        }
+        },
+        itClass: {
+            type: Object,
+            required: true,
+        },
     });
 
     const serverItems = computed(() => {
-        return props.itClasses?.data || [];
+        return props.itClassGenerations?.data || [];
     });
     const totalItems = computed(() => {
-        return props.itClasses?.total || 0;
+        return props.itClassGenerations?.total || 0;
     });
 
     const itemsPerPage = computed(() => {
-        return props.itClasses?.per_page || 10;
+        return props.itClassGenerations?.per_page || 10;
     });
 
     const loading = ref(false);
 
-    const filter = ref({
-        name: route().params.filter?.name ?? null,
-    });
-
     const headers = [
         {
-            title: 'Class Name',
+            title: 'Generation',
             align: 'start',
             sortable: true,
-            key: 'name',
+            key: 'generation',
         },
     ];
+
+    const filter = ref({
+        generation: route().params.filter?.generation ?? null,
+    });
 
     /**
      * Breadcrumbs data
@@ -88,8 +91,9 @@
      * @type {Array}
      */
     const breadcrumbs = ref([
-        { icon: 'mdi-home', disabled: false, href: '#' },
-        { title: 'Classes', disabled: true, href: '#' },
+        { icon: 'mdi-home', disabled: false, href: route('classes.index') },
+        { title: 'Classes', disabled: false, href: route('classes.index') },
+        { title: 'Generations', disabled: true, href: '#' },
     ]);
 
 
@@ -112,6 +116,24 @@
     }
 
     /**
+     * Filter callback
+     *
+     * @return {void}
+     */
+    const filterCallback = () => {
+        router.reload({
+            only: ["itClassGenerations"],
+            data: {
+                page: 1,
+                itemsPerPage: itemsPerPage.value,
+                filter: {
+                    generation: filter.value.generation,
+                },
+            },
+        });
+    };
+
+    /**
      * Show callback
      *
      * @param {Object} item
@@ -125,24 +147,6 @@
             method: 'get',
             preserveState: true,
             preserveScroll: true,
-        });
-    };
-
-    /**
-     * Filter callback
-     *
-     * @return {void}
-     */
-    const filterCallback = () => {
-        router.reload({
-            only: ["itClasses"],
-            data: {
-                page: 1,
-                itemsPerPage: itemsPerPage.value,
-                filter: {
-                    name: filter.value.name,
-                },
-            },
         });
     };
 </script>
