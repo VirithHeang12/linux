@@ -44,9 +44,20 @@ Route::middleware('auth')->group(function () {
             Route::get('/', [ItClassGenerationAcademicController::class, 'index'])
                 ->name('classes.generations.academics.index');
 
-            Route::prefix('{academic}/students')->group(function () {
-                Route::get('/', [ItClassGenerationAcademicStudentController::class, 'index'])
-                    ->name('classes.generations.academics.students.index');
+            Route::prefix('{academic}')->group(function () {
+                Route::get('students/{student}/delete', [ItClassGenerationAcademicStudentController::class, 'delete'])
+                    ->name('classes.generations.academics.students.delete');
+
+                Route::resource('students', ItClassGenerationAcademicStudentController::class)
+                    ->names([
+                        'index'         => 'classes.generations.academics.students.index',
+                        'show'          => 'classes.generations.academics.students.show',
+                        'create'        => 'classes.generations.academics.students.create',
+                        'store'         => 'classes.generations.academics.students.store',
+                        'edit'          => 'classes.generations.academics.students.edit',
+                        'update'        => 'classes.generations.academics.students.update',
+                        'destroy'       => 'classes.generations.academics.students.destroy'
+                    ]);
             });
         });
     });

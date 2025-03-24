@@ -1,7 +1,7 @@
 <template>
     <v-card class="mb-4 d-flex align-center">
-        <v-card-title>Student List of Year {{ props.academic.year }}, Generation
-            {{ props.generation.name }}</v-card-title>
+        <v-card-title>Class: {{ itClass?.name }} Generation: {{ generation.data.generation }} Academic: {{
+            academic.data?.year }} Room: {{ academic.data?.room }}</v-card-title>
         <v-spacer></v-spacer>
         <v-breadcrumbs :items="breadcrumbs">
             <template v-slot:item="{ item, index }">
@@ -15,15 +15,18 @@
             </template>
         </v-breadcrumbs>
     </v-card>
-    <data-table-server :showNo="true" title="Generations" :serverItems="serverItems" :items-length="totalItems"
+    <data-table-server :showNo="true" title="Students" :serverItems="serverItems" :items-length="totalItems"
         :headers="headers" :loading="loading" :items-per-page="itemsPerPage" item-value="id" @update:options="loadItems"
-        :has-create="false" :has-import="false" :has-edit="false" :has-delete="false" @delete="deleteCallback" />
+        :has-create="true" :has-show="true" :has-import="false" :has-export="true" :has-edit="true" :has-delete="true"
+        @delete="deleteCallback" @create="createCallback" />
 </template>
 
 <script setup>
     import { computed, ref } from "vue";
     import { router } from "@inertiajs/vue3";
     import { route } from "ziggy-js";
+    import { visitModal } from '@inertiaui/modal-vue';
+    import { toast } from 'vue3-toastify';
 
     const props = defineProps({
         itClassGenerationAcademicStudents: {
@@ -52,7 +55,7 @@
     });
 
     const itemsPerPage = computed(() => {
-        return props.itClassGenerationAcademics?.meta?.per_page || 10;
+        return props.itClassGenerationAcademicStudents?.meta?.per_page || 5;
     });
 
     const loading = ref(false);
@@ -94,7 +97,7 @@
      * @type {Array}
      */
     const breadcrumbs = ref([
-        { icon: "mdi-home", disabled: false, href: route("classes.index") },
+        { title: 'Dashboard', disabled: false, href: route("classes.index") },
         { title: "Classes", disabled: false, href: route("classes.index") },
         {
             title: "Generations",
@@ -108,7 +111,7 @@
             disabled: false,
             href: route("classes.generations.academics.index", {
                 class: props.itClass.id,
-                generation: props.generation.id,
+                generation: props.generation.data.id,
             }),
         },
         { title: "Students", disabled: true, href: "#" },
@@ -152,6 +155,36 @@
     };
 
     /**
+     * Create callback
+     *
+     * @return {void}
+     */
+    const createCallback = () => {
+        router.get(route('classes.generations.academics.students.create', {
+            class: props.itClass.id,
+            generation: props.generation.data.id,
+            academic: props.academic.data.id,
+        }));
+    };
+
+
+    /**
+     * Delete callback
+     *
+     * @param {Object} item
+     *
+     * @return {void}
+     */
+    const deleteCallback = (item) => {
+        visitModal(route('classes.generations.academics.students.delete', {
+            class: props.itClass.id,
+            generation: props.generation.data.id,
+            academic: props.academic.data.id,
+            student: item.id,
+        }));
+    }
+
+    /**
      * Show callback
      *
      * @param {Object} item
@@ -160,10 +193,10 @@
      */
     const showCallback = (item) => {
         router.visit(
-            route("classes.generations.academics.index", {
+            route("classes.generations.academics.students.index", {
                 class: props.itClass.id,
-                generation: props.generation.id,
-                academic: item.id,
+                generation: props.generation.data.id,
+                academic: props.academic.data.id,
             }),
             {
                 method: "get",

@@ -14,7 +14,7 @@
             </template>
         </v-breadcrumbs>
     </v-card>
-    <data-table-server :showNo="true" title="Generations" :serverItems="serverItems" :items-length="totalItems"
+    <data-table-server :showNo="true" title="Academics" :serverItems="serverItems" :items-length="totalItems"
         :headers="headers" :loading="loading" :items-per-page="itemsPerPage" item-value="id" @update:options="loadItems"
         :has-create="false" :has-import="false" :has-edit="false" :has-delete="false" @view="showCallback" />
 </template>
@@ -85,7 +85,7 @@
      * @type {Array}
      */
     const breadcrumbs = ref([
-        { icon: "mdi-home", disabled: false, href: route("classes.index") },
+        { title: 'Dashboard', disabled: false, href: route("classes.index") },
         { title: "Classes", disabled: false, href: route("classes.index") },
         {
             title: "Generations",

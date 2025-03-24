@@ -6,7 +6,7 @@
             <template v-slot:item="{ item, index }">
                 <v-breadcrumbs-item :href="item.href" :disabled="item.disabled">
                     <v-icon v-if="item.icon" :color="index === 0 ? 'primary' : undefined">{{ item.icon
-                    }}</v-icon>
+                        }}</v-icon>
                     <span v-else>{{ item.title }}</span>
                 </v-breadcrumbs-item>
             </template>
@@ -47,9 +47,6 @@
     import { computed, ref } from 'vue'
     import { router } from '@inertiajs/vue3';
     import { route } from 'ziggy-js';
-    import { usePage } from '@inertiajs/vue3';
-
-    const { props: p } = usePage();
 
     const props = defineProps({
         itClasses: {
@@ -90,7 +87,7 @@
      * @type {Array}
      */
     const breadcrumbs = ref([
-        { icon: 'mdi-home', disabled: false, href: '#' },
+        { title: 'Dashboard', disabled: false, href: '#' },
         { title: 'Classes', disabled: true, href: '#' },
     ]);
 

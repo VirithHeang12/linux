@@ -90,7 +90,7 @@
      * @type {Array}
      */
     const breadcrumbs = ref([
-        { icon: "mdi-home", disabled: false, href: route("classes.index") },
+        { title: 'Dashboard', disabled: false, href: route("classes.index") },
         { title: "Classes", disabled: false, href: route("classes.index") },
         { title: "Generations", disabled: true, href: "#" },
     ]);

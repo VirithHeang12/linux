@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StudentEnrollmentRequest;
+use App\Http\Resources\ItClassGenerationAcademicResource;
 use App\Http\Resources\ItClassGenerationAcademicStudentResource;
-use App\Models\Academic;
-use App\Models\Generation;
+use App\Http\Resources\ItClassGenerationResource;
 use App\Models\ItClass;
 use App\Models\ItClassGeneration;
 use App\Models\ItClassGenerationAcademic;
 use App\Models\ItClassGenerationAcademicStudent;
+use App\Models\Student;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\QueryBuilder;
+use InertiaUI\Modal\Modal;
 
 class ItClassGenerationAcademicStudentController extends Controller
 {
@@ -40,9 +44,84 @@ class ItClassGenerationAcademicStudentController extends Controller
 
         return Inertia::render('Dashboard/Classes/Generations/Academics/Students/Index', [
             'itClassGenerationAcademicStudents' => $itClassGenerationAcademicStudents,
-            'academic'                          => $academic,
-            'generation'                        => $generation,
+            'academic'                          => ItClassGenerationAcademicResource::make($academic),
+            'generation'                        => ItClassGenerationResource::make($generation),
             'itClass'                           => $class,
         ]);
+    }
+
+    /**
+     * Show the form for creating a new student in the academic generation.
+     *
+     * @param ItClass $class
+     * @param ItClassGeneration $generation
+     * @param ItClassGenerationAcademic $academic
+     *
+     * @return Modal
+     */
+    public function create(ItClass $class, ItClassGeneration $generation, ItClassGenerationAcademic $academic)
+    {
+        $students = Student::whereDoesntHave('itClassGenerationAcademicStudents', function ($query) use ($academic) {
+            $query->where('it_class_generation_academic_id', $academic->id);
+        })->get();
+
+        $students = collect($students)->map(function ($student) {
+            return [
+                'id'                => $student->id,
+                'student_id'        => $student->student_id,
+                'first_name'        => $student->first_name,
+                'last_name'         => $student->last_name,
+            ];
+        })->toArray();
+
+        return Inertia::render('Dashboard/Classes/Generations/Academics/Students/Create', [
+            'academic'          => ItClassGenerationAcademicResource::make($academic),
+            'generation'        => ItClassGenerationResource::make($generation),
+            'itClass'           => $class,
+            'students'          => $students,
+        ]);
+    }
+
+    /**
+     * Store a newly created student in the academic generation.
+     *
+     * @param ItClass $class
+     * @param ItClassGeneration $generation
+     * @param ItClassGenerationAcademic $academic
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(StudentEnrollmentRequest $request, ItClass $class, ItClassGeneration $generation, ItClassGenerationAcademic $academic)
+    {
+        $data = $request->validated();
+
+        DB::beginTransaction();
+
+        try {
+            $studentIds = $data['student_ids'];
+
+            foreach ($studentIds as $studentId) {
+                ItClassGenerationAcademicStudent::create([
+                    'it_class_generation_academic_id' => $academic->id,
+                    'student_id'                      => $studentId,
+                ]);
+            }
+
+            DB::commit();
+
+            return redirect()
+                ->route('dashboard.classes.generations.academics.students.index', [
+                    'class'             => $class->id,
+                    'generation'        => $generation->id,
+                    'academic'          => $academic->id,
+                ])
+                ->with('success', 'Students enrolled successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()
+                ->back()
+                ->with('error', 'Failed to enroll students. Please try again.');
+        }
     }
 }

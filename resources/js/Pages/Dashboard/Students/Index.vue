@@ -44,219 +44,219 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
-import { router, usePage } from '@inertiajs/vue3';
-import { route } from 'ziggy-js';
-import { visitModal } from '@inertiaui/modal-vue';
-import { toast } from 'vue3-toastify';
+    import { computed, ref, watch } from 'vue'
+    import { router, usePage } from '@inertiajs/vue3';
+    import { route } from 'ziggy-js';
+    import { visitModal } from '@inertiaui/modal-vue';
+    import { toast } from 'vue3-toastify';
 
-const props = defineProps({
-    students: {
-        type: Object,
-        required: true,
+    const props = defineProps({
+        students: {
+            type: Object,
+            required: true,
+        }
+    });
+
+    const serverItems = computed(() => {
+        return props.students?.data || [];
+    });
+    const totalItems = computed(() => {
+        return props.students?.total || 0;
+    });
+
+    const itemsPerPage = computed(() => {
+        return props.students?.per_page || 10;
+    });
+
+    const loading = ref(false);
+
+    const filter = ref({
+        first_name: route().params.filter?.first_name ?? null,
+        last_name: route().params.filter?.last_name ?? null,
+        phone: route().params.filter?.phone ?? null,
+        email: route().params.filter?.email ?? null,
+    });
+
+    const headers = [
+        {
+            title: 'Image',
+            align: 'start',
+            sortable: true,
+            key: 'image',
+        },
+        {
+            title: 'Student ID',
+            align: 'start',
+            sortable: true,
+            key: 'student_id',
+        },
+        {
+            title: 'First Name',
+            align: 'start',
+            sortable: true,
+            key: 'first_name',
+        },
+        {
+            title: 'Last Name',
+            align: 'start',
+            sortable: true,
+            key: 'last_name',
+        },
+        {
+            title: 'Gender',
+            align: 'start',
+            sortable: true,
+            key: 'gender',
+        },
+        {
+            title: 'Birth Date',
+            align: 'start',
+            sortable: true,
+            key: 'date_of_birth',
+        },
+        {
+            title: 'Address',
+            align: 'start',
+            sortable: true,
+            key: 'address',
+        },
+        {
+            title: 'Email',
+            align: 'start',
+            sortable: true,
+            key: 'email',
+        },
+        {
+            title: 'Phone',
+            align: 'start',
+            sortable: true,
+            key: 'phone',
+        },
+    ];
+
+
+    /**
+     * Load items from the server
+     *
+     * @param {Object} options
+     * @param {Number} options.page
+     * @param {Number} options.itemsPerPage
+     *
+     * @return {void}
+     */
+    function loadItems({ page, itemsPerPage }) {
+        router.reload({
+            data: {
+                page,
+                itemsPerPage,
+            },
+        });
     }
-});
 
-const serverItems = computed(() => {
-    return props.students?.data || [];
-});
-const totalItems = computed(() => {
-    return props.students?.total || 0;
-});
+    /**
+     * View callback
+     *
+     * @param {Object} item
+     *
+     * @return {void}
+     */
+    const viewCallback = (item) => {
+        router.get(route('students.show', {
+            student: item.id,
+        }));
+    };
 
-const itemsPerPage = computed(() => {
-    return props.students?.per_page || 10;
-});
+    /**
+     * Edit callback
+     *
+     * @param {Object} item
+     *
+     * @return {void}
+     */
+    const editCallback = (item) => {
+        router.get(route('students.edit', {
+            student: item.id,
+        }));
+    };
 
-const loading = ref(false);
+    /**
+     * Delete callback
+     *
+     * @param {Object} item
+     *
+     * @return {void}
+     */
+    const deleteCallback = (item) => {
+        visitModal(route('students.delete', {
+            student: item.id,
+        }));
 
-const filter = ref({
-    first_name: route().params.filter?.first_name ?? null,
-    last_name: route().params.filter?.last_name ?? null,
-    phone: route().params.filter?.phone ?? null,
-    email: route().params.filter?.email ?? null,
-});
+    };
 
-const headers = [
-    {
-        title: 'Image',
-        align: 'start',
-        sortable: true,
-        key: 'image',
-    },
-    {
-        title: 'Student ID',
-        align: 'start',
-        sortable: true,
-        key: 'student_id',
-    },
-    {
-        title: 'First Name',
-        align: 'start',
-        sortable: true,
-        key: 'first_name',
-    },
-    {
-        title: 'Last Name',
-        align: 'start',
-        sortable: true,
-        key: 'last_name',
-    },
-    {
-        title: 'Gender',
-        align: 'start',
-        sortable: true,
-        key: 'gender',
-    },
-    {
-        title: 'Birth Date',
-        align: 'start',
-        sortable: true,
-        key: 'date_of_birth',
-    },
-    {
-        title: 'Address',
-        align: 'start',
-        sortable: true,
-        key: 'address',
-    },
-    {
-        title: 'Email',
-        align: 'start',
-        sortable: true,
-        key: 'email',
-    },
-    {
-        title: 'Phone',
-        align: 'start',
-        sortable: true,
-        key: 'phone',
-    },
-];
+    /**
+     * Create callback
+     *
+     * @return {void}
+     */
+    const createCallback = () => {
+        visitModal(route('students.create'));
+    };
 
+    const exportCallback = () => {
+        router.get(route('students.export'), {
+            data: {
+                filter: filter.value,
+            },
+        });
+    };
 
-/**
- * Load items from the server
- *
- * @param {Object} options
- * @param {Number} options.page
- * @param {Number} options.itemsPerPage
- *
- * @return {void}
- */
-function loadItems({ page, itemsPerPage }) {
-    router.reload({
-        data: {
-            page,
-            itemsPerPage,
-        },
-    });
-}
+    /**
+     * Filter callback
+     *
+     * @return {void}
+     */
+    const filterCallback = () => {
+        router.reload({
+            only: ["students"],
+            data: {
+                filter: filter.value,
+                page: 1,
+                itemsPerPage: itemsPerPage.value,
+            },
+        });
+    };
 
-/**
- * View callback
- *
- * @param {Object} item
- *
- * @return {void}
- */
-const viewCallback = (item) => {
-    router.get(route('students.show', {
-        student: item.id,
-    }));
-};
-
-/**
- * Edit callback
- *
- * @param {Object} item
- *
- * @return {void}
- */
-const editCallback = (item) => {
-    router.get(route('students.edit', {
-        student: item.id,
-    }));
-};
-
-/**
- * Delete callback
- *
- * @param {Object} item
- *
- * @return {void}
- */
-const deleteCallback = (item) => {
-    visitModal(route('students.delete', {
-        student: item.id,
-    }));
-
-};
-
-/**
- * Create callback
- *
- * @return {void}
- */
-const createCallback = () => {
-    visitModal(route('students.create'));
-};
-
-const exportCallback = () => {
-    router.get(route('students.export'), {
-        data: {
-            filter: filter.value,
-        },
-    });
-};
-
-/**
- * Filter callback
- *
- * @return {void}
- */
-const filterCallback = () => {
-    router.reload({
-        only: ["students"],
-        data: {
-            filter: filter.value,
-            page: 1,
-            itemsPerPage: itemsPerPage.value,
-        },
-    });
-};
-
-/**
- * Notify the user
- *
- * @param {string} message
- *
- * @return void
- */
-const notify = (message) => {
-    toast(message, {
-        autoClose: 1500,
-        position: toast.POSITION.BOTTOM_RIGHT,
-    });
-}
-
-const page = usePage();
-
-/**
- * Watch for flash messages
- *
- * @return void
- */
-watch(() => page.props.flash, (flash) => {
-    const success = page.props.flash.success;
-    const error = page.props.flash.error;
-
-    if (success) {
-        notify(success);
-    } else if (error) {
-        notify(error);
+    /**
+     * Notify the user
+     *
+     * @param {string} message
+     *
+     * @return void
+     */
+    const notify = (message) => {
+        toast(message, {
+            autoClose: 1500,
+            position: toast.POSITION.BOTTOM_RIGHT,
+        });
     }
-}, {
-    deep: true,
-});
+
+    const page = usePage();
+
+    /**
+     * Watch for flash messages
+     *
+     * @return void
+     */
+    watch(() => page.props.flash, (flash) => {
+        const success = page.props.flash.success;
+        const error = page.props.flash.error;
+
+        if (success) {
+            notify(success);
+        } else if (error) {
+            notify(error);
+        }
+    }, {
+        deep: true,
+    });
 </script>
