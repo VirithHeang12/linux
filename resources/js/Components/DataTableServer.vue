@@ -162,7 +162,7 @@
 
     const itemsPerPageOptions = [5, 10, 20, 30, 40, 50];
 
-    const emits = defineEmits(['view', 'edit', 'delete', 'create', 'update:options']);
+    const emits = defineEmits(['view', 'edit', 'delete', 'create', 'export', 'update:options']);
 
     const updateOptionsCallback = (options) => {
         page.value = options.page;
@@ -187,6 +187,10 @@
 
     const viewImage = (path) => {
         window.open(path, '_blank');
+    };
+
+    const exportItem = () => {
+        emits('export');
     };
 </script>
 

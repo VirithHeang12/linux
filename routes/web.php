@@ -2,6 +2,7 @@
 
 use App\Enums\RoleEnum;
 use App\Http\Controllers\Auth\AuthenticationController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\ItClassController;
 use App\Http\Controllers\ItClassGenerationAcademicController;
 use App\Http\Controllers\ItClassGenerationAcademicStudentController;
@@ -45,6 +46,13 @@ Route::middleware('auth')->group(function () {
                 ->name('classes.generations.academics.index');
 
             Route::prefix('{academic}')->group(function () {
+                Route::controller(ExportController::class)->group(function () {
+                    Route::get('students/export/form', 'showExportForm')
+                        ->name('classes.generations.academics.students.export.form');
+
+                    Route::get('students/export', 'export')
+                        ->name('classes.generations.academics.students.export');
+                });
                 Route::get('students/{student}/delete', [ItClassGenerationAcademicStudentController::class, 'delete'])
                     ->name('classes.generations.academics.students.delete');
 
@@ -63,7 +71,6 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::resource('students', StudentController::class);
-
 
 });
 

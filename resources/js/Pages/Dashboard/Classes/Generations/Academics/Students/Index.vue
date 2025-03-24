@@ -18,7 +18,7 @@
     <data-table-server :showNo="true" title="Students" :serverItems="serverItems" :items-length="totalItems"
         :headers="headers" :loading="loading" :items-per-page="itemsPerPage" item-value="id" @update:options="loadItems"
         :has-create="true" :has-show="true" :has-import="false" :has-export="true" :has-edit="true" :has-delete="true"
-        @delete="deleteCallback" @create="createCallback" />
+        @delete="deleteCallback" @create="createCallback" @export="exportCallback" />
 </template>
 
 <script setup>
@@ -183,6 +183,20 @@
             student: item.id,
         }));
     }
+
+    /**
+     * Export callback
+     *
+     * @return {void}
+     */
+    const exportCallback = () => {
+        visitModal(route('classes.generations.academics.students.export.form', {
+            class: props.itClass.id,
+            generation: props.generation.data.id,
+            academic: props.academic.data.id,
+        }));
+    }
+
 
     /**
      * Show callback
