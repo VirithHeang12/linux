@@ -1,6 +1,6 @@
 <template>
     <v-card class="mb-4 d-flex align-center">
-        <v-card-title>Generations</v-card-title>
+        <v-card-title>Academics</v-card-title>
         <v-spacer></v-spacer>
         <v-breadcrumbs :items="breadcrumbs">
             <template v-slot:item="{ item, index }">
@@ -18,38 +18,6 @@
             </template>
         </v-breadcrumbs>
     </v-card>
-    <v-expansion-panels class="mb-3">
-        <v-expansion-panel>
-            <v-expansion-panel-title>
-                <v-icon left>mdi-filter</v-icon>
-                <span class="ml-4">Filter</span>
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-                <v-row dense>
-                    <v-col cols="12" md="12">
-                        <v-text-field
-                            v-model.lazy="filter.generation"
-                            label="Generation"
-                            clearable
-                            variant="outlined"
-                            hide-details
-                        >
-                        </v-text-field>
-                    </v-col>
-                    <v-col :cols="12">
-                        <v-btn
-                            class="mt-3"
-                            color="black"
-                            @click="filterCallback"
-                        >
-                            <v-icon left>mdi-filter</v-icon>
-                            Filter
-                        </v-btn>
-                    </v-col>
-                </v-row>
-            </v-expansion-panel-text>
-        </v-expansion-panel>
-    </v-expansion-panels>
     <data-table-server
         :showNo="true"
         title="Generations"
@@ -74,7 +42,7 @@
     import { route } from "ziggy-js";
 
     const props = defineProps({
-        itClassGenerations: {
+        itClassGenerationAcademics: {
             type: Object,
             required: true,
         },
@@ -82,27 +50,49 @@
             type: Object,
             required: true,
         },
+        generation: {
+            type: Object,
+            required: true,
+        },
     });
 
     const serverItems = computed(() => {
-        return props.itClassGenerations?.data || [];
+        return props.itClassGenerationAcademics?.data || [];
     });
     const totalItems = computed(() => {
-        return props.itClassGenerations?.total || 0;
+        return props.itClassGenerationAcademics?.total || 0;
     });
 
     const itemsPerPage = computed(() => {
-        return props.itClassGenerations?.per_page || 10;
+        return props.itClassGenerationAcademics?.per_page || 10;
     });
 
     const loading = ref(false);
 
     const headers = [
         {
-            title: "Generation",
+            title: "Room No",
             align: "start",
             sortable: true,
-            key: "generation",
+            key: "room",
+        },
+        {
+            title: "Year",
+            align: "start",
+            sortable: true,
+            key: "year",
+        },
+        {
+            title: "Start Date",
+            align: "start",
+            sortable: true,
+            key: "start_date",
+        },
+        {
+            title: "End Date",
+            align: "start",
+            sortable: true,
+            key: "end_date",
         },
     ];
 
@@ -117,8 +107,14 @@
      */
     const breadcrumbs = ref([
         { icon: "mdi-home", disabled: false, href: route("classes.index") },
-        { title: "Classes", disabled: false, href: route("classes.index") },
-        { title: "Generations", disabled: true, href: "#" },
+        {
+            title: "Generations",
+            disabled: false,
+            href: route("classes.generations.index", {
+                class: props.itClass.id,
+            }),
+        },
+        { title: "Academics", disabled: true, href: "#" },
     ]);
 
     /**
@@ -146,7 +142,7 @@
      */
     const filterCallback = () => {
         router.reload({
-            only: ["itClassGenerations"],
+            only: ["itClassGenerationAcademics"],
             data: {
                 page: 1,
                 itemsPerPage: itemsPerPage.value,
@@ -166,9 +162,10 @@
      */
     const showCallback = (item) => {
         router.visit(
-            route("classes.generations.academics.index", {
+            route("classes.generations.academics.students.index", {
                 class: props.itClass.id,
-                generation: item.id,
+                generation: props.generation.id,
+                academic: item.id,
             }),
             {
                 method: "get",
@@ -178,3 +175,4 @@
         );
     };
 </script>
+

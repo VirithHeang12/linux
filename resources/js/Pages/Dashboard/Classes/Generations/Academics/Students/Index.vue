@@ -1,6 +1,9 @@
 <template>
     <v-card class="mb-4 d-flex align-center">
-        <v-card-title>Generations</v-card-title>
+        <v-card-title
+            >Student List of Year {{ props.academic.year }}, Generation
+            {{ props.generation.name }}</v-card-title
+        >
         <v-spacer></v-spacer>
         <v-breadcrumbs :items="breadcrumbs">
             <template v-slot:item="{ item, index }">
@@ -18,38 +21,6 @@
             </template>
         </v-breadcrumbs>
     </v-card>
-    <v-expansion-panels class="mb-3">
-        <v-expansion-panel>
-            <v-expansion-panel-title>
-                <v-icon left>mdi-filter</v-icon>
-                <span class="ml-4">Filter</span>
-            </v-expansion-panel-title>
-            <v-expansion-panel-text>
-                <v-row dense>
-                    <v-col cols="12" md="12">
-                        <v-text-field
-                            v-model.lazy="filter.generation"
-                            label="Generation"
-                            clearable
-                            variant="outlined"
-                            hide-details
-                        >
-                        </v-text-field>
-                    </v-col>
-                    <v-col :cols="12">
-                        <v-btn
-                            class="mt-3"
-                            color="black"
-                            @click="filterCallback"
-                        >
-                            <v-icon left>mdi-filter</v-icon>
-                            Filter
-                        </v-btn>
-                    </v-col>
-                </v-row>
-            </v-expansion-panel-text>
-        </v-expansion-panel>
-    </v-expansion-panels>
     <data-table-server
         :showNo="true"
         title="Generations"
@@ -64,7 +35,7 @@
         :has-import="false"
         :has-edit="false"
         :has-delete="false"
-        @view="showCallback"
+        @delete="deleteCallback"
     />
 </template>
 
@@ -72,9 +43,18 @@
     import { computed, ref } from "vue";
     import { router } from "@inertiajs/vue3";
     import { route } from "ziggy-js";
+    import { it } from "vuetify/locale";
 
     const props = defineProps({
-        itClassGenerations: {
+        itClassGenerationAcademicStudents: {
+            type: Object,
+            required: true,
+        },
+        generation: {
+            type: Object,
+            required: true,
+        },
+        academic: {
             type: Object,
             required: true,
         },
@@ -85,24 +65,42 @@
     });
 
     const serverItems = computed(() => {
-        return props.itClassGenerations?.data || [];
+        return props.itClassGenerationAcademics?.data || [];
     });
     const totalItems = computed(() => {
-        return props.itClassGenerations?.total || 0;
+        return props.itClassGenerationAcademics?.total || 0;
     });
 
     const itemsPerPage = computed(() => {
-        return props.itClassGenerations?.per_page || 10;
+        return props.itClassGenerationAcademics?.per_page || 10;
     });
 
     const loading = ref(false);
 
     const headers = [
         {
-            title: "Generation",
+            title: "Student ID",
             align: "start",
             sortable: true,
-            key: "generation",
+            key: "id",
+        },
+        {
+            title: "First Name",
+            align: "start",
+            sortable: true,
+            key: "first_name",
+        },
+        {
+            title: "Last Name",
+            align: "start",
+            sortable: true,
+            key: "last_name",
+        },
+        {
+            title: "Date of Birth",
+            align: "start",
+            sortable: true,
+            key: "date_of_birth",
         },
     ];
 
@@ -117,8 +115,15 @@
      */
     const breadcrumbs = ref([
         { icon: "mdi-home", disabled: false, href: route("classes.index") },
-        { title: "Classes", disabled: false, href: route("classes.index") },
-        { title: "Generations", disabled: true, href: "#" },
+        {
+            title: "Academics",
+            disabled: false,
+            href: route("classes.generations.academics.index", {
+                class: props.itClass.id,
+                generation: props.generation.id,
+            }),
+        },
+        { title: "Students", disabled: true, href: "#" },
     ]);
 
     /**
@@ -146,7 +151,7 @@
      */
     const filterCallback = () => {
         router.reload({
-            only: ["itClassGenerations"],
+            only: ["itClassGenerationAcademics"],
             data: {
                 page: 1,
                 itemsPerPage: itemsPerPage.value,
@@ -168,7 +173,8 @@
         router.visit(
             route("classes.generations.academics.index", {
                 class: props.itClass.id,
-                generation: item.id,
+                generation: props.generation.id,
+                academic: item.id,
             }),
             {
                 method: "get",
@@ -178,3 +184,4 @@
         );
     };
 </script>
+

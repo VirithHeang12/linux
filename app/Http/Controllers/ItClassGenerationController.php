@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ItClassGenerationResource;
 use App\Models\ItClass;
 use App\Models\ItClassGeneration;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -21,6 +20,7 @@ class ItClassGenerationController extends Controller
      */
     public function index(ItClass $class): \Inertia\Response
     {
+
         $perPage = request()->query('itemsPerPage', 5);
 
         $itClassGenerations = QueryBuilder::for(ItClassGeneration::class)
