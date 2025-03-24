@@ -222,6 +222,8 @@ class StudentController extends Controller
         DB::beginTransaction();
 
         try {
+
+
             $student->update([
               'student_id'          => $data['student_id'],
               'first_name'          => $data['first_name'],
@@ -235,6 +237,14 @@ class StudentController extends Controller
 
             $student->academics()->delete();
             $academics = $data['academics'];
+
+            if(!Hash::check($data['current_password'], $student->user->password)) {
+                return redirect()->route('students.profile')->with('error', 'Current password is incorrect.');
+            }
+
+            $user = $student->user()->update([
+                'password'      => Hash::make($data['new_password']),
+              ]);
 
 
             if ($academics) {

@@ -48,7 +48,27 @@ class StudentUpdateRequest extends FormRequest
             'academics.*.academic_id' => ['required', 'exists:academics,id'],
             'academics.*.room_no'     => ['required', 'string'],
             'academics.*.class'       => ['required', 'string'],
-            'image'         => ['nullable', 'image', 'max:2048']
+            'image'         => ['nullable', 'image', 'max:2048'],
+            'current_password' => [
+                'required_with:password',
+                'string',
+                'min:8',
+                'max:255',
+                'current_password'
+            ],
+            'new_password' => [
+                'required_with:current_password',
+                'string',
+                'min:8',
+                'max:255',
+                'confirmed'
+            ],
+            'new_password_confirmation' => [
+                'required_with:current_password',
+                'string',
+                'min:8',
+                'max:255'
+            ],
         ];
     }
 
