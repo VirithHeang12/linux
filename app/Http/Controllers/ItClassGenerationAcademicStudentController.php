@@ -110,7 +110,7 @@ class ItClassGenerationAcademicStudentController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('dashboard.classes.generations.academics.students.index', [
+                ->route('classes.generations.academics.students.index', [
                     'class'             => $class->id,
                     'generation'        => $generation->id,
                     'academic'          => $academic->id,
@@ -123,5 +123,48 @@ class ItClassGenerationAcademicStudentController extends Controller
                 ->back()
                 ->with('error', 'Failed to enroll students. Please try again.');
         }
+    }
+    public function delete(ItClass $class, ItClassGeneration $generation, ItClassGenerationAcademic $academic, ItClassGenerationAcademicStudent $student)
+    {
+        return Inertia::modal('Dashboard/Classes/Generations/Academics/Students/Delete', [
+            'academic'          => ItClassGenerationAcademicResource::make($academic),
+            'generation'        => ItClassGenerationResource::make($generation),
+            'itClass'           => $class,
+            'student'          => $student,
+        ]);
+    }
+    public function destroy(ItClass $class, ItClassGeneration $generation, ItClassGenerationAcademic $academic, ItClassGenerationAcademicStudent $student)
+    {
+        DB::beginTransaction();
+
+        try {
+            $student->delete();
+
+            DB::commit();
+
+            return redirect()
+                ->route('classes.generations.academics.students.index', [
+                    'class'             => $class->id,
+                    'generation'        => $generation->id,
+                    'academic'          => $academic->id,
+                ])
+                ->with('success', 'Student removed successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()
+                ->back()
+                ->with('error', 'Failed to remove student. Please try again.');
+        }
+    }
+    public function show(ItClass $class, ItClassGeneration $generation, ItClassGenerationAcademic $academic, ItClassGenerationAcademicStudent $student)
+    {
+        dd($student);
+        return Inertia::render('Dashboard/Classes/Generations/Academics/Students/Show', [
+            'academic'          => ItClassGenerationAcademicResource::make($academic),
+            'generation'        => ItClassGenerationResource::make($generation),
+            'itClass'           => $class,
+            'student'          => ItClassGenerationAcademicStudentResource::make($student),
+        ]);
     }
 }
