@@ -8,7 +8,7 @@
         <template v-else>
             <StudentHeader />
         </template>
-        <v-main class="d-flex align-start justify-center bg-neutral-50" style="min-height: 300px;">
+        <v-main class="d-flex align-start justify-start bg-neutral-50">
             <v-container fluid class="px-5">
                 <slot>
                     Main content
