@@ -6,23 +6,25 @@ use App\Http\Resources\ItClassGenerationAcademicStudentResource;
 use App\Models\Academic;
 use App\Models\Generation;
 use App\Models\ItClass;
+use App\Models\ItClassGeneration;
+use App\Models\ItClassGenerationAcademic;
 use App\Models\ItClassGenerationAcademicStudent;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ItClassGenerationAcademicStudentController extends Controller
 {
-    //
-
     /**
      * Display a listing of the students for a specific academic generation.
      *
-     * @return \Inertia\Response
+     * @param ItClass $class
+     * @param ItClassGeneration $generation
+     * @param ItClassGenerationAcademic $academic
      *
+     * @return \Inertia\Response
      */
-    public function index(ItClass $class, Generation $generation, Academic $academic): \Inertia\Response
+    public function index(ItClass $class, ItClassGeneration $generation, ItClassGenerationAcademic $academic): \Inertia\Response
     {
-
         $perPage = request()->query('itemsPerPage', 5);
 
         $itClassGenerationAcademicStudents = QueryBuilder::for(ItClassGenerationAcademicStudent::class)
@@ -38,9 +40,9 @@ class ItClassGenerationAcademicStudentController extends Controller
 
         return Inertia::render('Dashboard/Classes/Generations/Academics/Students/Index', [
             'itClassGenerationAcademicStudents' => $itClassGenerationAcademicStudents,
-            'academic'  => $academic,
-            'generation' => $generation,
-            'itClass' => $class,
+            'academic'                          => $academic,
+            'generation'                        => $generation,
+            'itClass'                           => $class,
         ]);
     }
 }

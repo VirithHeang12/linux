@@ -51,6 +51,11 @@
     import { computed, ref } from 'vue';
 
     const props = defineProps({
+        hasExport: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
         hasCreate: {
             type: Boolean,
             required: false,
@@ -157,11 +162,11 @@
 
     const itemsPerPageOptions = [5, 10, 20, 30, 40, 50];
 
-    const emits = defineEmits(['view', 'edit', 'delete', 'create', '@update:options']);
+    const emits = defineEmits(['view', 'edit', 'delete', 'create', 'update:options']);
 
     const updateOptionsCallback = (options) => {
         page.value = options.page;
-        emits('@update:options', options);
+        emits('update:options', options);
     };
 
     const viewItem = (item) => {
@@ -182,10 +187,6 @@
 
     const viewImage = (path) => {
         window.open(path, '_blank');
-    };
-
-    const hasExport = () => {
-        emits('export');
     };
 </script>
 

@@ -1,18 +1,12 @@
 <template>
     <v-card class="mb-4 d-flex align-center">
-        <v-card-title
-            >Student List of Year {{ props.academic.year }}, Generation
-            {{ props.generation.name }}</v-card-title
-        >
+        <v-card-title>Student List of Year {{ props.academic.year }}, Generation
+            {{ props.generation.name }}</v-card-title>
         <v-spacer></v-spacer>
         <v-breadcrumbs :items="breadcrumbs">
             <template v-slot:item="{ item, index }">
                 <v-breadcrumbs-item :href="item.href" :disabled="item.disabled">
-                    <v-icon
-                        v-if="item.icon"
-                        :color="index === 0 ? 'primary' : undefined"
-                        >{{ item.icon }}</v-icon
-                    >
+                    <v-icon v-if="item.icon" :color="index === 0 ? 'primary' : undefined">{{ item.icon }}</v-icon>
                     <span v-else>{{ item.title }}</span>
                 </v-breadcrumbs-item>
             </template>
@@ -21,29 +15,15 @@
             </template>
         </v-breadcrumbs>
     </v-card>
-    <data-table-server
-        :showNo="true"
-        title="Generations"
-        :serverItems="serverItems"
-        :items-length="totalItems"
-        :headers="headers"
-        :loading="loading"
-        :items-per-page="itemsPerPage"
-        item-value="id"
-        @update:options="loadItems"
-        :has-create="false"
-        :has-import="false"
-        :has-edit="false"
-        :has-delete="false"
-        @delete="deleteCallback"
-    />
+    <data-table-server :showNo="true" title="Generations" :serverItems="serverItems" :items-length="totalItems"
+        :headers="headers" :loading="loading" :items-per-page="itemsPerPage" item-value="id" @update:options="loadItems"
+        :has-create="false" :has-import="false" :has-edit="false" :has-delete="false" @delete="deleteCallback" />
 </template>
 
 <script setup>
     import { computed, ref } from "vue";
     import { router } from "@inertiajs/vue3";
     import { route } from "ziggy-js";
-    import { it } from "vuetify/locale";
 
     const props = defineProps({
         itClassGenerationAcademicStudents: {
@@ -65,14 +45,14 @@
     });
 
     const serverItems = computed(() => {
-        return props.itClassGenerationAcademics?.data || [];
+        return props.itClassGenerationAcademicStudents?.data || [];
     });
     const totalItems = computed(() => {
-        return props.itClassGenerationAcademics?.total || 0;
+        return props.itClassGenerationAcademicStudents?.meta?.total || 0;
     });
 
     const itemsPerPage = computed(() => {
-        return props.itClassGenerationAcademics?.per_page || 10;
+        return props.itClassGenerationAcademics?.meta?.per_page || 10;
     });
 
     const loading = ref(false);
@@ -115,6 +95,14 @@
      */
     const breadcrumbs = ref([
         { icon: "mdi-home", disabled: false, href: route("classes.index") },
+        { title: "Classes", disabled: false, href: route("classes.index") },
+        {
+            title: "Generations",
+            disabled: false,
+            href: route("classes.generations.index", {
+                class: props.itClass.id,
+            }),
+        },
         {
             title: "Academics",
             disabled: false,
@@ -125,6 +113,7 @@
         },
         { title: "Students", disabled: true, href: "#" },
     ]);
+
 
     /**
      * Load items from the server
@@ -184,4 +173,3 @@
         );
     };
 </script>
-

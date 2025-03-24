@@ -47,7 +47,9 @@
     import { computed, ref } from 'vue'
     import { router } from '@inertiajs/vue3';
     import { route } from 'ziggy-js';
-    import { toast } from 'vue3-toastify';
+    import { usePage } from '@inertiajs/vue3';
+
+    const { props: p } = usePage();
 
     const props = defineProps({
         itClasses: {
@@ -64,7 +66,7 @@
     });
 
     const itemsPerPage = computed(() => {
-        return props.itClasses?.per_page || 10;
+        return props.itClasses?.per_page || 5;
     });
 
     const loading = ref(false);

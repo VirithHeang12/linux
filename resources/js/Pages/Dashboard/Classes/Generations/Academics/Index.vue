@@ -1,15 +1,11 @@
 <template>
     <v-card class="mb-4 d-flex align-center">
-        <v-card-title>Academics</v-card-title>
+        <v-card-title>Class: {{ itClass?.name }} Generation: {{ generation.data.generation }}</v-card-title>
         <v-spacer></v-spacer>
         <v-breadcrumbs :items="breadcrumbs">
             <template v-slot:item="{ item, index }">
                 <v-breadcrumbs-item :href="item.href" :disabled="item.disabled">
-                    <v-icon
-                        v-if="item.icon"
-                        :color="index === 0 ? 'primary' : undefined"
-                        >{{ item.icon }}</v-icon
-                    >
+                    <v-icon v-if="item.icon" :color="index === 0 ? 'primary' : undefined">{{ item.icon }}</v-icon>
                     <span v-else>{{ item.title }}</span>
                 </v-breadcrumbs-item>
             </template>
@@ -18,22 +14,9 @@
             </template>
         </v-breadcrumbs>
     </v-card>
-    <data-table-server
-        :showNo="true"
-        title="Generations"
-        :serverItems="serverItems"
-        :items-length="totalItems"
-        :headers="headers"
-        :loading="loading"
-        :items-per-page="itemsPerPage"
-        item-value="id"
-        @update:options="loadItems"
-        :has-create="false"
-        :has-import="false"
-        :has-edit="false"
-        :has-delete="false"
-        @view="showCallback"
-    />
+    <data-table-server :showNo="true" title="Generations" :serverItems="serverItems" :items-length="totalItems"
+        :headers="headers" :loading="loading" :items-per-page="itemsPerPage" item-value="id" @update:options="loadItems"
+        :has-create="false" :has-import="false" :has-edit="false" :has-delete="false" @view="showCallback" />
 </template>
 
 <script setup>
@@ -60,11 +43,11 @@
         return props.itClassGenerationAcademics?.data || [];
     });
     const totalItems = computed(() => {
-        return props.itClassGenerationAcademics?.total || 0;
+        return props.itClassGenerationAcademics?.meta?.total || 0;
     });
 
     const itemsPerPage = computed(() => {
-        return props.itClassGenerationAcademics?.per_page || 10;
+        return props.itClassGenerationAcademics?.meta?.per_page || 5;
     });
 
     const loading = ref(false);
@@ -96,10 +79,6 @@
         },
     ];
 
-    const filter = ref({
-        generation: route().params.filter?.generation ?? null,
-    });
-
     /**
      * Breadcrumbs data
      *
@@ -107,6 +86,7 @@
      */
     const breadcrumbs = ref([
         { icon: "mdi-home", disabled: false, href: route("classes.index") },
+        { title: "Classes", disabled: false, href: route("classes.index") },
         {
             title: "Generations",
             disabled: false,
@@ -136,24 +116,6 @@
     }
 
     /**
-     * Filter callback
-     *
-     * @return {void}
-     */
-    const filterCallback = () => {
-        router.reload({
-            only: ["itClassGenerationAcademics"],
-            data: {
-                page: 1,
-                itemsPerPage: itemsPerPage.value,
-                filter: {
-                    generation: filter.value.generation,
-                },
-            },
-        });
-    };
-
-    /**
      * Show callback
      *
      * @param {Object} item
@@ -164,7 +126,7 @@
         router.visit(
             route("classes.generations.academics.students.index", {
                 class: props.itClass.id,
-                generation: props.generation.id,
+                generation: props.generation.data.id,
                 academic: item.id,
             }),
             {
@@ -175,4 +137,3 @@
         );
     };
 </script>
-

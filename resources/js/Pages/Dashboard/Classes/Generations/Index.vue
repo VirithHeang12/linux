@@ -1,15 +1,11 @@
 <template>
     <v-card class="mb-4 d-flex align-center">
-        <v-card-title>Generations</v-card-title>
+        <v-card-title>Class: {{ itClass?.name }}</v-card-title>
         <v-spacer></v-spacer>
         <v-breadcrumbs :items="breadcrumbs">
             <template v-slot:item="{ item, index }">
                 <v-breadcrumbs-item :href="item.href" :disabled="item.disabled">
-                    <v-icon
-                        v-if="item.icon"
-                        :color="index === 0 ? 'primary' : undefined"
-                        >{{ item.icon }}</v-icon
-                    >
+                    <v-icon v-if="item.icon" :color="index === 0 ? 'primary' : undefined">{{ item.icon }}</v-icon>
                     <span v-else>{{ item.title }}</span>
                 </v-breadcrumbs-item>
             </template>
@@ -27,21 +23,12 @@
             <v-expansion-panel-text>
                 <v-row dense>
                     <v-col cols="12" md="12">
-                        <v-text-field
-                            v-model.lazy="filter.generation"
-                            label="Generation"
-                            clearable
-                            variant="outlined"
-                            hide-details
-                        >
+                        <v-text-field v-model.lazy="filter.generation" label="Generation" clearable variant="outlined"
+                            hide-details>
                         </v-text-field>
                     </v-col>
                     <v-col :cols="12">
-                        <v-btn
-                            class="mt-3"
-                            color="black"
-                            @click="filterCallback"
-                        >
+                        <v-btn class="mt-3" color="black" @click="filterCallback">
                             <v-icon left>mdi-filter</v-icon>
                             Filter
                         </v-btn>
@@ -50,22 +37,9 @@
             </v-expansion-panel-text>
         </v-expansion-panel>
     </v-expansion-panels>
-    <data-table-server
-        :showNo="true"
-        title="Generations"
-        :serverItems="serverItems"
-        :items-length="totalItems"
-        :headers="headers"
-        :loading="loading"
-        :items-per-page="itemsPerPage"
-        item-value="id"
-        @update:options="loadItems"
-        :has-create="false"
-        :has-import="false"
-        :has-edit="false"
-        :has-delete="false"
-        @view="showCallback"
-    />
+    <data-table-server :showNo="true" title="Generations" :serverItems="serverItems" :items-length="totalItems"
+        :headers="headers" :loading="loading" :items-per-page="itemsPerPage" item-value="id" @update:options="loadItems"
+        :has-create="false" :has-import="false" :has-edit="false" :has-delete="false" @view="showCallback" />
 </template>
 
 <script setup>
@@ -88,11 +62,11 @@
         return props.itClassGenerations?.data || [];
     });
     const totalItems = computed(() => {
-        return props.itClassGenerations?.total || 0;
+        return props.itClassGenerations?.meta?.total || 0;
     });
 
     const itemsPerPage = computed(() => {
-        return props.itClassGenerations?.per_page || 10;
+        return props.itClassGenerations?.meta?.per_page || 5;
     });
 
     const loading = ref(false);
