@@ -27,7 +27,7 @@ class StudentExport implements FromView, WithStyles, ShouldAutoSize, WithTitle
      * @param $academic
      * @param $format
      */
-    public function __construct($itClass, $generation, $academic, $format)
+    public function __construct($itClass, $generation, $academic)
     {
         $this->itClass = $itClass;
         $this->generation = $generation;
