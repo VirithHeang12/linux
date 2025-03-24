@@ -28,7 +28,7 @@
                         <vee-field name="email" v-slot="{ field, errors }">
                             <v-text-field v-bind="field" :error-messages="errors" v-model="form.email" label="Email"
                                 prepend-inner-icon="mdi-email-outline" variant="outlined" color="primary" class="mb-5"
-                                autocomplete="email" size="large"></v-text-field>
+                                autocomplete="email"></v-text-field>
                         </vee-field>
 
                         <vee-field name="password" v-slot="{ field, errors }">
@@ -37,7 +37,7 @@
                                 :append-inner-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
                                 :type="showPassword ? 'text' : 'password'"
                                 @click:append-inner="showPassword = !showPassword" variant="outlined" color="primary"
-                                class="mb-6" autocomplete="current-password" size="large"></v-text-field>
+                                class="mb-6" autocomplete="current-password"></v-text-field>
                         </vee-field>
 
                         <v-btn color="primary" size="x-large" block :loading="form.processing"

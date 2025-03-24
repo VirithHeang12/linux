@@ -63,27 +63,17 @@ const vuetify = createVuetify({
 
 createInertiaApp({
     resolve: (name) => {
-        const isAdmin = usePage().props?.auth?.user?.is_admin;
-
         const pages = import.meta.glob('./Pages/**/*.vue', { eager: true })
         let page = pages[`./Pages/${name}.vue`];
-
-        page.default.layout = DashboardLayout
 
         if (name === "Auth/Login" || name === "Auth/Register") {
             page.default.layout = null;
             return page;
         }
 
-        if (isAdmin) {
-            page.default.layout = DashboardLayout;
+        page.default.layout = DashboardLayout;
 
-            return page;
-        } else {
-            page.default.layout = StudentLayout;
-
-            return page;
-        }
+        return page;
     },
     setup({ el, App, props, plugin }) {
         const app = createApp({ render: renderApp(App, props) })

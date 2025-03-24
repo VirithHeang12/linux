@@ -11,7 +11,7 @@
                 </v-btn>
             </template>
 
-            <v-list class="menu-list" elevation="3" rounded="lg">
+            <v-list class="menu-list" elevation="3">
                 <v-list-item v-for="(item, index) in items" :key="index" :to="item.route" @click="handleRoute(item)"
                     rounded class="mb-1" color="rgba(38, 164, 197, 0.08)">
                     <template v-slot:prepend>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\RoleEnum;
 use App\Http\Requests\StudentStoreRequest;
 use App\Http\Requests\StudentUpdateRequest;
 use App\Http\Resources\StudentResource;
@@ -9,6 +10,7 @@ use App\Models\Academic;
 use App\Models\Student;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -94,6 +96,14 @@ class StudentController extends Controller
               'email'               => $data['email'],
               'phone'               => $data['phone'],
             ]);
+
+            $user = $student->user()->create([
+              'name'          => $data['first_name'] . ' ' . $data['last_name'],
+              'email'         => $data['email'],
+              'password'      => Hash::make(12345678),
+            ]);
+
+            $user->assignRole(RoleEnum::STUDENT);
 
             $image = $request->file('image');
 
