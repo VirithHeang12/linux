@@ -87,10 +87,6 @@
         },
     ];
 
-    const filter = ref({
-        generation: route().params.filter?.generation ?? null,
-    });
-
     /**
      * Breadcrumbs data
      *

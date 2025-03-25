@@ -102,109 +102,72 @@
 </template>
 
 <script setup>
-import { router, useForm, usePage } from '@inertiajs/vue3';
-import * as yup from 'yup';
-import { route } from 'ziggy-js';
-import { defineProps, ref, watch } from 'vue';
-import { toast } from 'vue3-toastify';
+    import { router, useForm, usePage } from '@inertiajs/vue3';
+    import * as yup from 'yup';
+    import { route } from 'ziggy-js';
+    import { defineProps, ref, watch } from 'vue';
+    import { toast } from 'vue3-toastify';
 
-const props = defineProps({
-    student: Object,
-    academicYears: Array,
-    rooms: Array,
-    classes: Array,
-});
+    const props = defineProps({
+        student: Object,
+        academicYears: Array,
+        rooms: Array,
+        classes: Array,
+    });
 
-const schema = yup.object().shape({
-    student_id: yup.string().required("Student ID is required"),
-    first_name: yup.string().required("First name is required").min(2, "First name must be at least 2 characters"),
-    last_name: yup.string().required("Last name is required").min(2, "Last name must be at least 2 characters"),
-    date_of_birth: yup.date().required("Date of birth is required").typeError("Invalid date format"),
-    address: yup.string().required("Address is required").min(5, "Address must be at least 5 characters"),
-    email: yup.string().email("Invalid email").required("Email is required"),
-    phone: yup.string().required("Phone is required").min(9, "Phone must be at least 10 characters"),
-});
+    const schema = yup.object().shape({
+        student_id: yup.string().required("Student ID is required"),
+        first_name: yup.string().required("First name is required").min(2, "First name must be at least 2 characters"),
+        last_name: yup.string().required("Last name is required").min(2, "Last name must be at least 2 characters"),
+        date_of_birth: yup.date().required("Date of birth is required").typeError("Invalid date format"),
+        address: yup.string().required("Address is required").min(5, "Address must be at least 5 characters"),
+        email: yup.string().email("Invalid email").required("Email is required"),
+        phone: yup.string().required("Phone is required").min(9, "Phone must be at least 10 characters"),
+    });
 
-const form = useForm({
-    student_id: props.student.student_id,
-    first_name: props.student.first_name,
-    last_name: props.student.last_name,
-    gender: props.student.gender,
-    date_of_birth: props.student.date_of_birth,
-    address: props.student.address,
-    email: props.student.email,
-    phone: props.student.phone,
-    image: null,
-    image_url: props.student.image?.path,
+    const form = useForm({
+        student_id: props.student.student_id,
+        first_name: props.student.first_name,
+        last_name: props.student.last_name,
+        gender: props.student.gender,
+        date_of_birth: props.student.date_of_birth,
+        address: props.student.address,
+        email: props.student.email,
+        phone: props.student.phone,
+        image: null,
+        image_url: props.student.image?.path,
 
-});
-
-
-/**
- * Back callback
- *
- * @return {void}
- */
-const backCallback = () => {
-    router.get(route('students.profile'));
-};
-
-/**
-    * Submit callback to update student.
-    *
-    * @param setErrors
-    */
-const submitForm = (setErrors) => {
-    form.method = "PUT";
-    form.transform((data) => ({
-        ...data,
-        _method: "PUT",
-    })).post(
-        route("students.profile.update", {
-            student: props.student,
-        }),
-        {
-            onError: (errors) => {
-                setErrors(errors);
-            },
-        }
-    );
-}
+    });
 
 
+    /**
+     * Back callback
+     *
+     * @return {void}
+     */
+    const backCallback = () => {
+        router.get(route('students.profile'));
+    };
 
-
+    /**
+        * Submit callback to update student.
+        *
+        * @param setErrors
+        */
+    const submitForm = (setErrors) => {
+        form.method = "PUT";
+        form.transform((data) => ({
+            ...data,
+            _method: "PUT",
+        })).post(
+            route("students.profile.update", {
+                student: props.student,
+            }),
+            {
+                onError: (errors) => {
+                    setErrors(errors);
+                },
+            }
+        );
+    }
 </script>
-
-<style>
-.im-dialog {
-    z-index: 999999;
-    border-radius: 10px;
-}
-
-.im-close-button {
-    margin: 15px;
-}
-
-.im-close-button svg path {
-    stroke: rgb(114, 114, 114);
-    transition: 0.3s;
-}
-
-.im-close-button:hover.im-close-button svg path {
-    stroke: rgb(56, 56, 56);
-}
-
-.im-modal-container {
-    scrollbar-width: none !important;
-}
-
-.im-modal-positioner {
-    padding: 9px;
-}
-
-.im-modal-content {
-    min-height: 90vh !important;
-    border-radius: 10px;
-}
-</style>

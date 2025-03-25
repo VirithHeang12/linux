@@ -94,12 +94,16 @@ class ItClassGenerationAcademicStudentController extends Controller
             ];
         })->toArray();
 
-        return Inertia::render('Dashboard/Classes/Generations/Academics/Students/Create', [
+        return Inertia::modal('Dashboard/Classes/Generations/Academics/Students/Create', [
             'academic'          => ItClassGenerationAcademicResource::make($academic),
             'generation'        => ItClassGenerationResource::make($generation),
             'itClass'           => $class,
             'students'          => $students,
-        ]);
+        ])->baseRoute('classes.generations.academics.students.index', [
+                'class'             => $class,
+                'generation'        => $generation,
+                'academic'          => $academic,
+            ]);
     }
 
     /**

@@ -1,39 +1,31 @@
 <template>
-    <v-container>
-        <v-row>
-            <v-col cols="12" class="d-flex align-center mb-4">
-                <v-btn color="secondary" variant="outlined" class="me-4" prepend-icon="mdi-arrow-left"
-                    @click="backCallback">
-                    Back
-                </v-btn>
-                <h3 class="text-h5 font-weight-bold mb-0">Register Student</h3>
-            </v-col>
-        </v-row>
+    <Modal v-slot="{ close }">
+        <v-container>
+            <v-card elevation="2" class="pa-4 rounded-lg">
+                <vee-form :validation-schema="schema" @submit.prevent="submitForm" v-slot="{ meta, setErrors }">
+                    <v-row dense>
+                        <v-col :cols="12" :md="12" class="mt-2" style="z-index: 9999 !important;">
+                            <vee-field name="student_ids" v-slot="{ field: { value, ...field }, errors }">
+                                <v-autocomplete v-bind="field" :error-messages="errors" label="Select Students"
+                                    :items="computedStudents" item-title="student_id" item-value="id"
+                                    v-model="form.student_ids" multiple chips closable-chips variant="outlined"
+                                    placeholder="Search and select students" persistent-placeholder></v-autocomplete>
+                            </vee-field>
+                        </v-col>
+                    </v-row>
 
-        <v-card elevation="2" class="pa-4 rounded-lg">
-            <vee-form :validation-schema="schema" @submit.prevent="submitForm" v-slot="{ meta, setErrors }">
-                <v-row dense>
-                    <v-col :cols="12" :md="12" class="mt-2">
-                        <vee-field name="student_ids" v-slot="{ field: { value, ...field }, errors }">
-                            <v-autocomplete v-bind="field" :error-messages="errors" label="Select Students"
-                                :items="computedStudents" item-title="student_id" item-value="id"
-                                v-model="form.student_ids" multiple chips closable-chips variant="outlined"
-                                placeholder="Search and select students" persistent-placeholder></v-autocomplete>
-                        </vee-field>
-                    </v-col>
-                </v-row>
-
-                <v-row dense>
-                    <v-col :cols="12" class="d-flex justify-end">
-                        <v-btn color="primary" class="mt-4" size="large" :disabled="!meta.valid || form.processing"
-                            @click.prevent="submitForm(setErrors)" :loading="form.processing">
-                            Submit
-                        </v-btn>
-                    </v-col>
-                </v-row>
-            </vee-form>
-        </v-card>
-    </v-container>
+                    <v-row dense>
+                        <v-col :cols="12" class="d-flex justify-end">
+                            <v-btn color="primary" class="mt-4" size="large" :disabled="!meta.valid || form.processing"
+                                @click.prevent="submitForm(setErrors, close)" :loading="form.processing">
+                                Submit
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+                </vee-form>
+            </v-card>
+        </v-container>
+    </Modal>
 </template>
 
 <script setup>
@@ -95,7 +87,7 @@
      *
      * @param setErrors
      */
-    const submitForm = (setErrors) => {
+    const submitForm = (setErrors, close) => {
         form.post(route('classes.generations.academics.students.store', {
             class: props.itClass.id,
             generation: props.generation.data.id,
@@ -103,6 +95,9 @@
         }), {
             onError: (errors) => {
                 setErrors(errors);
+            },
+            onSuccess: () => {
+                close();
             },
             forceFormData: true,
         });

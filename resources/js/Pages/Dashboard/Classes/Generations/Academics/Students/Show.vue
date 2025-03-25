@@ -2,9 +2,9 @@
     <v-container>
         <v-card>
             <v-card-item class="profile-header">
-                <v-card-title class="text-white text-h4 font-weight-medium"><v-btn class="rounded-lg"
-                        @click="backCallback">
-                        <v-icon left>mdi-arrow-left</v-icon>
+                <v-card-title class="text-white text-h4 font-weight-medium">
+                    <v-btn variant="outlined" class="me-4" prepend-icon="mdi-arrow-left" @click="backCallback">
+                        Back
                     </v-btn>Student Profile</v-card-title>
             </v-card-item>
 

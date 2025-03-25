@@ -399,36 +399,3 @@
     });
 
 </script>
-
-<style>
-    .im-dialog {
-        z-index: 999999;
-        border-radius: 10px;
-    }
-
-    .im-close-button {
-        margin: 15px;
-    }
-
-    .im-close-button svg path {
-        stroke: rgb(114, 114, 114);
-        transition: 0.3s;
-    }
-
-    .im-close-button:hover.im-close-button svg path {
-        stroke: rgb(56, 56, 56);
-    }
-
-    .im-modal-container {
-        scrollbar-width: none !important;
-    }
-
-    .im-modal-positioner {
-        padding: 9px;
-    }
-
-    .im-modal-content {
-        min-height: 90vh !important;
-        border-radius: 10px;
-    }
-</style>
