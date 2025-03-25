@@ -280,7 +280,7 @@ academic, index
         address: props.student.data.address,
         phone: props.student.data.phone,
         image: null,
-        image_url: props.student.data.image.path || null,
+        image_url: props.student.data.image?.path ?? null,
         password: "",
         password_confirmation: "",
     });

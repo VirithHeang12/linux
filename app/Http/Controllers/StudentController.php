@@ -199,8 +199,10 @@ class StudentController extends Controller
 
             $image = $request->file('image');
             if ($image) {
-                Storage::delete($student->image->path);
-                $student->image()->delete();
+                if ($student->image) {
+                    Storage::delete($student->image->path);
+                    $student->image->delete();
+                }
                 $student->image()->create([
                     'path' => $image->store('students'),
                 ]);
