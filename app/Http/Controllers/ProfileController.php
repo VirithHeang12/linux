@@ -74,19 +74,14 @@ class ProfileController extends Controller
                         'password'      => Hash::make($data['password']),
                     ]);
                 }
-            } else {
-                return redirect()->route('students.profile')->with('error', 'Current password is incorrect.');
             }
 
             $image = $request->file('image');
-
             if ($image) {
                 if ($student->image) {
                     Storage::delete($student->image->path);
-
-                    $student->image()->delete();
+                    $student->image->delete();
                 }
-
                 $student->image()->create([
                     'path' => $image->store('students'),
                 ]);

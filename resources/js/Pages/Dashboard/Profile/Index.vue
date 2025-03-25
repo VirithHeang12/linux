@@ -335,6 +335,7 @@ academic, index
             onError: (errors) => {
                 setErrors(errors);
             },
+            forceFormData: true,
         });
     };
 
