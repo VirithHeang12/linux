@@ -123,11 +123,9 @@
 </template>
 
 <script setup>
-    import { useForm } from '@inertiajs/vue3';
+    import { useForm, usePage } from '@inertiajs/vue3';
     import * as yup from 'yup';
     import { route } from 'ziggy-js';
-    import { ref as vueRef } from "vue";
-
 
     const schema = yup.object().shape({
         student_id: yup.string().required("Student ID is required"),
@@ -138,6 +136,8 @@
         email: yup.string().email("Invalid email").required("Email is required"),
         phone: yup.string().required("Phone is required").min(9, "Phone must be at least 10 characters"),
     });
+
+    const page = usePage();
 
     const form = useForm({
         student_id: '',
@@ -150,6 +150,7 @@
         phone: '',
         image: null,
         image_url: null,
+        _token: page.props.csrf_token
     });
 
 
