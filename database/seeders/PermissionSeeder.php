@@ -41,69 +41,6 @@ class PermissionSeeder extends Seeder
             'password'      => bcrypt('12345678'),
         ]);
 
-        $sophannarith       = User::create([
-            'name'          => 'Chea Sophannarith',
-            'email'         => 'sophannarith@gmail.com',
-            'password'      => bcrypt('12345678'),
-        ]);
-
-        $soriya             = User::create([
-            'name'          => 'Chann Soriya',
-            'email'         => 'soriya@gmail.com',
-            'password'      => bcrypt('12345678'),
-        ]);
-
-        $panha             = User::create([
-            'name'          => 'Thorn Panha',
-            'email'         => 'panha@gmail.com',
-            'password'      => bcrypt('12345678'),
-        ]);
-
-        $bona               = User::create([
-            'name'          => 'Vorn Bona',
-            'email'         => 'bona@gmail.com',
-            'password'      => bcrypt('12345678'),
-        ]);
-
-        $thou               = User::create([
-            'name'          => 'Chev Thou',
-            'email'         => 'thou@gmail.com',
-            'password'      => bcrypt('12345678'),
-        ]);
-
-        $vathana            = User::create([
-            'name'          => 'Sroeun Vathana',
-            'email'         => 'vathana@gmail.com',
-            'password'      => bcrypt('12345678'),
-        ]);
-
-        $broseth        = User::create([
-            'name'          => 'Kung Broseth',
-            'email'         => 'broseth@gmail.com',
-            'password'      => bcrypt('12345678'),
-        ]);
-
-        $chamroeun          = User::create([
-            'name'          => 'Sok Chamroeun',
-            'email'         => 'chamroeun@gmail.com',
-            'password'      => bcrypt('12345678'),
-        ]);
-
-        $rathana            = User::create([
-            'name'          => 'Vin Rathana',
-            'email'         => 'rathana@gmail.com',
-            'password'      => bcrypt('12345678'),
-        ]);
-
         $virith->assignRole(RoleEnum::ADMIN);
-        $sophannarith->assignRole(RoleEnum::ADMIN);
-        $soriya->assignRole(RoleEnum::ADMIN);
-        $panha->assignRole(RoleEnum::ADMIN);
-        $bona->assignRole(RoleEnum::ADMIN);
-        $thou->assignRole(RoleEnum::ADMIN);
-        $vathana->assignRole(RoleEnum::ADMIN);
-        $broseth->assignRole(RoleEnum::ADMIN);
-        $chamroeun->assignRole(RoleEnum::ADMIN);
-        $rathana->assignRole(RoleEnum::ADMIN);
     }
 }
