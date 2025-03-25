@@ -1,6 +1,12 @@
 <template>
     <Modal v-slot="{ close }">
         <v-container>
+            <v-row>
+                <v-col cols="12" class="d-flex align-center mb-4">
+                    <h3 class="text-h5 font-weight-bold mb-0">Register Student</h3>
+                </v-col>
+            </v-row>
+
             <v-card elevation="2" class="pa-4 rounded-lg">
                 <vee-form :validation-schema="schema" @submit.prevent="submitForm" v-slot="{ meta, setErrors }">
                     <v-row dense>
