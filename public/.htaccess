@@ -5,21 +5,31 @@
 
     RewriteEngine On
 
-    # Handle Authorization Header
+    # Ensure Authorization header is passed
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Handle X-XSRF-Token Header
+    # Ensure X-XSRF-Token header is passed
     RewriteCond %{HTTP:x-xsrf-token} .
     RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
 
-    # Redirect Trailing Slashes If Not A Folder...
+    # Redirect Trailing Slashes If Not A Folder
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Send Requests To Front Controller...
-    RewriteCond %{REQUEST_FILENAME} !-d
+    # Prevent infinite redirect loop (Ensure requests go through public/)
+    RewriteCond %{REQUEST_URI} !^/public/
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ public/index.php [L]
+
+    # Prevent access to sensitive files
+    <FilesMatch "(\.env|\.git|composer\.(json|lock)|package\.json|artisan|server\.php|phpunit\.xml)">
+        Order Allow,Deny
+        Deny from all
+    </FilesMatch>
+
+    # Block directory listings
+    Options -Indexes
 </IfModule>
