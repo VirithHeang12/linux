@@ -50,7 +50,7 @@ class ProfileUpdateRequest extends FormRequest
             'academics.*.class'         => ['required', 'string'],
             'image'                     => ['nullable', 'image', 'max:2048'],
             'current_password'          => [
-                'required',
+                'nullable',
                 'string',
                 'min:8',
                 'max:255'
@@ -92,7 +92,6 @@ class ProfileUpdateRequest extends FormRequest
             'phone.regex'                       => 'Invalid phone number.',
             'image.image'                       => 'Image must be an image.',
             'image.max'                         => 'Image must not be greater than :max kilobytes.',
-            'current_password.required'         => 'Current password is required.',
             'current_password.string'           => 'Current password must be a string.',
             'current_password.min'              => 'Current password must be at least :min characters.',
             'current_password.max'              => 'Current password must not be greater than :max characters.',
