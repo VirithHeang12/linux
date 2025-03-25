@@ -10,7 +10,6 @@
                                 <v-radio-group v-bind="field" :error-messages="errors" v-model="form.format" inline
                                     color="primary" class="mt-0 gender-radio-group">
                                     <v-radio label="EXCEL" value="excel" class="mr-6"></v-radio>
-                                    <v-radio label="PDF" value="pdf" class="mr-6"></v-radio>
                                     <v-radio label="CSV" value="csv"></v-radio>
                                 </v-radio-group>
                             </vee-field>

@@ -50,13 +50,13 @@ class ExportController extends Controller
     public function export(Request $request, ItClass $class, ItClassGeneration $generation, ItClassGenerationAcademic $academic): \Symfony\Component\HttpFoundation\BinaryFileResponse | \Illuminate\Http\RedirectResponse
     {
         $request->validate([
-            'format' => 'required|string|in:excel,csv,pdf',
+            'format' => 'required|string|in:excel,csv',
         ]);
 
         $format = $request->input('format');
 
         $generationName = $generation->generation?->name;
-        $academicName = $academic->itClassGeneration?->generation?->name;
+        $academicName = $academic?->academic?->year;
 
         try {
             $export = new StudentExport($class, $generationName, $academicName, $academic->id);
@@ -66,8 +66,6 @@ class ExportController extends Controller
                     return Excel::download($export, 'students.xlsx', \Maatwebsite\Excel\Excel::XLSX);
                 case 'csv':
                     return Excel::download($export, 'students.csv', \Maatwebsite\Excel\Excel::CSV);
-                case 'pdf':
-                    return Excel::download($export, 'students.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
                 default:
                     return Excel::download($export, 'students.xlsx', \Maatwebsite\Excel\Excel::XLSX);
             }

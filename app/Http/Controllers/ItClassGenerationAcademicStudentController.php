@@ -81,8 +81,8 @@ class ItClassGenerationAcademicStudentController extends Controller
      */
     public function create(ItClass $class, ItClassGeneration $generation, ItClassGenerationAcademic $academic)
     {
-        $students = Student::whereDoesntHave('itClassGenerationAcademicStudents', function ($query) use ($academic) {
-            $query->where('it_class_generation_academic_id', $academic->id);
+        $students = Student::whereDoesntHave('itClassGenerationAcademicStudents.itClassGenerationAcademic.academic', function ($query) use ($academic) {
+            $query->where('year', $academic->academic->year);
         })->get();
 
         $students = collect($students)->map(function ($student) {
