@@ -86,9 +86,6 @@ class ProfileController extends Controller
 
                     $student->image()->delete();
                 }
-                Storage::delete($student->image->path);
-
-                $student->image()->delete();
 
                 $student->image()->create([
                     'path' => $image->store('students'),
