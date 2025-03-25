@@ -6,6 +6,7 @@ use App\Http\Requests\StudentEnrollmentRequest;
 use App\Http\Resources\ItClassGenerationAcademicResource;
 use App\Http\Resources\ItClassGenerationAcademicStudentResource;
 use App\Http\Resources\ItClassGenerationResource;
+use App\Http\Resources\StudentResource;
 use App\Models\ItClass;
 use App\Models\ItClassGeneration;
 use App\Models\ItClassGenerationAcademic;
@@ -159,12 +160,18 @@ class ItClassGenerationAcademicStudentController extends Controller
     }
     public function show(ItClass $class, ItClassGeneration $generation, ItClassGenerationAcademic $academic, ItClassGenerationAcademicStudent $student)
     {
-        dd($student);
+        $student=Student::find($student->student_id);
+        $student->load([
+            'image',
+        ]);
+        $student->load([
+            'image',
+        ]);
         return Inertia::render('Dashboard/Classes/Generations/Academics/Students/Show', [
             'academic'          => ItClassGenerationAcademicResource::make($academic),
             'generation'        => ItClassGenerationResource::make($generation),
             'itClass'           => $class,
-            'student'          => ItClassGenerationAcademicStudentResource::make($student),
+            'student'          => $student,
         ]);
     }
 }
