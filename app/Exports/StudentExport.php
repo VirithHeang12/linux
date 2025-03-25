@@ -15,8 +15,9 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class StudentExport implements FromView, WithStyles, ShouldAutoSize, WithTitle
 {
     private $itClass;
-    private $generation;
-    private $academic;
+    private $generationName;
+    private $academicName;
+    private $academicId;
     private $data;
 
     /**
@@ -27,16 +28,17 @@ class StudentExport implements FromView, WithStyles, ShouldAutoSize, WithTitle
      * @param $academic
      * @param $format
      */
-    public function __construct($itClass, $generation, $academic)
+    public function __construct($itClass, $generationName, $academicName, $academicId)
     {
         $this->itClass = $itClass;
-        $this->generation = $generation;
-        $this->academic = $academic;
+        $this->generationName = $generationName;
+        $this->academicName = $academicName;
+        $this->academicId = $academicId;
 
         $students = ItClassGenerationAcademicStudent::with([
             'student',
         ])
-            ->where('it_class_generation_academic_id', $this->academic->id)
+            ->where('it_class_generation_academic_id', $this->academicId)
             ->orderBy('student_id')
             ->get()
             ->toArray();
@@ -51,10 +53,10 @@ class StudentExport implements FromView, WithStyles, ShouldAutoSize, WithTitle
         });
 
         $this->data = [
-            'itClass'               => $this->itClass,
-            'generation'            => $this->generation,
-            'academic'              => $this->academic,
-            'students'              => $students,
+            'itClass'                   => $this->itClass,
+            'generationName'            => $this->generationName,
+            'academicName'              => $this->academicName,
+            'students'                  => $students,
         ];
     }
 

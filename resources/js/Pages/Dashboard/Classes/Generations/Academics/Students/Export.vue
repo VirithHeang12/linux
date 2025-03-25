@@ -1,5 +1,5 @@
 <template>
-    <Modal>
+    <Modal v-slot="{ close }">
         <v-container class="mt-4">
             <v-card elevation="2" class="pa-4 rounded-lg">
                 <vee-form :validation-schema="schema" @submit.prevent="submitForm" v-slot="{ meta, setErrors }">
@@ -20,7 +20,7 @@
                     <v-row dense>
                         <v-col :cols="12" class="d-flex justify-end">
                             <v-btn color="primary" class="mt-4" size="large" :disabled="!meta.valid || form.processing"
-                                @click.prevent="submitForm(setErrors)" :loading="form.processing">
+                                @click.prevent="submitForm(close)" :loading="form.processing">
                                 Submit
                             </v-btn>
                         </v-col>
@@ -63,20 +63,19 @@
     /**
      * Submit the form
      *
-     * @param setErrors
+     * @param {Function} close
      *
      * @returns {void}
      */
-    const submitForm = (setErrors) => {
-        form.get(route('classes.generations.academics.students.export', {
+    const submitForm = (close) => {
+        window.open(route('classes.generations.academics.students.export', {
             class: props.itClass.id,
             generation: props.generation.data.id,
             academic: props.academic.data.id,
-        }), {
-            onError: (errors) => {
-                setErrors(errors);
-            },
-        });
+            format: form.format,
+        }), "_blank");
+
+        close();
     }
 </script>
 

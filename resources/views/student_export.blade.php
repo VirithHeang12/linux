@@ -13,7 +13,7 @@
             <td colspan="5" style="font-weight: bold;">សាកលវិទ្យាល័យភូមិន្ទភ្នំពេញ</td>
         </tr>
         <tr>
-            <td colspan="5" style="color: blue;">និស្សិត​ {{ $itClass['name'] }}</td>
+            <td colspan="5" style="color: blue;">និស្សិត​ {{ $itClass['name'] }} ជំនាន់ទី {{ $generationName }} ឆ្នាំទី {{ $academicName}}</td>
         </tr>
     </thead>
 </table>

@@ -47,7 +47,7 @@ class ExportController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function export(Request $request, ItClass $class, ItClassGeneration $generation, ItClassGenerationAcademic $academic): \Symfony\Component\HttpFoundation\BinaryFileResponse
+    public function export(Request $request, ItClass $class, ItClassGeneration $generation, ItClassGenerationAcademic $academic): \Symfony\Component\HttpFoundation\BinaryFileResponse | \Illuminate\Http\RedirectResponse
     {
         $request->validate([
             'format' => 'required|string|in:excel,csv,pdf',
@@ -55,11 +55,11 @@ class ExportController extends Controller
 
         $format = $request->input('format');
 
-        $generation = ItClassGenerationResource::make($generation);
-        $academic = ItClassGenerationAcademicResource::make($academic);
+        $generationName = $generation->generation?->name;
+        $academicName = $academic->itClassGeneration?->generation?->name;
 
         try {
-            $export = new StudentExport($class, $generation, $academic, $format);
+            $export = new StudentExport($class, $generationName, $academicName, $academic->id);
 
             switch ($format) {
                 case 'excel':
@@ -72,7 +72,7 @@ class ExportController extends Controller
                     return Excel::download($export, 'students.xlsx', \Maatwebsite\Excel\Excel::XLSX);
             }
         } catch (\Exception $e) {
-            dd($e);
+            return back()->with('error', 'Failed to export students. Please try again.');
         }
     }
 }
