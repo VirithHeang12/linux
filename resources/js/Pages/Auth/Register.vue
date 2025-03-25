@@ -187,7 +187,7 @@
         first_name: yup.string().required("First name is required").min(2, "First name must be at least 2 characters"),
         last_name: yup.string().required("Last name is required").min(2, "Last name must be at least 2 characters"),
         date_of_birth: yup.date().required("Date of birth is required").typeError("Invalid date format"),
-        address: yup.string().nullable(),
+        address: yup.string().required("Address is required").min(5, "Address must be at least 5 characters"),
         email: yup.string().email("Invalid email format").required("Email is required"),
         phone: yup.string().required("Phone is required").min(9, "Phone must be at least 9 characters"),
         password: yup.string().required("Password is required").min(8, "Password must be at least 8 characters"),
