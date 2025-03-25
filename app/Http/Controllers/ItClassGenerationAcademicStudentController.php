@@ -6,7 +6,6 @@ use App\Http\Requests\StudentEnrollmentRequest;
 use App\Http\Resources\ItClassGenerationAcademicResource;
 use App\Http\Resources\ItClassGenerationAcademicStudentResource;
 use App\Http\Resources\ItClassGenerationResource;
-use App\Http\Resources\StudentResource;
 use App\Models\ItClass;
 use App\Models\ItClassGeneration;
 use App\Models\ItClassGenerationAcademic;
