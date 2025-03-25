@@ -18,16 +18,12 @@ return new class extends Migration
                 ->nullable()
                 ->index('it_class_generation_academic_id_index')
                 ->constrained('it_class_generation_academics', 'id', 'fk_students_it_class_generation_academic_id')
-                ->onDelete('cascade')
-                ->onUpdate('cascade')
                 ->comment('Foreign key to it_class_generation_academics table');
 
             $table->foreignId('student_id')
                 ->nullable()
                 ->index()
                 ->constrained('students')
-                ->onDelete('cascade')
-                ->onUpdate('cascade')
                 ->comment('Foreign key to students table');
 
             $table->timestamps();

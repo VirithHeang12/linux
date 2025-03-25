@@ -6,12 +6,10 @@ use App\Enums\RoleEnum;
 use App\Http\Requests\StudentStoreRequest;
 use App\Http\Requests\StudentUpdateRequest;
 use App\Http\Resources\StudentResource;
-use App\Models\Academic;
 use App\Models\Student;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -134,25 +132,15 @@ class StudentController extends Controller
     {
         Gate::authorize('view', $student);
 
-        $academicYears = Academic::get();
-
-        $academicYears = collect($academicYears)->map(function ($year) {
-            return [
-              'value'       => $year['id'],
-              'title'       => 'Year ' . $year['year'] . ' (' . $year['start_date'] . ' - ' . $year['end_date'] . ')',
-            ];
-        });
-
         $student->load([
             'image',
-            'academics'
+            'itClassGenerationAcademicStudents'
         ]);
 
         $student = StudentResource::make($student);
 
         return Inertia::render('Dashboard/Students/Show', [
-            'student'       => $student,
-            'academicYears' => $academicYears
+            'student'           => $student,
         ]);
     }
 
@@ -167,42 +155,14 @@ class StudentController extends Controller
     {
         Gate::authorize('update', $student);
 
-        $academicYears = Academic::get();
-        $rooms = config('rooms');
-        $classes = config('classes');
-
-        $academicYears = collect($academicYears)->map(function ($year) {
-            return [
-              'value'       => $year['id'],
-              'title'       => 'Year ' . $year['year'] . ' (' . $year['start_date'] . ' - ' . $year['end_date'] . ')',
-            ];
-        });
-
-        $rooms = collect($rooms)->map(function ($room) {
-            return [
-              'value'       => $room['building'] . $room['room_no'],
-              'title'       => $room['building'] . $room['room_no'],
-            ];
-        });
-
-        $classes = collect($classes)->map(function ($class) {
-            return [
-              'value'       => $class['class'],
-              'title'       => $class['class'],
-            ];
-        });
-
         $student->load([
             'image',
-            'academics'
+            'itClassGenerationAcademicStudents',
         ]);
         $student = StudentResource::make($student);
 
         return Inertia::render('Dashboard/Students/Edit', [
             'student'       => $student,
-            'academicYears' => $academicYears,
-            'rooms'         => $rooms,
-            'classes'       => $classes,
         ]);
     }
 
@@ -219,11 +179,10 @@ class StudentController extends Controller
 
         $data = $request->validated();
 
+
         DB::beginTransaction();
 
         try {
-
-
             $student->update([
               'student_id'          => $data['student_id'],
               'first_name'          => $data['first_name'],
@@ -231,31 +190,12 @@ class StudentController extends Controller
               'gender'              => $data['gender'],
               'date_of_birth'       => $data['date_of_birth'],
               'address'             => $data['address'],
-              'email'               => $data['email'],
               'phone'               => $data['phone'],
             ]);
 
-            $student->academics()->delete();
-            $academics = $data['academics'];
-
-            if(!Hash::check($data['current_password'], $student->user->password)) {
-                return redirect()->route('students.profile')->with('error', 'Current password is incorrect.');
-            }
-
-            $user = $student->user()->update([
-                'password'      => Hash::make($data['new_password']),
-              ]);
-
-
-            if ($academics) {
-                foreach ($academics as $academic) {
-                    $student->academics()->create([
-                      'academic_id'       => $academic['academic_id'],
-                      'room_no'           => $academic['room_no'],
-                      'class'             => $academic['class'],
-                    ]);
-                }
-            }
+            $student->user()->update([
+                'password'      => Hash::make($data['password']),
+            ]);
 
             $image = $request->file('image');
             if ($image) {
@@ -308,6 +248,11 @@ class StudentController extends Controller
         DB::beginTransaction();
 
         try {
+            if ($student->image) {
+                Storage::delete($student->image->path);
+                $student->image()->delete();
+            }
+            $student->user()->delete();
             $student->delete();
 
             DB::commit();

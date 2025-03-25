@@ -1,238 +1,275 @@
 <template>
-    <vee-form :validation-schema="schema" @submit.prevent="submitForm" v-slot="{ meta, setErrors }"
-        :initial-values="form">
-        <v-row dense>
-            <v-col :cols="12" :md="7">
-                <v-row dense>
-                    <v-col :cols="12" :md="7" class="mt-4">
-                        <v-row dense>
-                            <v-col :cols="12" :md="4" class="px-0">
-                                <vee-field name="student_id" v-slot="{ field, errors }">
-                                    <v-text-field v-bind="field" v-model="form.student_id" label="Student ID *"
-                                        variant="outlined" :error-messages="errors"></v-text-field>
-                                </vee-field>
-                            </v-col>
-                            <v-col :cols="12" :md="8" class="mt-2">
-                                <vee-field name="gender" v-slot="{ field, errors }">
-                                    <v-radio-group v-bind="field" :error-messages="errors" v-model="form.gender" inline>
-                                        <v-radio label="Male" value="male"></v-radio>
-                                        <v-radio label="Female" value="female"></v-radio>
-                                        <v-radio label="Other" value="other"></v-radio>
-                                    </v-radio-group>
-                                </vee-field>
-                            </v-col>
-                        </v-row>
-                        <v-row dense>
-                            <v-col :cols="12" :md="12" class="px-0">
-                                <vee-field name="first_name" v-slot="{ field, errors }">
-                                    <v-text-field v-bind="field" v-model="form.first_name" label="First Name *"
-                                        variant="outlined" :error-messages="errors"></v-text-field>
-                                </vee-field>
-                            </v-col>
-                        </v-row>
-                        <v-row dense>
-                            <v-col :cols="12" :md="12">
-                                <vee-field name="last_name" v-slot="{ field, errors }">
-                                    <v-text-field v-bind="field" v-model="form.last_name" label="Last Name *"
-                                        variant="outlined" :error-messages="errors"></v-text-field>
-                                </vee-field>
-                            </v-col>
-                        </v-row>
-                    </v-col>
-                    <v-col :cols="12" :md="5">
-                        <image-uploader v-model="form.image" :placeholder="form.image_url"></image-uploader>
-                    </v-col>
-                </v-row>
+    <v-container>
+        <v-card>
+            <v-card-item class="profile-header">
+                <v-card-title class="text-white text-h4 font-weight-medium">Student Profile</v-card-title>
+            </v-card-item>
 
-
-                <v-row dense>
-                    <v-col :cols="12" :md="6">
-                        <vee-field name="date_of_birth" v-slot="{ field, errors }">
-                            <v-text-field v-bind="field" v-model="form.date_of_birth" label="Date of Birth *"
-                                variant="outlined" type="date" :error-messages="errors">
-                            </v-text-field>
-                        </vee-field>
-                    </v-col>
-                    <v-col :cols="12" :md="6">
-                        <vee-field name="email" v-slot="{ field, errors }">
-                            <v-text-field v-bind="field" v-model="form.email" label="Email *" variant="outlined"
-                                :error-messages="errors">
-                            </v-text-field>
-                        </vee-field>
-                    </v-col>
-                </v-row>
-
-                <v-row dense>
-                    <v-col :cols="12" :md="6">
-                        <vee-field name="phone" v-slot="{ field, errors }">
-                            <v-text-field v-bind="field" v-model="form.phone" label="Phone *" variant="outlined"
-                                :error-messages="errors">
-                            </v-text-field>
-                        </vee-field>
-
-                    </v-col>
-                    <v-col :cols="12" :md="6">
-                        <vee-field name="address" v-slot="{ field, errors }">
-                            <v-text-field v-bind="field" v-model="form.address" label="Address" variant="outlined"
-                                :error-messages="errors"></v-text-field>
-                        </vee-field>
-                    </v-col>
-                </v-row>
-
-                <v-row dense>
-                    <v-col :cols="12" :md="12">
-                        <v-btn color="blue" class="mt-4 d-inline-flex justify-content-start" @click="backCallback">
-                            Back
-                        </v-btn>
-                        <v-btn color="green" class="ml-4 mt-4 d-inline-flex justify-content-start"
-                            :disabled="!meta.valid || form.processing" @click.prevent="submitForm(setErrors)">
-                            <span v-if="form.processing" class="spinner-border spinner-border-sm me-2" role="status"
-                                aria-hidden="true"></span>
-                            Submit
-                        </v-btn>
-                    </v-col>
-                </v-row>
-            </v-col>
-            <v-col :cols="12" :md="5">
-                <v-card height="100%" :elevation="0">
-                    <v-card-title class="d-flex">
-                        Academic Year
-                        <v-spacer></v-spacer>
-                        <v-btn @click="addAcademic()">
-                            <v-icon>mdi-plus-circle</v-icon>
-                            Add
-                        </v-btn>
-                    </v-card-title>
-                    <v-divider></v-divider>
-                    <v-card-text>
-                        <v-table>
-                            <thead class="bg-blue-grey-lighten-5">
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Class</th>
-                                    <th>Room No</th>
-                                    <th style="width: 100px" class="text-center">Options</th>
-                                </tr>
-                            </thead>
-                            <tbody v-if="form.academics.length > 0">
-                                <tr v-for="(academic, index) in form.academics" :key="index">
-                                    <td>{{academicYears.find(a => a.value === academic.academic_id)?.title}}</td>
-                                    <td>{{ academic.class }}</td>
-                                    <td>{{ academic.room_no }}</td>
-
-                                    <td class="text-right">
-                                        <v-item-group class="d-flex ga-1">
-                                            <v-btn icon="mdi-pencil-outline" color="warning" density="comfortable"
-                                                @click="editAcademic(index)"></v-btn>
-                                            <v-btn icon="mdi-delete-outline" color="red" density="comfortable"
-                                                @click="showDeleteAcademic(index)"></v-btn>
-                                        </v-item-group>
-                                    </td>
-                                </tr>
-                            </tbody>
-                            <tbody v-else>
-                                <tr>
-                                    <td colspan="8" class="text-center">No Data.</td>
-                                </tr>
-                            </tbody>
-                        </v-table>
-                    </v-card-text>
-                </v-card>
-
-                <v-dialog v-model="addOrEditDialog" max-width="900px" persistent>
-                    <v-card>
-                        <v-card-title class="d-flex align-center">
-                            <span class="headline">Add Academic Year</span>
-                            <v-spacer></v-spacer>
-
-                            <v-btn icon color="primary" size="small" @click="addOrEditDialog = false">
-                                <v-icon>mdi-close</v-icon>
-                            </v-btn>
-                        </v-card-title>
-                        <v-divider></v-divider>
-                        <v-card-text>
-                            <v-row dense>
-                                <v-col :cols="12" :md="12">
-                                    <v-autocomplete v-model="selectedAcademic.academic_id" label="Academic Year"
-                                        variant="outlined" :items="academicYears" item-title="title" item-value="value"
-                                        clearable></v-autocomplete>
+            <vee-form :validation-schema="schema" @submit.prevent="submitForm" v-slot="{ meta, setErrors }"
+                :initial-values="form">
+                <v-container>
+                    <v-row class="pb-2">
+                        <v-col cols="12" md="6">
+                            <v-row>
+                                <v-col cols="12" md="4" class="text-center">
+                                    <div class="avatar-wrapper">
+                                        <v-avatar size="150" class="mb-3 mt-n12 profile-avatar">
+                                            <v-img v-if="form.image_url" :src="form.image_url" cover></v-img>
+                                            <v-icon v-else size="72" color="grey-lighten-1">mdi-account</v-icon>
+                                        </v-avatar>
+                                        <div class="upload-overlay" @click="triggerImageUpload">
+                                            <v-icon color="white">mdi-camera</v-icon>
+                                            <span class="ml-1 text-white text-caption">Upload</span>
+                                            <input type="file" ref="fileInput" class="d-none" @change="onFileChange"
+                                                accept="image/*" />
+                                        </div>
+                                    </div>
                                 </v-col>
-                                <v-col :cols="12" :md="12">
-                                    <v-autocomplete v-model="selectedAcademic.class" label="Class" variant="outlined"
-                                        :items="classes" item-title="title" item-value="value"
-                                        clearable></v-autocomplete>
+                                <v-col cols="12" md="8">
+                                    <v-row>
+                                        <v-col cols="12">
+                                            <vee-field name="student_id" v-slot="{ field, errors }">
+                                                <v-text-field v-bind="field" v-model="form.student_id"
+                                                    label="Student ID" variant="outlined" density="comfortable"
+                                                    prepend-inner-icon="mdi-card-account-details-outline"
+                                                    :error-messages="errors" bg-color="grey-lighten-4"
+                                                    class="rounded-lg" hide-details="auto"></v-text-field>
+                                            </vee-field>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row class="mt-2">
+                                        <v-col cols="12">
+                                            <vee-field name="gender" v-slot="{ field, errors }">
+                                                <v-radio-group v-bind="field" v-model="form.gender" inline
+                                                    :error-messages="errors" density="compact" hide-details="auto"
+                                                    class="mt-n2">
+                                                    <label
+                                                        class="mb-1 text-subtitle-2 text-grey-darken-2">Gender</label>
+                                                    <v-radio label="Male" value="male" color="primary"></v-radio>
+                                                    <v-radio label="Female" value="female" color="primary"></v-radio>
+                                                    <v-radio label="Other" value="other" color="primary"></v-radio>
+                                                </v-radio-group>
+                                            </vee-field>
+                                        </v-col>
+                                    </v-row>
                                 </v-col>
-                                <v-col :cols="12" :md="12">
-                                    <v-autocomplete v-model="selectedAcademic.room_no" label="Room No"
-                                        variant="outlined" :items="rooms" item-title="title" item-value="value"
-                                        clearable></v-autocomplete>
-                                </v-col>
-
                             </v-row>
-                        </v-card-text>
-                        <v-divider></v-divider>
-                        <v-card-text class="text-center">
-                            <v-btn color="primary" width="150px" @click="saveAcademic()"
-                                :disabled="(selectedAcademic.academic_id == null) || (selectedAcademic.class == null) || (selectedAcademic.room_no == null)">
-                                <v-icon left>{{ 'mdi-content-save' }}</v-icon>
-                                Save
-                            </v-btn>
-                        </v-card-text>
-                    </v-card>
-                </v-dialog>
 
-                <v-dialog v-model="deleteDialog" max-width="900px" persistent>
-                    <v-card>
-                        <v-card-title class="d-flex align-center">
-                            <span class="headline">Delete Academic Year</span>
-                            <v-spacer></v-spacer>
+                            <v-row>
+                                <v-col cols="12" md="6">
+                                    <vee-field name="first_name" v-slot="{ field, errors }">
+                                        <v-text-field v-bind="field" v-model="form.first_name" label="First Name"
+                                            variant="outlined" prepend-inner-icon="mdi-account" density="comfortable"
+                                            :error-messages="errors" bg-color="grey-lighten-4" class="rounded-lg"
+                                            hide-details="auto"></v-text-field>
+                                    </vee-field>
+                                </v-col>
+                                <v-col cols="12" md="6">
+                                    <vee-field name="last_name" v-slot="{ field, errors }">
+                                        <v-text-field v-bind="field" v-model="form.last_name" label="Last Name"
+                                            variant="outlined" prepend-inner-icon="mdi-account" density="comfortable"
+                                            :error-messages="errors" bg-color="grey-lighten-4" class="rounded-lg"
+                                            hide-details="auto"></v-text-field>
+                                    </vee-field>
+                                </v-col>
+                            </v-row>
 
-                            <v-btn icon color="primary" size="small" @click="deleteDialog = false">
-                                <v-icon>mdi-close</v-icon>
-                            </v-btn>
-                        </v-card-title>
-                        <v-card-text class="text-center" style="font-weight: 700; font-size: 20px;">
-                            {{academicYears.find(a => a.value === selectedAcademic.academic_id)?.title}} {{
-                                selectedAcademic.class }} {{ selectedAcademic.room_no
-                            }}
-                        </v-card-text>
+                            <v-row>
+                                <v-col cols="12" md="6">
+                                    <vee-field name="date_of_birth" v-slot="{ field, errors }">
+                                        <v-text-field v-bind="field" v-model="form.date_of_birth" label="Date of Birth"
+                                            variant="outlined" type="date" prepend-inner-icon="mdi-calendar"
+                                            density="comfortable" :error-messages="errors" bg-color="grey-lighten-4"
+                                            class="rounded-lg" hide-details="auto"></v-text-field>
+                                    </vee-field>
+                                </v-col>
+                                <v-col cols="12" md="6">
+                                    <vee-field name="phone" v-slot="{ field, errors }">
+                                        <v-text-field v-bind="field" v-model="form.phone" label="Phone"
+                                            variant="outlined" prepend-inner-icon="mdi-phone-outline"
+                                            density="comfortable" :error-messages="errors" bg-color="grey-lighten-4"
+                                            class="rounded-lg" hide-details="auto"></v-text-field>
+                                    </vee-field>
+                                </v-col>
+                            </v-row>
 
-                        <v-card-text class="text-center">
-                            <v-btn color="red" width="150px" @click="deleteAcademic()">
-                                <v-icon left>{{ 'mdi-content-save' }}</v-icon>
-                                Save
-                            </v-btn>
-                        </v-card-text>
-                    </v-card>
-                </v-dialog>
-            </v-col>
-        </v-row>
-    </vee-form>
+                            <v-row>
+                                <v-col cols="12" md="12">
+                                    <vee-field name="address" v-slot="{ field, errors }">
+                                        <v-textarea v-bind="field" v-model="form.address" label="Address"
+                                            variant="outlined" prepend-inner-icon="mdi-map-marker-outline"
+                                            density="comfortable" :error-messages="errors" bg-color="grey-lighten-4"
+                                            class="rounded-lg" hide-details="auto"></v-textarea>
+                                    </vee-field>
+                                </v-col>
+                            </v-row>
+
+                            <v-row>
+                                <v-col cols="12" md="12">
+                                    <v-card>
+                                        <v-card-title class="ml-2">Change Password</v-card-title>
+                                        <vee-field name="password" v-slot="{ field, errors }">
+                                            <v-text-field type="password" v-bind="field" v-model="form.password"
+                                                label="New Password" variant="outlined" prepend-inner-icon="mdi-account"
+                                                density="comfortable" :error-messages="errors" bg-color="grey-lighten-4"
+                                                class="m-4 rounded-lg" hide-details="auto"></v-text-field>
+                                        </vee-field>
+                                        <vee-field name="password_confirmation" v-slot="{ field, errors }">
+                                            <v-text-field type="password" v-bind="field" v-model="form.password_confirmation
+                                                " label="Confirm Password" variant="outlined"
+                                                prepend-inner-icon="mdi-account" density="comfortable"
+                                                :error-messages="errors" bg-color="grey-lighten-4"
+                                                class="m-4 rounded-lg" hide-details="auto"></v-text-field>
+                                        </vee-field>
+                                    </v-card>
+                                </v-col>
+                            </v-row>
+
+                            <v-row class="mt-3">
+
+                                <v-col cols="12">
+                                    <v-btn style="background-color: #209ab9"
+                                        class="mr-4 px-6 text-white rounded-lg text-capitalize text-subtitle-1"
+                                        @click="backCallback" prepend-icon="mdi-arrow-left" elevation="2">
+                                        Back
+                                    </v-btn>
+                                    <v-btn style="background-color: #209ab9"
+                                        class="px-6 text-white rounded-lg text-capitalize text-subtitle-1" :disabled="!meta.valid || form.processing
+                                            " @click.prevent="submitForm(setErrors)" prepend-icon="mdi-content-save"
+                                        elevation="2">
+                                        <v-progress-circular v-if="form.processing" indeterminate size="20" width="2"
+                                            class="mr-2"></v-progress-circular>
+                                        Save Profile
+                                    </v-btn>
+
+                                </v-col>
+                            </v-row>
+                        </v-col>
+
+                        <v-col cols="12" md="6">
+                            <v-card class="rounded-lg" elevation="0" border>
+                                <v-card-title class="py-3" style="
+                                        background-color: rgba(
+                                            38,
+                                            164,
+                                            197,
+                                            0.1
+                                        );
+                                    ">
+                                    <v-icon class="mr-2">mdi-school-outline</v-icon>
+                                    Academic History
+                                </v-card-title>
+                                <v-divider></v-divider>
+                                <v-card-text>
+                                    <v-table class="rounded-lg">
+                                        <thead>
+                                            <tr class="bg-grey-lighten-5">
+                                                <th class="font-weight-medium">
+                                                    Year
+                                                </th>
+                                                <th class="font-weight-medium">
+                                                    Start Date
+                                                </th>
+                                                <th class="font-weight-medium">
+                                                    End Date
+                                                </th>
+                                                <th class="font-weight-medium">
+                                                    Class
+                                                </th>
+                                                <th class="font-weight-medium">
+                                                    Room No
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody v-if="
+                                            student.data.academics &&
+                                            student.data.academics.length >
+                                            0
+                                        ">
+                                            <tr v-for="(
+academic, index
+                                                ) in student.data.academics" :key="index">
+                                                <td>{{ academic.year }}</td>
+                                                <td>
+                                                    {{ academic.start_date }}
+                                                </td>
+                                                <td>{{ academic.end_date }}</td>
+                                                <td>{{ academic.class }}</td>
+                                                <td>{{ academic.room_no }}</td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody v-else>
+                                            <tr>
+                                                <td colspan="5" class="py-4 text-center text-grey-darken-1">
+                                                    <v-icon class="mb-2" size="large">mdi-information-outline</v-icon>
+                                                    <div>
+                                                        No academic data
+                                                        available.
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </v-table>
+                                </v-card-text>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                </v-container>
+            </vee-form>
+        </v-card>
+    </v-container>
 </template>
 
 <script setup>
-    import { router, useForm, usePage } from '@inertiajs/vue3';
-    import * as yup from 'yup';
-    import { route } from 'ziggy-js';
-    import { defineProps, ref, watch } from 'vue';
-    import { toast } from 'vue3-toastify';
+    import { router, useForm, usePage } from "@inertiajs/vue3";
+    import * as yup from "yup";
+    import { route } from "ziggy-js";
+    import { defineProps, watch, ref as vueRef } from "vue";
+    import { toast } from "vue3-toastify";
 
     const props = defineProps({
         student: Object,
-        academicYears: Array,
-        rooms: Array,
-        classes: Array,
     });
 
     const schema = yup.object().shape({
         student_id: yup.string().required("Student ID is required"),
-        first_name: yup.string().required("First name is required").min(2, "First name must be at least 2 characters"),
-        last_name: yup.string().required("Last name is required").min(2, "Last name must be at least 2 characters"),
-        date_of_birth: yup.date().required("Date of birth is required").typeError("Invalid date format"),
-        address: yup.string().required("Address is required").min(5, "Address must be at least 5 characters"),
-        email: yup.string().email("Invalid email").required("Email is required"),
-        phone: yup.string().required("Phone is required").min(9, "Phone must be at least 10 characters"),
+        first_name: yup
+            .string()
+            .required("First name is required")
+            .min(2, "First name must be at least 2 characters"),
+        last_name: yup
+            .string()
+            .required("Last name is required")
+            .min(2, "Last name must be at least 2 characters"),
+        date_of_birth: yup
+            .date()
+            .required("Date of birth is required")
+            .typeError("Invalid date format"),
+        address: yup
+            .string()
+            .required("Address is required")
+            .min(5, "Address must be at least 5 characters"),
+        phone: yup
+            .string()
+            .required("Phone is required")
+            .min(9, "Phone must be at least 10 characters"),
+        password: yup
+            .string()
+            .nullable()
+            .test(
+                'min-length',
+                'Password must be at least 8 characters',
+                value => !value || value.length >= 8
+            )
+            .notRequired(), // Allows it to be optional
+        password_confirmation: yup
+            .string()
+            .nullable()
+            .notRequired()
+            .oneOf([yup.ref("password"), null], "Passwords must match")
     });
+
+    const fileInput = vueRef(null);
 
     const form = useForm({
         student_id: props.student.data.student_id,
@@ -241,105 +278,37 @@
         gender: props.student.data.gender,
         date_of_birth: props.student.data.date_of_birth,
         address: props.student.data.address,
-        email: props.student.data.email,
         phone: props.student.data.phone,
         image: null,
-        image_url: props.student.data.image?.path,
-        academics: props.student.data.academics ?? [],
+        image_url: props.student.data.image.path || null,
+        password: "",
+        password_confirmation: "",
     });
 
-    const deleteDialog = ref(false);
-    const addOrEditDialog = ref(false);
-    const selectedAcademic = ref(null);
-
     /**
-      * Add academic
-      *
-      * @return {void}
-      */
-    const addAcademic = () => {
-        selectedAcademic.value = {
-            academic_id: null,
-            class: null,
-            room_no: null,
-        };
-        addOrEditDialog.value = true;
+     * Trigger file input click
+     */
+    const triggerImageUpload = () => {
+        fileInput.value.click();
     };
 
     /**
-     * Edit academic
+     * Handle file change
      *
-     * @param {Number} index
-     * @return {void}
+     * @param {Event} event
      */
-    const editAcademic = (index) => {
-        selectedAcademic.value = form.academics[index];
-        addOrEditDialog.value = true;
-    };
+    const onFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            form.image = file;
 
-    /**
-     * Delete academic
-     *
-     * @param {Number} index
-     *
-     * @return {void}
-     */
-    const showDeleteAcademic = (index) => {
-        selectedAcademic.value = form.academics[index];
-        deleteDialog.value = true;
-    };
-
-    /**
-     * Delete academic
-     *
-     * @return {void}
-     */
-    const deleteAcademic = () => {
-        const existingAcademic = form.academics.find((academic) => selectedAcademic.value.academic_id === academic.academic_id);
-        if (existingAcademic) {
-            form.academics.splice(form.academics.indexOf(existingAcademic), 1);
+            // Create a preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                form.image_url = e.target.result;
+            };
+            reader.readAsDataURL(file);
         }
-        deleteDialog.value = false;
-        selectedAcademic.value = {
-            academic_id: null,
-            class: null,
-            room_no: null,
-        };
-    };
-
-    /**
-     * Add or edit academic
-     *
-     * @return {void}
-     */
-    const saveAcademic = () => {
-        const existingAcademic = form.academics.find((academic) => selectedAcademic.value.academic_id === academic.academic_id);
-
-        const newAcademic = {
-            ...selectedAcademic.value,
-        };
-
-        if (existingAcademic) {
-            form.academics.splice(form.academics.indexOf(existingAcademic), 1, newAcademic);
-        } else {
-            form.academics.push(newAcademic);
-        }
-
-        addOrEditDialog.value = false;
-        selectedAcademic.value = {
-            academic_id: null,
-            class: null,
-            room_no: null,
-        };
-    };
-
-    /**
-     * Back callback
-     *
-     * @return {void}
-     */
-    const backCallback = () => {
-        router.get(route('students.index'));
     };
 
     /**
@@ -365,6 +334,15 @@
     }
 
     /**
+     * Back callback to redirect to the previous page.
+     *
+     * @return void
+     */
+    const backCallback = () => {
+        router.visit(route("students.index"));
+    };
+
+    /**
      * Notify the user
      *
      * @param {string} message
@@ -376,7 +354,7 @@
             autoClose: 1500,
             position: toast.POSITION.BOTTOM_RIGHT,
         });
-    }
+    };
 
     const page = usePage();
 
@@ -385,17 +363,77 @@
      *
      * @return void
      */
-    watch(() => page.props.flash, (flash) => {
-        const success = page.props.flash.success;
-        const error = page.props.flash.error;
+    watch(
+        () => page.props.flash,
+        (flash) => {
+            const success = page.props.flash.success;
+            const error = page.props.flash.error;
 
-        if (success) {
-            notify(success);
-        } else if (error) {
-            notify(error);
+            if (success) {
+                notify(success);
+            } else if (error) {
+                notify(error);
+            }
+        },
+        {
+            deep: true,
         }
-    }, {
-        deep: true,
-    });
-
+    );
 </script>
+
+<style scoped>
+    .student-profile-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .profile-card {
+        position: relative;
+        overflow: visible;
+        border-radius: 24px;
+    }
+
+    .profile-header {
+        background: linear-gradient(to right, #26a4c5, #0e64b4);
+        padding-bottom: 2rem;
+        border-radius: 24px 24px 0 0;
+    }
+
+    .profile-avatar {
+        border: 4px solid white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #f5f5f5;
+        position: relative;
+    }
+
+    .avatar-wrapper {
+        position: relative;
+        display: inline-block;
+    }
+
+    .upload-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 150px;
+        height: 40px;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        opacity: 1;
+        z-index: 1;
+        border-radius: 0 0 75px 75px;
+    }
+
+    /* Rounded corners for form fields */
+    :deep(.v-field__outline__start) {
+        border-radius: 12px 0 0 12px !important;
+    }
+
+    :deep(.v-field__outline__end) {
+        border-radius: 0 12px 12px 0 !important;
+    }
+</style>
