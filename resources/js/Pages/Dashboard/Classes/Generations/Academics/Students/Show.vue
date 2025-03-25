@@ -2,10 +2,7 @@
     <v-container>
         <v-card>
             <v-card-item class="profile-header">
-                <v-card-title class="text-white text-h4 font-weight-medium">
-                    <v-btn variant="outlined" class="me-4" prepend-icon="mdi-arrow-left" @click="backCallback">
-                        Back
-                    </v-btn>Student Profile</v-card-title>
+                <v-card-title class="text-white text-h4 font-weight-medium">Student Profile</v-card-title>
             </v-card-item>
 
             <vee-form :initial-values="form">
@@ -103,6 +100,18 @@
                                             density="comfortable" :error-messages="errors" bg-color="grey-lighten-4"
                                             class="rounded-lg" hide-details="auto"></v-textarea>
                                     </vee-field>
+                                </v-col>
+                            </v-row>
+
+
+                            <v-row class="mt-3">
+
+                                <v-col cols="12">
+                                    <v-btn style="background-color: #209ab9"
+                                        class="mr-4 px-6 text-white rounded-lg text-capitalize text-subtitle-1"
+                                        @click="backCallback" prepend-icon="mdi-arrow-left" elevation="2">
+                                        Back
+                                    </v-btn>
                                 </v-col>
                             </v-row>
                         </v-col>

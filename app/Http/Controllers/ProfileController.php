@@ -7,6 +7,7 @@ use App\Http\Resources\StudentResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -63,10 +64,24 @@ class ProfileController extends Controller
               'phone'               => $data['phone'],
             ]);
 
+            if (Hash::check($data['current_password'], Auth::user()->password)) {
+                if ($data['password']) {
+                    Auth::user()->update([
+                        'password'      => Hash::make($data['password']),
+                    ]);
+                }
+            } else {
+                return redirect()->route('students.profile')->with('error', 'Current password is incorrect.');
+            }
 
             $image = $request->file('image');
 
             if ($image) {
+                if ($student->image) {
+                    Storage::delete($student->image->path);
+
+                    $student->image()->delete();
+                }
                 Storage::delete($student->image->path);
 
                 $student->image()->delete();

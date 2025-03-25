@@ -7,22 +7,27 @@
             </v-expansion-panel-title>
             <v-expansion-panel-text>
                 <v-row dense>
-                    <v-col cols="12" md="3">
+                    <v-col cols="12" md="4">
+                        <v-text-field v-model.lazy="filter.student_id" label="Student ID" clearable variant="outlined"
+                            hide-details>
+                        </v-text-field>
+                    </v-col>
+                    <v-col cols="12" md="4">
                         <v-text-field v-model.lazy="filter.first_name" label="First Name" clearable variant="outlined"
                             hide-details>
                         </v-text-field>
                     </v-col>
-                    <v-col cols="12" md="3">
+                    <v-col cols="12" md="4">
                         <v-text-field v-model.lazy="filter.last_name" label="Last Name" clearable variant="outlined"
                             hide-details>
                         </v-text-field>
                     </v-col>
-                    <v-col cols="12" md="3">
+                    <v-col cols="12" md="6">
                         <v-text-field v-model.lazy="filter.phone" label="Phone" clearable variant="outlined"
                             hide-details>
                         </v-text-field>
                     </v-col>
-                    <v-col cols="12" md="3">
+                    <v-col cols="12" md="6">
                         <v-text-field v-model.lazy="filter.email" label="Email" clearable variant="outlined"
                             hide-details>
                         </v-text-field>
@@ -71,6 +76,7 @@
     const loading = ref(false);
 
     const filter = ref({
+        student_id: route().params.filter?.student_id ?? null,
         first_name: route().params.filter?.first_name ?? null,
         last_name: route().params.filter?.last_name ?? null,
         phone: route().params.filter?.phone ?? null,

@@ -109,20 +109,20 @@
                                     <v-card>
                                         <v-card-title class="ml-2">Change Password</v-card-title>
                                         <vee-field name="current_password" v-slot="{ field, errors }">
-                                            <v-text-field v-bind="field" v-model="form.current_password"
+                                            <v-text-field type="password" v-bind="field" v-model="form.current_password"
                                                 label="Current Password" variant="outlined"
                                                 prepend-inner-icon="mdi-account" density="comfortable"
                                                 :error-messages="errors" bg-color="grey-lighten-4"
                                                 class="m-4 rounded-lg" hide-details="auto"></v-text-field>
                                         </vee-field>
-                                        <vee-field name="new_password" v-slot="{ field, errors }">
-                                            <v-text-field v-bind="field" v-model="form.new_password"
+                                        <vee-field name="password" v-slot="{ field, errors }">
+                                            <v-text-field type="password" v-bind="field" v-model="form.password"
                                                 label="New Password" variant="outlined" prepend-inner-icon="mdi-account"
                                                 density="comfortable" :error-messages="errors" bg-color="grey-lighten-4"
                                                 class="m-4 rounded-lg" hide-details="auto"></v-text-field>
                                         </vee-field>
-                                        <vee-field name="new_password_confirmation" v-slot="{ field, errors }">
-                                            <v-text-field v-bind="field" v-model="form.new_password_confirmation
+                                        <vee-field name="password_confirmation" v-slot="{ field, errors }">
+                                            <v-text-field type="password" v-bind="field" v-model="form.password_confirmation
                                                 " label="Confirm Password" variant="outlined"
                                                 prepend-inner-icon="mdi-account" density="comfortable"
                                                 :error-messages="errors" bg-color="grey-lighten-4"
@@ -253,6 +253,29 @@ academic, index
             .string()
             .required("Phone is required")
             .min(9, "Phone must be at least 10 characters"),
+        current_password: yup
+            .string()
+            .nullable()
+            .test(
+                'min-length',
+                'Password must be at least 8 characters',
+                value => !value || value.length >= 8
+            )
+            .notRequired(), // Allows it to be optional
+        password: yup
+            .string()
+            .nullable()
+            .test(
+                'min-length',
+                'Password must be at least 8 characters',
+                value => !value || value.length >= 8
+            )
+            .notRequired(), // Allows it to be optional
+        password_confirmation: yup
+            .string()
+            .nullable()
+            .notRequired()
+            .oneOf([yup.ref("password"), null], "Passwords must match")
     });
 
     const fileInput = vueRef(null);
@@ -268,8 +291,8 @@ academic, index
         image: null,
         image_url: props.student.data.image.path || null,
         current_password: "",
-        new_password: "",
-        new_password_confirmation: "",
+        password: "",
+        password_confirmation: "",
     });
 
     /**
