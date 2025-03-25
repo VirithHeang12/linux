@@ -47,4 +47,14 @@ class ItClassGenerationAcademic extends Model
     {
         return $this->belongsTo(Academic::class);
     }
+
+    /**
+     * Get the it class generation academic students for the it class generation academic.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function itClassGenerationAcademicStudents(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ItClassGenerationAcademicStudent::class);
+    }
 }

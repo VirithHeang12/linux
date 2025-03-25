@@ -9,6 +9,7 @@ use App\Http\Controllers\ItClassGenerationAcademicStudentController;
 use App\Http\Controllers\ItClassGenerationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
+use App\Http\Middleware\LogUserOutWhenGraduate;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
@@ -26,10 +27,12 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticationController::class, 'destroy'])
         ->name('logout');
 
-    Route::get("/student/profile", [ProfileController::class, 'profile'])
-        ->name('students.profile');
-     Route::put("/student/profile/update", [ProfileController::class, 'update'])
-        ->name('students.profile.update');
+    Route::middleware(LogUserOutWhenGraduate::class)->group(function () {
+        Route::get("/student/profile", [ProfileController::class, 'profile'])
+            ->name('students.profile');
+        Route::put("/student/profile/update", [ProfileController::class, 'update'])
+            ->name('students.profile.update');
+    });
 
     Route::get('students/{student}/delete', [StudentController::class, 'delete'])
         ->name('students.delete');

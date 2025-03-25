@@ -18,9 +18,13 @@ class ProfileController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function profile(): \Inertia\Response
+    public function profile()
     {
-        $student = Auth::user()->userable;
+        $student = Auth::user()?->userable;
+
+        if (!$student) {
+            return redirect()->route('index')->with('error', 'Student not found.');
+        }
 
         Gate::authorize('update', $student);
 

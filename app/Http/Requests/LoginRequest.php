@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Enums\RoleEnum;
+use App\Models\Academic;
+use App\Models\Student;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -71,11 +73,10 @@ class LoginRequest extends FormRequest
         if ($user->hasRole(RoleEnum::STUDENT)) {
             $student = $user->userable;
 
-            $academics = $student?->academics;
-
-            $year4 = collect($academics)->first(function ($academic) {
-                return $academic->academic?->year == 4;
-            })?->academic;
+            $year4 = Academic::whereHas('itClassGenerationAcademics.itClassGenerationAcademicStudents.student', function ($query) use ($student) {
+                $query->where('id', $student->id);
+            })->where('year', 4)
+                ->first();
 
             if ($year4) {
                 if ($year4->end_date < now()) {
