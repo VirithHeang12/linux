@@ -150,7 +150,6 @@
         phone: '',
         image: null,
         image_url: null,
-        _token: page.props.csrf_token
     });
 
 
