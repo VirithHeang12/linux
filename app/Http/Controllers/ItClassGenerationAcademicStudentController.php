@@ -51,6 +51,26 @@ class ItClassGenerationAcademicStudentController extends Controller
     }
 
     /**
+     * Show specific student details in the academic generation.
+     *
+     * @param ItClass $class
+     * @param ItClassGeneration $generation
+     * @param ItClassGenerationAcademic $academic
+     * @param ItClassGenerationAcademicStudent $student
+     *
+     * @return \Inertia\Response
+     */
+    public function show(ItClass $class, ItClassGeneration $generation, ItClassGenerationAcademic $academic, ItClassGenerationAcademicStudent $student): \Inertia\Response
+    {
+        return Inertia::render('Dashboard/Classes/Generations/Academics/Students/Show', [
+            'academic'          => ItClassGenerationAcademicResource::make($academic),
+            'generation'        => ItClassGenerationResource::make($generation),
+            'itClass'           => $class,
+            'student'           => ItClassGenerationAcademicStudentResource::make($student),
+        ]);
+    }
+
+    /**
      * Show the form for creating a new student in the academic generation.
      *
      * @param ItClass $class
@@ -110,10 +130,10 @@ class ItClassGenerationAcademicStudentController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('dashboard.classes.generations.academics.students.index', [
-                    'class'             => $class->id,
-                    'generation'        => $generation->id,
-                    'academic'          => $academic->id,
+                ->route('classes.generations.academics.students.index', [
+                    'class'             => $class,
+                    'generation'        => $generation,
+                    'academic'          => $academic,
                 ])
                 ->with('success', 'Students enrolled successfully.');
         } catch (\Exception $e) {
@@ -122,6 +142,65 @@ class ItClassGenerationAcademicStudentController extends Controller
             return redirect()
                 ->back()
                 ->with('error', 'Failed to enroll students. Please try again.');
+        }
+    }
+
+    /**
+     * Show the form for deleting a student from the academic generation.
+     *
+     * @param ItClass $class
+     * @param ItClassGeneration $generation
+     * @param ItClassGenerationAcademic $academic
+     * @param ItClassGenerationAcademicStudent $student
+     *
+     * @return Modal
+     */
+    public function delete(ItClass $class, ItClassGeneration $generation, ItClassGenerationAcademic $academic, ItClassGenerationAcademicStudent $student): Modal
+    {
+        return Inertia::modal('Dashboard/Classes/Generations/Academics/Students/Delete', [
+            'academic'          => ItClassGenerationAcademicResource::make($academic),
+            'generation'        => ItClassGenerationResource::make($generation),
+            'itClass'           => $class,
+            'student'           => ItClassGenerationAcademicStudentResource::make($student),
+        ])->baseRoute('classes.generations.academics.students.index', [
+            'class'             => $class,
+            'generation'        => $generation,
+            'academic'          => $academic,
+        ]);
+    }
+
+    /**
+     * Remove the specified student from the academic generation.
+     *
+     * @param ItClass $class
+     * @param ItClassGeneration $generation
+     * @param ItClassGenerationAcademic $academic
+     * @param ItClassGenerationAcademicStudent $student
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(ItClass $class, ItClassGeneration $generation, ItClassGenerationAcademic $academic, ItClassGenerationAcademicStudent $student): \Illuminate\Http\RedirectResponse
+    {
+        DB::beginTransaction();
+
+        try {
+            $student->delete();
+
+            DB::commit();
+
+            return redirect()
+                ->route('classes.generations.academics.students.index', [
+                    'class'             => $class,
+                    'generation'        => $generation,
+                    'academic'          => $academic,
+                ])
+                ->with('success', 'Student removed successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect()
+                ->back()
+                ->with('error', 'Failed to remove student. Please try again.');
         }
     }
 }

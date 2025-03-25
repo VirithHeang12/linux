@@ -15,11 +15,17 @@ class ItClassGenerationAcademicStudentResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'         => $this->student?->student_id,
-            'first_name'       => $this->student?->first_name,
-            'last_name'   => $this->student?->last_name,
-            'date_of_birth' => $this->student?->date_of_birth,
-            'email'   => $this->student?->email,
+            'id'                    => $this->id,
+            'student_id'            => $this->student?->student_id,
+            'first_name'            => $this->student?->first_name,
+            'last_name'             => $this->student?->last_name,
+            'date_of_birth'         => $this->student?->date_of_birth,
+            'email'                 => $this->student?->email,
+            'phone'                 => $this->student?->phone,
+            'gender'                => $this->student?->gender,
+            'address'               => $this->student?->address,
+            'academics'             => StudentAcademicResource::collection($this->student?->itClassGenerationAcademicStudents),
+            'image'                 => new ImageResource($this->student?->image),
         ];
     }
 }

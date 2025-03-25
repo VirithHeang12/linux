@@ -17,13 +17,13 @@
     </v-card>
     <data-table-server :showNo="true" title="Students" :serverItems="serverItems" :items-length="totalItems"
         :headers="headers" :loading="loading" :items-per-page="itemsPerPage" item-value="id" @update:options="loadItems"
-        :has-create="true" :has-show="true" :has-import="false" :has-export="true" :has-edit="true" :has-delete="true"
-        @delete="deleteCallback" @create="createCallback" @export="exportCallback" />
+        :has-create="true" :has-show="true" :has-import="false" :has-export="true" :has-edit="false" :has-delete="true"
+        @delete="deleteCallback" @create="createCallback" @view="showCallback" @export="exportCallback" />
 </template>
 
 <script setup>
-    import { computed, ref } from "vue";
-    import { router } from "@inertiajs/vue3";
+    import { computed, ref, watch } from "vue";
+    import { router, usePage } from "@inertiajs/vue3";
     import { route } from "ziggy-js";
     import { visitModal } from '@inertiaui/modal-vue';
     import { toast } from 'vue3-toastify';
@@ -65,7 +65,7 @@
             title: "Student ID",
             align: "start",
             sortable: true,
-            key: "id",
+            key: "student_id",
         },
         {
             title: "First Name",
@@ -137,24 +137,6 @@
     }
 
     /**
-     * Filter callback
-     *
-     * @return {void}
-     */
-    const filterCallback = () => {
-        router.reload({
-            only: ["itClassGenerationAcademics"],
-            data: {
-                page: 1,
-                itemsPerPage: itemsPerPage.value,
-                filter: {
-                    generation: filter.value.generation,
-                },
-            },
-        });
-    };
-
-    /**
      * Create callback
      *
      * @return {void}
@@ -207,10 +189,11 @@
      */
     const showCallback = (item) => {
         router.visit(
-            route("classes.generations.academics.students.index", {
+            route("classes.generations.academics.students.show", {
                 class: props.itClass.id,
                 generation: props.generation.data.id,
                 academic: props.academic.data.id,
+                student: item.id,
             }),
             {
                 method: "get",
@@ -219,4 +202,39 @@
             }
         );
     };
+
+
+    /**
+     * Notify the user
+     *
+     * @param {string} message
+     *
+     * @return void
+     */
+    const notify = (message) => {
+        toast(message, {
+            autoClose: 1500,
+            position: toast.POSITION.BOTTOM_RIGHT,
+        });
+    }
+
+    const page = usePage();
+
+    /**
+     * Watch for flash messages
+     *
+     * @return void
+     */
+    watch(() => page.props.flash, (flash) => {
+        const success = page.props.flash.success;
+        const error = page.props.flash.error;
+
+        if (success) {
+            notify(success);
+        } else if (error) {
+            notify(error);
+        }
+    }, {
+        deep: true,
+    });
 </script>
