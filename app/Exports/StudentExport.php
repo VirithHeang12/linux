@@ -45,7 +45,7 @@ class StudentExport implements FromView, WithStyles, ShouldAutoSize, WithTitle
 
         $students = collect($students)->map(function ($student) {
             return [
-                'student_id'        => $student['student']['id'],
+                'student_id'        => $student['student']['student_id'],
                 'first_name'        => $student['student']['first_name'],
                 'last_name'         => $student['student']['last_name'],
                 'date_of_birth'     => $student['student']['date_of_birth'],
